@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+		<meta name="description" content="">
+		<meta name="author" content="Alexandre Mota">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="jquerymobile-files/jquery.mobile.custom.structure.css" />
+		<link rel="stylesheet" href="jquerymobile-files/jquery.mobile.custom.theme.css" />
+		<link rel="stylesheet" href="jquerymobile-files/jquery.mobile.icons.min.css" />
+		<link rel="stylesheet" href="css/style.css"/>
+		<script src="jquerymobile-files/jquery-1.10.2.min.js"></script>
+		<script src="jquerymobile-files/jquery.mobile.custom.js"></script>
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+		<script src="http://code.highcharts.com/modules/exporting.js"></script>
+		<script src="js/script.js"></script>
+
+		<title>index</title>
+
+	</head>
+
+	<body>
+		<!--Incio da pagina Inicial splah page-->
+		<div data-role="page" >
+
+			<div data-role="header" data-theme="b">
+				<h1>MonitorApp</h1>
+			</div>
+
+			<div data-role="content">
+
+				<a href="#pacientes"> <h1 align="center"><img  src="img/monitor_icon.png"/></h1></a>
+				<h2 align="center">Monitoramento de Sinais Vitais Humanos</h2>
+			</div>
+
+		</div>
+		<!--Fim da pagina Inicial splah page-->
+
+		<!--Incio da pagina de Pacientes-->
+
+		<div data-role="page" id="pacientes">
+			<div data-role="header" data-theme="b">
+				<div data-role="navbar">
+
+					<ul>
+						<li>
+							<a href="#painel-config" data-icon="gear">Configuração</a>
+						</li>
+						<li>
+							<a href="" data-icon="user">Pacientes</a>
+						</li>
+					</ul>
+
+				</div>
+			</div>
+			<div data-role="content" >
+
+				<ul data-role="listview" data-icon="alert">
+
+					<li>
+						<a href="#monitor"><img src="img/paciente-fem.png"/> <h3>Maria da Silva</h3>
+						<p>
+							UTI 153
+						</p> </a>
+					</li>
+					<li data-icon="audio">
+						<a href=""><img src="img/paciente-mas.png"/> <h3>Pedro Rocha</h3>
+						<p>
+							UTI 038
+						</p></a>
+					</li>
+					<li>
+						<a href=""><img src="img/paciente-fem.png"/> <h3>Isabel Ferreira</h3>
+						<p>
+							UTI 227
+						</p></a>
+					</li>
+					<li data-icon="audio">
+						<a href=""><img src="img/paciente-mas.png"/> <h3>João Carlos</h3>
+						<p>
+							UTI 018
+						</p></a>
+					</li>
+					<li>
+						<a href=""><img src="img/paciente-fem.png"/> <h3>Rosana Matos</h3>
+						<p>
+							UTI 527
+						</p></a>
+					</li>
+					<li data-icon="audio">
+						<a href=""><img src="img/paciente-mas.png"/> <h3>Bruno Ramos</h3>
+						<p>
+							UTI 018
+						</p></a>
+					</li>
+
+				</ul>
+
+			</div>
+
+			<div data-role="panel" id="painel-config" data-display="push" data-position="left" data-theme="b">
+
+				<p>
+					<strong>Configurações Gerais</strong>
+
+				</p>
+				<div data-role="content">
+
+					<form>
+						<label for="aviso-sonoro">Alertas sonoros:</label>
+						<select name="aviso-sonoro" id="aviso-sonoro" data-role="slider">
+							<option value="off">Off</option>
+							<option value="on">On</option>
+						</select>
+
+						<label for="volume">Volume:</label>
+						<input type="range" name="volume" id="volume" min="0" max="10" value="5" data-highlight="true"/>
+
+						<label for="aviso-visual">Alertas visuais:</label>
+						<select name="aviso-visual" id="aviso-visual" data-role="slider">
+							<option value="off">Off</option>
+							<option value="on">On</option>
+						</select>
+
+						<label for="aviso-visual">Alertas vibratorios:</label>
+						<select name="aviso-visual" id="aviso-visual" data-role="slider">
+							<option value="off">Off</option>
+							<option value="on">On</option>
+						</select>
+
+					</form>
+					<a href="#" data-rel="close" data-role="button" data-mini="true" data-inline="true" data-icon="forward" data-iconpos="right">Voltar</a>
+
+				</div>
+
+			</div><!-- /panel -->
+
+		</div>
+		<!--Fim da pagina de Pacientes-->
+
+		<!--Incio da pagina do Monitor-->
+
+		<div data-role="page" id="monitor">
+
+			<div data-role="header" data-theme="b">
+
+				<div data-role="navbar">
+					<ul>
+						<li>
+							<a href="#pacientes" data-icon="user">Pacientes</a>
+						</li>
+						<li>
+							<a href="#monitor" data-icon="eye" class="ui-btn-active">Monitor</a>
+						</li>
+						<li>
+							<a href="#tabela" data-icon="grid">Tabela</a>
+						</li>
+						<li>
+							<a href="#graficos" data-icon="action">Graficos</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div data-role="content">
+
+				<form>
+					<ul data-role="listview" data-inset="true" data-icon="false">
+						<li data-role="list-divider">
+							<h1>Nome do Paciente</h1>
+							<p class="ui-li-aside">
+								<strong>UTI 123</strong>
+							</p>
+						</li>
+
+						<li>
+							<img src="img/heart.png"/><h1><big><big><big>102 bpm</big></big></big></h1>
+						</li>
+
+						<li>
+							<img src="img/thermometer.png"/><h1><big><big><big>38 °C</big></big></big></h1>
+						</li>
+
+						<li>
+							<img src="img/blood pressure.png"/><h1><big><big><big>130/85</big></big></big></h1>
+						</li>
+
+					</ul>
+				</form>
+			</div>
+		</div>
+
+		<!--Fim da pagina do Monitor-->
+
+		<!--Inicio da pagina dos Graficos-->
+
+		<div data-role="page"id="graficos">
+
+			<div data-role="header" data-theme="b">
+
+				<div data-role="navbar">
+					<ul>
+						<li>
+							<a href="#pacientes" data-icon="user">Pacientes</a>
+						</li>
+						<li>
+							<a href="#monitor" data-icon="eye">Monitor</a>
+						</li>
+						<li>
+							<a href="#tabela" data-icon="grid">Tabela</a>
+						</li>
+						<li>
+							<a href="#graficos" data-icon="action" class="ui-btn-active">Graficos</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div data-role="content">
+				<div id="pressao" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
+				<div id="pressaoVenosaEabominal" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
+				<div id="frequenciaCardiaca" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
+				<div id="temperaturaCorporea" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
+				<div id="frequenciaRespiratoria" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
+				<div id="glicemia" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
+			</div>
+		</div>
+
+		<!--Fim da pagina do Graficos-->
+
+		<!--Inicio da pagina da tabela-->
+		<div data-role="page" id="tabela">
+			<div data-role="header" data-theme="b">
+
+				<div data-role="navbar">
+					<ul>
+						<li>
+							<a href="#pacientes" data-icon="user">Pacientes</a>
+						</li>
+						<li>
+							<a href="#monitor" data-icon="eye">Monitor</a>
+						</li>
+						<li>
+							<a href="#tabela" data-icon="grid" class="ui-btn-active">Tabela</a>
+						</li>
+						<li>
+							<a href="#graficos" data-icon="action">Graficos</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div data-role="content">
+				<table class="tabela">
+
+					<caption>
+						Sinais vitais
+					</caption>
+					<thead>
+						<tr>
+							<td>Hora</td>
+							<td><b>T</b>
+							<br>
+							<code>
+								&deg
+							</code>C</br></td>
+							<td><b>FC</b>
+							<br>
+							bpm</br></td>
+							<td><b>FR</b>
+							<br>
+							ipm</br></td>
+							<td><b>PA</b>
+							<br>
+							mmHg</br></td>
+							<td><b>PVC</b>
+							<br>
+							cmH2O</br></td>
+							<td><b>PAM</b>
+							<br>
+							mmHg</br></td>
+							<td><b>PIA</b>
+							<br>
+							cmH2O</br></td>
+							<td><b>Glicemia</b>
+							<br>
+							mg/dl</br></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>07</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>08</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>09</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>10</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>11</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>12</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>13</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>14</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>15</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>16</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>17</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>18</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>19</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>20</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>21</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>22</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>23</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>00</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>01</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>02</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>03</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>04</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>05</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>06</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+		</div>
+		<!--Inicio da pagina da tabela-->
+
+	</body>
+</html>

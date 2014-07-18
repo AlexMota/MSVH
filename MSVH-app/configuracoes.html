@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+		<meta name="description" content="">
+		<meta name="author" content="Alexandre Mota">
+		<meta name="viewport" content="width=device-width; initial-scale=1.0">
+		<link rel="stylesheet" href="jquerymobile-files/jquery.mobile.custom.structure.css" />
+		<link rel="stylesheet" href="jquerymobile-files/jquery.mobile.custom.theme.css" />
+		<link rel="stylesheet" href="jquerymobile-files/jquery.mobile.icons.min.css" />
+		<script src="jquerymobile-files/jquery-1.10.2.min.js"></script>
+		<script src="jquerymobile-files/jquery.mobile.custom.js"></script>
+		<title>index</title>
+
+	</head>
+
+	<body>
+
+		<div data-role="page" >
+
+			<div data-role="header" data-theme="b">
+				<h1>Configurações</h1>
+			</div>
+
+			<div data-role="content">
+
+				<form>
+					<label for="aviso-sonoro">Alertas sonoros:</label>
+					<select name="aviso-sonoro" id="aviso-sonoro" data-role="slider">
+						<option value="off">Off</option>
+						<option value="on">On</option>
+					</select>
+
+					<label for="aviso-visual">Alertas visuais:</label>
+					<select name="aviso-visual" id="aviso-visual" data-role="slider">
+						<option value="off">Off</option>
+						<option value="on">On</option>
+					</select>
+
+					<label for="volume">Volume:</label>
+					<input type="range" name="volume" id="volume" min="0" max="10" value="5" data-highlight="true"/>
+				</form>
+
+			</div>
+		</div>
+
+	</body>
+</html>
