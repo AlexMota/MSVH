@@ -21,6 +21,10 @@
 	</head>
 
 	<body>
+
+		
+
+
 		<!--Incio da pagina Inicial splah page-->
 		<div data-role="page" >
 
@@ -217,12 +221,57 @@
 				</div>
 			</div>
 			<div data-role="content">
+
+				<!--Botão data atual-->
+				<a id="botDiaAtual" href="#" data-role="button" data-inline="true" ></a>
+				<a id="botGraficoUnico" href="#" data-role="button" data-inline="true" ></a>
+
+
 				<div id="pressao" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
 				<div id="pressaoVenosaEabominal" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
 				<div id="frequenciaCardiaca" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
 				<div id="temperaturaCorporea" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
 				<div id="frequenciaRespiratoria" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
 				<div id="glicemia" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
+
+
+				<script type="text/javascript">
+
+					var date = new Date();
+					var diaSemana = date.getDay();
+					var dd = date.getDate();
+					var mm = date.getMonth()+1; //January is 0!
+					var yyyy = date.getFullYear();
+
+					if(diaSemana == 0){
+						diaSemana = "Dom";
+					}else if(diaSemana == 1){
+						diaSemana = "Seg";
+					}else if(diaSemana == 2){
+						diaSemana = "Ter";
+					}else if(diaSemana == 1){
+						diaSemana = "Qua";
+					}else if(diaSemana == 1){
+						diaSemana = "Qui";
+					}else if(diaSemana == 1){
+						diaSemana = "Sex";
+					}else if(diaSemana == 1){
+						diaSemana = "Sab";
+					}
+
+					if(dd<10) {
+    					dd='0'+dd
+					} 
+
+					if(mm<10) {
+					    mm='0'+mm
+					} 
+
+					var today = dd+'/'+mm+'/'+yyyy+' ('+diaSemana+')';
+					document.getElementById("botDiaAtual").innerHTML = today;
+
+				</script>
+
 			</div>
 		</div>
 
