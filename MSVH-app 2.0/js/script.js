@@ -33,42 +33,90 @@ $(function () {
             },
             tooltip: {
                 pointFormat: '{series.name}: <b>{point.y}</b><br/>',
-                valueSuffix: 'mmHg',
+                //valueSuffix: 'mmHg',
                 shared: true
             },
             legend: {
+                labelFormatter: function() {
+                if(this.index == 0){
+                return 'Pressão Arterial Sistólica';
+                }else if(this.index == 1){
+                return 'Pressão Arterial Diastólica';
+                }else if(this.index == 2){
+                return 'Pressão Arterial Média';
+                }else if(this.index == 3){
+                return 'Pressão Venosa Central';
+                }else if(this.index == 4){
+                return 'Pressão Intra-Abdominal';
+                }else if(this.index == 5){
+                return 'Frequência Cardíaca';
+                }else if(this.index == 6){
+                return 'Temperatura Corpórea';
+                }else if(this.index == 7){
+                return 'Frequência Respiratória';
+                }else if(this.index == 8){
+                return 'Glicemia';
+                }
+            },
                 layout: 'vertical',
                 align: 'center',
                 verticalAlign: 'bottom',
                 borderWidth: 0
             },
             series: [{
-                name: 'Pressão arterial sistólica',
-                data: [110, 150, 130, 140, 150, 120, 130, 160, 170, 190, 210, 190, 180, 190, 200, 190, 180, 170, 150, 160, 180, 160, 150, 140]
+                name: 'PAS',
+                data: [110, 150, 130, 140, 150, 120, 130, 160, 170, 190, 210, 190, 180, 190, 200, 190, 180, 170, 150, 160, 180, 160, 150, 140],
+                tooltip: {
+                    valueSuffix: ' mmHg'
+                }
             }, {
-                name: 'Pressão arterial diastólica',
-                data: [75, 90, 85, 90, 80, 95, 100, 105, 110, 95, 85, 90, 80, 75, 100, 90, 80, 95, 85, 80, 70, 75, 80, 100]
+                name: 'PAD',
+                data: [75, 90, 85, 90, 80, 95, 100, 105, 110, 95, 85, 90, 80, 75, 100, 90, 80, 95, 85, 80, 70, 75, 80, 100],
+                tooltip: {
+                    valueSuffix: ' mmHg'
+                }
             }, {
-                name: 'Pressão arterial média',
-                data: [86, 110, 100, 95, 93, 90, 95, 92, 85, 90, 100, 120, 110, 105, 90, 95, 85, 80, 95, 100, 110, 95, 85, 90]
+                name: 'PAM',
+                data: [86, 110, 100, 95, 93, 90, 95, 92, 85, 90, 100, 120, 110, 105, 90, 95, 85, 80, 95, 100, 110, 95, 85, 90],
+                tooltip: {
+                    valueSuffix: ' mmHg'
+                }
             },{
-                name: 'Pressão venosa central',
-                data: [5, 8, 7, 4, 3, 2, 3, 5, 6, 8, 8, 8, 8, 7, 5, 2, 3, 4, 5, 3, 4, 6, 5, 7]
+                name: 'PVC',
+                data: [5, 8, 7, 4, 3, 2, 3, 5, 6, 8, 8, 8, 8, 7, 5, 2, 3, 4, 5, 3, 4, 6, 5, 7],
+                tooltip: {
+                    valueSuffix: ' cmH2O'
+                }
             }, {
-                name: 'Pressão intra-abdominal',
-                data: [9, 8, 5, 6, 7, 8, 10, 10, 10, 9, 9, 6, 5, 3, 4, 5, 6, 6, 7, 8, 8, 8, 9, 9]
+                name: 'PIA',
+                data: [9, 8, 5, 6, 7, 8, 10, 10, 10, 9, 9, 6, 5, 3, 4, 5, 6, 6, 7, 8, 8, 8, 9, 9],
+                tooltip: {
+                    valueSuffix: ' cmH2O'
+                }
             },{
-                name: 'Frequência Cardíaca',
-                data: [49, 55, 57, 56, 55, 58, 60, 59, 58, 60, 65, 68, 70, 73, 71, 68, 65, 63, 60, 57, 56, 55, 52, 55]
+                name: 'FC',
+                data: [49, 55, 57, 56, 55, 58, 60, 59, 58, 60, 65, 68, 70, 73, 71, 68, 65, 63, 60, 57, 56, 55, 52, 55],
+                tooltip: {
+                    valueSuffix: ' bpm'
+                }
             },{
-                name: 'Temperatura Corpórea',
-                data: [36.1, 36.1, 36.3, 36.2, 36.1, 36, 35.9, 36, 36.1, 36.5, 36.7, 36.8, 36.8, 36.8, 37, 37.2, 37.3, 37.5, 36.9, 36.5, 36.4, 36.4, 36.5, 36.6]
+                name: 'TC',
+                data: [36.1, 36.1, 36.3, 36.2, 36.1, 36, 35.9, 36, 36.1, 36.5, 36.7, 36.8, 36.8, 36.8, 37, 37.2, 37.3, 37.5, 36.9, 36.5, 36.4, 36.4, 36.5, 36.6],
+                tooltip: {
+                    valueSuffix: ' °C'
+                }
             },{
-                name: 'Frequência Respiratória',
-                data: [15, 13, 12, 13, 13, 14, 14, 13, 12, 15, 16, 15, 13, 17, 18, 12, 13, 15, 17, 18, 15, 16, 13, 12]
+                name: 'FR',
+                data: [15, 13, 12, 13, 13, 14, 14, 13, 12, 15, 16, 15, 13, 17, 18, 12, 13, 15, 17, 18, 15, 16, 13, 12],
+                tooltip: {
+                    valueSuffix: ' ipm'
+                }
             },{
-                name: 'Glicemia',
-                data: [55, 55, 54, 57, 60, 62, 61, 56, 70, 75, 72, 73, 80, 75, 74, 73, 65, 62, 59, 68, 76, 82, 75, 68]
+                name: 'Glic.',
+                data: [55, 55, 54, 57, 60, 62, 61, 56, 70, 75, 72, 73, 80, 75, 74, 73, 65, 62, 59, 68, 76, 82, 75, 68],
+                tooltip: {
+                    valueSuffix: ' mg/dl'
+                }
             }]
         });
     });
@@ -85,7 +133,7 @@ $(function () {
                 enabled: false
             },
             title: {
-                text: 'Pressão Arterial (mmHg)',
+                text: 'Pressão Arterial',
                 x: -20 //center
             },
             
@@ -108,25 +156,51 @@ $(function () {
                 }]
             },
             tooltip: {
+
                 pointFormat: '{series.name}: <b>{point.y}</b><br/>',
-                valueSuffix: 'mmHg',
+                
                 shared: true
-            },
+
+                    
+                },
+
+                
+                
+            
             legend: {
+                labelFormatter: function() {
+                if(this.index == 0){
+                return 'Pressão Arterial Sistólica';
+                }else if(this.index == 1){
+                return 'Pressão Arterial Diastólica';
+                }
+            },
                 layout: 'vertical',
                 align: 'center',
                 verticalAlign: 'bottom',
                 borderWidth: 0
             },
             series: [{
-                name: 'Pressão arterial sistólica',
-                data: [110, 150, 130, 140, 150, 120, 130, 160, 170, 190, 210, 190, 180, 190, 200, 190, 180, 170, 150, 160, 180, 160, 150, 140]
+                
+                name: 'PAS',
+                data: [110, 150, 130, 140, 150, 120, 130, 160, 170, 190, 210, 190, 180, 190, 200, 190, 180, 170, 150, 160, 180, 160, 150, 140],
+                tooltip: {
+                    valueSuffix: ' mmHg'
+                }
             }, {
-                name: 'Pressão arterial diastólica',
-                data: [75, 90, 85, 90, 80, 95, 100, 105, 110, 95, 85, 90, 80, 75, 100, 90, 80, 95, 85, 80, 70, 75, 80, 100]
+                
+                name: 'PAD',
+                data: [75, 90, 85, 90, 80, 95, 100, 105, 110, 95, 85, 90, 80, 75, 100, 90, 80, 95, 85, 80, 70, 75, 80, 100],
+                tooltip: {
+                    valueSuffix: ' mmHg'
+                }
             }, {
-                name: 'Pressão arterial média',
-                data: [86, 110, 100, 95, 93, 90, 95, 92, 85, 90, 100, 120, 110, 105, 90, 95, 85, 80, 95, 100, 110, 95, 85, 90]
+                
+                name: 'PAM',
+                data: [86, 110, 100, 95, 93, 90, 95, 92, 85, 90, 100, 120, 110, 105, 90, 95, 85, 80, 95, 100, 110, 95, 85, 90],
+                tooltip: {
+                    valueSuffix: ' mmHg'
+                }
             }]
         });
     });
@@ -144,7 +218,7 @@ $(function () {
                 enabled: false
             },
             title: {
-                text: 'PVC e PIA (cmH2O)',
+                text: 'PVC e PIA',
                 x: -20 //center
             },
             
@@ -168,22 +242,35 @@ $(function () {
             },
             tooltip: {
                 pointFormat: '{series.name}: <b>{point.y}</b><br/>',
-                valueSuffix: 'cmH2O',
+               
                 shared: true
                 
             },
             legend: {
+                labelFormatter: function() {
+                if(this.index == 0){
+                return 'Pressão Venosa Central';
+                }else if(this.index == 1){
+                return 'Pressão Intra-Abdominal';
+                }
+            },
                 layout: 'vertical',
                 align: 'center',
                 verticalAlign: 'bottom',
                 borderWidth: 0
             },
             series: [{
-                name: 'Pressão venosa central',
-                data: [5, 8, 7, 4, 3, 2, 3, 5, 6, 8, 8, 8, 8, 7, 5, 2, 3, 4, 5, 3, 4, 6, 5, 7]
+                name: 'PVC',
+                data: [5, 8, 7, 4, 3, 2, 3, 5, 6, 8, 8, 8, 8, 7, 5, 2, 3, 4, 5, 3, 4, 6, 5, 7],
+                tooltip: {
+                    valueSuffix: ' cmH2O'
+                }
             }, {
-                name: 'Pressão intra-abdominal',
-                data: [9, 8, 5, 6, 7, 8, 10, 10, 10, 9, 9, 6, 5, 3, 4, 5, 6, 6, 7, 8, 8, 8, 9, 9]
+                name: 'PIA',
+                data: [9, 8, 5, 6, 7, 8, 10, 10, 10, 9, 9, 6, 5, 3, 4, 5, 6, 6, 7, 8, 8, 8, 9, 9],
+                tooltip: {
+                    valueSuffix: ' cmH2O'
+                }
             }]
         });
     });
@@ -199,7 +286,7 @@ $(function () {
                 enabled: false
             },
             title: {
-                text: 'Frequência Cardíaca (bpm)',
+                text: 'Frequência Cardíaca',
                 x: -20 //center
             },
             
@@ -226,13 +313,18 @@ $(function () {
                 valueSuffix: 'bpm'
             },
             legend: {
+                labelFormatter: function() {
+                if(this.index == 0){
+                return 'Frequência Cardíaca';
+                }
+            },
                 layout: 'vertical',
                 align: 'center',
                 verticalAlign: 'bottom',
                 borderWidth: 0
             },
             series: [{
-                name: 'Frequência Cardíaca',
+                name: 'FC',
                 data: [49, 55, 57, 56, 55, 58, 60, 59, 58, 60, 65, 68, 70, 73, 71, 68, 65, 63, 60, 57, 56, 55, 52, 55]
             }]
         });
@@ -251,7 +343,7 @@ $(function () {
                 enabled: false
             },
             title: {
-                text: 'Temperatura Corpórea (°C)',
+                text: 'Temperatura Corpórea',
                 x: -20 //center
             },
             
@@ -278,13 +370,18 @@ $(function () {
                 valueSuffix: '°C'
             },
             legend: {
+                labelFormatter: function() {
+                if(this.index == 0){
+                return 'Temperatura Corpórea';
+                }
+            },
                 layout: 'vertical',
                 align: 'center',
                 verticalAlign: 'bottom',
                 borderWidth: 0
             },
             series: [{
-                name: 'Temperatura Corpórea',
+                name: 'TC',
                 data: [36.1, 36.1, 36.3, 36.2, 36.1, 36, 35.9, 36, 36.1, 36.5, 36.7, 36.8, 36.8, 36.8, 37, 37.2, 37.3, 37.5, 36.9, 36.5, 36.4, 36.4, 36.5, 36.6]
             }]
         });
@@ -301,7 +398,7 @@ $(function () {
                 enabled: false
             },
             title: {
-                text: 'Frequência Respiratória (ipm)',
+                text: 'Frequência Respiratória',
                 x: -20 //center
             },
             
@@ -328,13 +425,18 @@ $(function () {
                 valueSuffix: 'ipm'
             },
             legend: {
+                labelFormatter: function() {
+                if(this.index == 0){
+                return 'Frequência Respiratória';
+                }
+            },
                 layout: 'vertical',
                 align: 'center',
                 verticalAlign: 'bottom',
                 borderWidth: 0
             },
             series: [{
-                name: 'Frequência Respiratória',
+                name: 'FR',
                 data: [15, 13, 12, 13, 13, 14, 14, 13, 12, 15, 16, 15, 13, 17, 18, 12, 13, 15, 17, 18, 15, 16, 13, 12]
             }]
         });
@@ -351,7 +453,7 @@ $(function () {
                 enabled: false
             },
             title: {
-                text: 'Glicemia (mg/dl)',
+                text: 'Glicemia',
                 x: -20 //center
             },
             
@@ -378,13 +480,18 @@ $(function () {
                 valueSuffix: 'mg/dl'
             },
             legend: {
+                labelFormatter: function() {
+                if(this.index == 0){
+                return 'Glicemia';
+                }
+            },
                 layout: 'vertical',
                 align: 'center',
                 verticalAlign: 'bottom',
                 borderWidth: 0
             },
             series: [{
-                name: 'Glicemia',
+                name: 'Glic.',
                 data: [55, 55, 54, 57, 60, 62, 61, 56, 70, 75, 72, 73, 80, 75, 74, 73, 65, 62, 59, 68, 76, 82, 75, 68]
             }]
         });
