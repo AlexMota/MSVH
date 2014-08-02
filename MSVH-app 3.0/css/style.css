@@ -14,10 +14,12 @@ td input, td input:focus { border: 1px solid orange; outline: none; padding: 2px
 
 .ui-icon-alarm:after {
     background-image: url("../img/alarm.png");
-    background-size: 70%;
 }
 
 .ui-icon-alarm-off:after {
     background-image: url("../img/alarm-off.png");
-    background-size: 70%;
+}
+
+.ui-icon-bp-icon:after {
+    background-image: url("../img/bp-icon.png");
 }
