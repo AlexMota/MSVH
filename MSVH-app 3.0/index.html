@@ -400,9 +400,29 @@
 			</div>
 			<div data-role="content">
 
+				<div data-role="popup" id="popupMonitor" data-theme="b" data-transition="pop">
+					<div data-role="header" data-theme="a">
+						<h1> 07h - 11/05/2013</h1>
+					</div>
+					<ul data-role="listview" data-icon="false">
+						<li>
+							<a href="#">Freq. Cardiaca: 102 bpm</a>
+						</li>
+						<li>
+							<a href="#">Temperatura: 38ºC</a>
+						</li>
+						<li>
+							<a href="#">Pressão Arterial: 130/85</a>
+						</li>
+						<li>
+							<a href="#">Sat. Oxigênio: 95%</a>
+						</li>
+					</ul>
+				</div>
+
 				<ul data-role="listview" data-filter="true" data-filter-placeholder="Pesquise horario..">
 					<li>
-						<a href="#">07h</a>
+						<a href="#popupMonitor" data-rel="popup"data-position-to="origin">07h</a>
 					</li>
 					<li>
 						<a href="">08h</a>
@@ -423,7 +443,7 @@
 						<a href="#">13h</a>
 					</li>
 					<li>
-						<a href="#">14h</a>
+						<a href="#popupMonitor" data-rel="popup"data-position-to="origin">14h</a>
 					</li>
 					<li>
 						<a href="#">15h</a>
