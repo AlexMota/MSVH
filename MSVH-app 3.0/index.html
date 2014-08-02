@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+		<meta name="description" content="">
+		<meta name="author" content="Alexandre Mota">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="jquerymobile-files/jquery.mobile.custom.structure.css" />
+		<link rel="stylesheet" href="jquerymobile-files/jquery.mobile.custom.theme.css" />
+		<link rel="stylesheet" href="jquerymobile-files/jquery.mobile.icons.min.css" />
+		<link rel="stylesheet" href="css/style.css"/>
+		<script src="jquerymobile-files/jquery-1.10.2.min.js"></script>
+		<script src="jquerymobile-files/jquery.mobile.custom.js"></script>
+		<script src="js/highcharts.js"></script>
+		<script src="js/exporting.js"></script>
+		<script src="js/script.js"></script>
+
+		<title>index</title>
+
+	</head>
+
+	<body onload="setButtonText()">
+
+		<!--Incio da pagina Inicial splah page-->
+		<div data-role="page" >
+
+			<div data-role="header" data-theme="b">
+				<h1>MonitorApp</h1>
+			</div>
+
+			<div data-role="content">
+
+				<a href="#pacientes"> <h1 align="center"><img  src="img/monitor_icon.png"/></h1></a>
+				<h2 align="center">Monitoramento de Sinais Vitais Humanos</h2>
+			</div>
+
+		</div>
+		<!--Fim da pagina Inicial splah page-->
+
+		<!--Incio da pagina de Pacientes-->
+
+		<div data-role="page" id="pacientes">
+			<div data-role="header" data-theme="b">
+				<div data-role="navbar">
+
+					<ul>
+						<li>
+							<a href="#painel-config" data-icon="gear">Configuração</a>
+						</li>
+						<li>
+							<a href="" data-icon="user">Pacientes</a>
+						</li>
+					</ul>
+
+				</div>
+			</div>
+			<div data-role="content" >
+
+				<ul data-role="listview" data-icon="alert">
+
+					<li>
+						<a href="#monitor"><img src="img/paciente-fem.png"/> <h3>Maria da Silva</h3>
+						<p>
+							UTI 153
+						</p> </a>
+						<a href="" data-role="icon" data-icon='alarm' data-mini='true' data-iconpos='notext' data-inline='true' data-theme='a'></a>
+					</li>
+					<li data-icon="alarm">
+						<a href=""><img src="img/paciente-mas.png"/> <h3>Pedro Rocha</h3>
+						<p>
+							UTI 038
+						</p></a>
+					</li>
+					<li data-icon="alarm-off">
+						<a href=""><img src="img/paciente-fem.png"/> <h3>Isabel Ferreira</h3>
+						<p>
+							UTI 227
+						</p></a>
+					</li>
+					<li data-icon="alarm">
+						<a href=""><img src="img/paciente-mas.png"/> <h3>João Carlos</h3>
+						<p>
+							UTI 018
+						</p></a>
+					</li>
+					<li data-icon="alarm-off">
+						<a href=""><img src="img/paciente-fem.png"/> <h3>Rosana Matos</h3>
+						<p>
+							UTI 527
+						</p></a>
+					</li>
+					<li data-icon="alarm">
+						<a href=""><img src="img/paciente-mas.png"/> <h3>Bruno Ramos</h3>
+						<p>
+							UTI 018
+						</p></a>
+					</li>
+
+				</ul>
+
+			</div>
+
+			<div data-role="panel" id="painel-config" data-display="push" data-position="left" data-theme="b">
+
+				<p>
+					<strong>Configurações Gerais</strong>
+
+				</p>
+				<div data-role="content">
+
+					<form>
+						<label for="aviso-sonoro">Alertas sonoros:</label>
+						<select name="aviso-sonoro" id="aviso-sonoro" data-role="slider">
+							<option value="off">Off</option>
+							<option value="on">On</option>
+						</select>
+
+						<label for="volume">Volume:</label>
+						<input type="range" name="volume" id="volume" min="0" max="10" value="5" data-highlight="true"/>
+
+						<label for="aviso-visual">Alertas visuais:</label>
+						<select name="aviso-visual" id="aviso-visual" data-role="slider">
+							<option value="off">Off</option>
+							<option value="on">On</option>
+						</select>
+
+						<label for="aviso-visual">Alertas vibratorios:</label>
+						<select name="aviso-visual" id="aviso-visual" data-role="slider">
+							<option value="off">Off</option>
+							<option value="on">On</option>
+						</select>
+
+					</form>
+
+				</div>
+
+			</div><!-- /panel -->
+
+		</div>
+		<!--Fim da pagina de Pacientes-->
+
+		<!--Incio da pagina do Monitor-->
+
+		<div data-role="page" id="monitor">
+
+			<div data-role="header" data-theme="b">
+
+				<div data-role="navbar">
+					<ul>
+						<li>
+							<a href="#pacientes" data-icon="user">Pacientes</a>
+						</li>
+						<li>
+							<a href="#monitor" data-icon="eye" class="ui-btn-active">Monitor</a>
+						</li>
+						<li>
+							<a href="#tabela" data-icon="grid">Ficha</a>
+						</li>
+						<li>
+							<a href="#graficos" data-icon="action">Graficos</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div data-role="content">
+
+				<form>
+					<ul data-role="listview" data-inset="true"data-divider-theme="b">
+						<li data-role="list-divider" data-icon="audio" class="ui-icon-home">
+							<h1>Nome do Paciente</h1>
+							<p class="ui-li-aside">
+								<strong>UTI 123</strong>
+							</p>
+						</li>
+
+						<li>
+							<img src="img/heart.png"/><h1><big><big><big>102 bpm</big></big></big></h1>
+						</li>
+
+						<li>
+							<img src="img/thermometer.png"/><h1><big><big><big>38 °C</big></big></big></h1>
+						</li>
+
+						<li>
+							<img src="img/blood pressure.png"/><h1><big><big><big>130/85</big></big></big></h1>
+						</li>
+
+						<li>
+							<img src="img/blood.png"/><h1><big><big><big>95%</big></big></big></h1>
+						</li>
+
+					</ul>
+				</form>
+			</div>
+		</div>
+
+		<!--Fim da pagina do Monitor-->
+
+		<!--Inicio da pagina dos Graficos-->
+
+		<div data-role="page"id="graficos">
+
+			<div data-role="header" data-theme="b">
+
+				<div data-role="navbar">
+					<ul>
+						<li>
+							<a href="#pacientes" data-icon="user">Pacientes</a>
+						</li>
+						<li>
+							<a href="#monitor" data-icon="eye">Monitor</a>
+						</li>
+						<li>
+							<a href="#tabela" data-icon="grid">Ficha</a>
+						</li>
+						<li>
+							<a href="#graficos" data-icon="action" class="ui-btn-active">Graficos</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div data-role="content" onload="setButtonText()">
+
+				<!--Botões data atual e grafico unico-->
+				<a id="botDiaAtual" href="#painel-datas" data-role="button" data-inline="true" ></a>
+				<a id="botGraficoUnico" href="#" data-role="button" data-inline="true" >Gráfico Único</a>
+				<a id="botGraficos" style="display:none" href="#" data-role="button" data-inline="true" >Gráficos Sep.</a>
+
+				<!--Gráficos individuais-->
+				<div id="pressao" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
+				<div id="pressaoVenosaEabominal" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
+				<div id="frequenciaCardiaca" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
+				<div id="temperaturaCorporea" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
+				<div id="frequenciaRespiratoria" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
+				<div id="glicemia" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
+				<div id="graficoUnico" style="display: none; min-width: 320px; height: 400px; margin: 0 auto"></div>
+
+			</div>
+
+			<script type="text/javascript">
+				$('#botGraficoUnico').click(function() {
+					$('#pressao').css('display', 'none');
+					$('#pressaoVenosaEabominal').css('display', 'none');
+					$('#frequenciaCardiaca').css('display', 'none');
+					$('#temperaturaCorporea').css('display', 'none');
+					$('#frequenciaRespiratoria').css('display', 'none');
+					$('#glicemia').css('display', 'none');
+					$('#graficoUnico').css('display', '');
+					$('#botGraficos').css('display', '');
+					$('#botGraficoUnico').css('display', 'none');
+				});
+
+				$('#botGraficos').click(function() {
+					$('#pressao').css('display', '');
+					$('#pressaoVenosaEabominal').css('display', '');
+					$('#frequenciaCardiaca').css('display', '');
+					$('#temperaturaCorporea').css('display', '');
+					$('#frequenciaRespiratoria').css('display', '');
+					$('#glicemia').css('display', '');
+					$('#graficoUnico').css('display', 'none');
+					$('#botGraficos').css('display', 'none');
+					$('#botGraficoUnico').css('display', '');
+				});
+
+			</script>
+
+			<div data-role="panel" id="painel-datas" data-display="push" data-position="left" data-theme="b">
+
+				<p>
+					<strong>Dias anteriores</strong>
+
+				</p>
+				<div data-role="content">
+
+					<form>
+						<div data-role="controlgroup">
+							<a id="botData1" href="" data-role="button"></a>
+							<a id="botData2" href="" data-role="button"></a>
+							<a id="botData3" href="" data-role="button"></a>
+							<a id="botData4" href="" data-role="button"></a>
+							<a id="botData5" href="" data-role="button"></a>
+							<a id="botData6" href="" data-role="button"></a>
+						</div>
+
+					</form>
+
+				</div>
+
+				<p>
+					<strong>Escolher outra data:</strong>
+				</p>
+
+				<div data-role="fieldcontain">
+					<input type="date" name="date" id="date" value="" />
+					<a id="botDataOK" href="" data-role="button">OK</a>
+				</div>
+
+			</div><!-- /panel -->
+
+			<script type="text/javascript">
+				function getCompleteDate(data) {
+
+					var diaSemana = data.getDay() + 1;
+					//1 == dom e 7 == sabado
+					var diaMes = data.getDate();
+					// pega o dia do mes (0 a 30/31)
+					var mes = data.getMonth() + 1;
+					// janeiro == 1 e dezembro == 12
+					var ano = data.getFullYear();
+
+					if (diaSemana == 1) {
+						diaSemana = "Dom";
+					} else if (diaSemana == 2) {
+						diaSemana = "Seg";
+					} else if (diaSemana == 3) {
+						diaSemana = "Ter";
+					} else if (diaSemana == 4) {
+						diaSemana = "Qua";
+					} else if (diaSemana == 5) {
+						diaSemana = "Qui";
+					} else if (diaSemana == 6) {
+						diaSemana = "Sex";
+					} else if (diaSemana == 7) {
+						diaSemana = "Sab";
+					}
+
+					if (diaMes < 10) {
+						diaMes = '0' + diaMes
+					}
+
+					if (mes < 10) {
+						mes = '0' + mes
+					}
+
+					var saida = diaMes + '/' + mes + '/' + ano + ' (' + diaSemana + ')'
+
+					return saida;
+
+				}
+
+				function setButtonText() {
+
+					var data = new Date();
+					document.getElementById("botDiaAtual").innerHTML = getCompleteDate(data);
+
+					var diaMes = data.getDate();
+					data.setDate(diaMes - 1);
+					document.getElementById("botData1").innerHTML = getCompleteDate(data);
+
+					diaMes = data.getDate();
+					data.setDate(diaMes - 1);
+					document.getElementById("botData2").innerHTML = getCompleteDate(data);
+
+					diaMes = data.getDate();
+					data.setDate(diaMes - 1);
+					document.getElementById("botData3").innerHTML = getCompleteDate(data);
+
+					diaMes = data.getDate();
+					data.setDate(diaMes - 1);
+					document.getElementById("botData4").innerHTML = getCompleteDate(data);
+
+					diaMes = data.getDate();
+					data.setDate(diaMes - 1);
+					document.getElementById("botData5").innerHTML = getCompleteDate(data);
+
+					diaMes = data.getDate();
+					data.setDate(diaMes - 1);
+					document.getElementById("botData6").innerHTML = getCompleteDate(data);
+
+				}
+
+			</script>
+
+		</div>
+
+		<!--Fim da pagina do Graficos-->
+
+		<!--Inicio da pagina da tabela-->
+		<div data-role="page" id="tabela">
+			<div data-role="header" data-theme="b">
+
+				<div data-role="navbar">
+					<ul>
+						<li>
+							<a href="#pacientes" data-icon="user">Pacientes</a>
+						</li>
+						<li>
+							<a href="#monitor" data-icon="eye">Monitor</a>
+						</li>
+						<li>
+							<a href="#tabela" data-icon="grid" class="ui-btn-active">Ficha</a>
+						</li>
+						<li>
+							<a href="#graficos" data-icon="action">Graficos</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div data-role="content">
+
+				<ul data-role="listview" data-filter="true" data-filter-placeholder="Pesquise horario..">
+					<li>
+						<a href="#">07h</a>
+					</li>
+					<li>
+						<a href="">08h</a>
+					</li>
+					<li>
+						<a href="#">09h</a>
+					</li>
+					<li>
+						<a href="#">10h</a>
+					</li>
+					<li>
+						<a href="#">11h</a>
+					</li>
+					<li>
+						<a href="#">12h</a>
+					</li>
+					<li>
+						<a href="#">13h</a>
+					</li>
+					<li>
+						<a href="#">14h</a>
+					</li>
+					<li>
+						<a href="#">15h</a>
+					</li>
+					<li>
+						<a href="#">16h</a>
+					</li>
+					<li>
+						<a href="#">17h</a>
+					</li>
+					<li>
+						<a href="#">18h</a>
+					</li>
+					<li>
+						<a href="#">19h</a>
+					</li>
+					<li>
+						<a href="#">20h</a>
+					</li>
+					<li>
+						<a href="#">21h</a>
+					</li>
+					<li>
+						<a href="#">22h</a>
+					</li>
+					<li>
+						<a href="#">23h</a>
+					</li>
+					<li>
+						<a href="#">00h</a>
+					</li>
+					<li>
+						<a href="#">01h</a>
+					</li>
+					<li>
+						<a href="">02h</a>
+					</li>
+					<li>
+						<a href="#">03h</a>
+					</li>
+					<li>
+						<a href="#">04h</a>
+					</li>
+					<li>
+						<a href="#">05h</a>
+					</li>
+					<li>
+						<a href="#">06h</a>
+					</li>
+
+				</ul
+			</div>
+
+		</div>
+		<!--Inicio da pagina da tabela-->
+
+	</body>
+</html>
