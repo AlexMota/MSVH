@@ -243,10 +243,8 @@
 			</div>
 			<div data-role="content" onload="setButtonText()">
 
-				<!--Botões data atual e grafico unico-->
-				<a id="botDiaAtual" href="#painel-datas" data-role="button" data-inline="true" ></a>
-				<a id="botGraficoUnico" href="#" data-role="button" data-inline="true" >Gráfico Único</a>
-				<a id="botGraficos" style="display:none" href="#" data-role="button" data-inline="true" >Gráficos Sep.</a>
+				
+				
 
 				<!--Gráficos individuais-->
 				<div id="pressao" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
@@ -259,65 +257,9 @@
 
 			</div>
 
-			<script type="text/javascript">
-				$('#botGraficoUnico').click(function() {
-					$('#pressao').css('display', 'none');
-					$('#pressaoVenosaEabominal').css('display', 'none');
-					$('#frequenciaCardiaca').css('display', 'none');
-					$('#temperaturaCorporea').css('display', 'none');
-					$('#frequenciaRespiratoria').css('display', 'none');
-					$('#glicemia').css('display', 'none');
-					$('#graficoUnico').css('display', '');
-					$('#botGraficos').css('display', '');
-					$('#botGraficoUnico').css('display', 'none');
-				});
+			
 
-				$('#botGraficos').click(function() {
-					$('#pressao').css('display', '');
-					$('#pressaoVenosaEabominal').css('display', '');
-					$('#frequenciaCardiaca').css('display', '');
-					$('#temperaturaCorporea').css('display', '');
-					$('#frequenciaRespiratoria').css('display', '');
-					$('#glicemia').css('display', '');
-					$('#graficoUnico').css('display', 'none');
-					$('#botGraficos').css('display', 'none');
-					$('#botGraficoUnico').css('display', '');
-				});
-
-			</script>
-
-			<div data-role="panel" id="painel-datas" data-display="push" data-position="left" data-theme="b">
-
-				<p>
-					<strong>Dias anteriores</strong>
-
-				</p>
-				<div data-role="content">
-
-					<form>
-						<div data-role="controlgroup">
-							<a id="botData1" href="" data-role="button"></a>
-							<a id="botData2" href="" data-role="button"></a>
-							<a id="botData3" href="" data-role="button"></a>
-							<a id="botData4" href="" data-role="button"></a>
-							<a id="botData5" href="" data-role="button"></a>
-							<a id="botData6" href="" data-role="button"></a>
-						</div>
-
-					</form>
-
-				</div>
-
-				<p>
-					<strong>Escolher outra data:</strong>
-				</p>
-
-				<div data-role="fieldcontain">
-					<input type="date" name="date" id="date" value="" />
-					<a id="botDataOK" href="" data-role="button">OK</a>
-				</div>
-
-			</div><!-- /panel -->
+			
 
 			<script type="text/javascript">
 				function getCompleteDate(data) {
