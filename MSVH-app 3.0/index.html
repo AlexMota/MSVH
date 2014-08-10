@@ -46,10 +46,10 @@
 
 					<ul>
 						<li>
-							<a href="#painel-config" data-icon="gear">Configuração</a>
+							<a href="#painel-config" data-icon="gear"></a>
 						</li>
 						<li>
-							<a href="" data-icon="user">Pacientes</a>
+							<a href="" data-icon="user"></a>
 						</li>
 					</ul>
 
@@ -144,21 +144,21 @@
 
 		<div data-role="page" id="monitor">
 
-			<div data-role="header" data-theme="b">
+			<div data-role="header" data-theme="b" data-position="fixed">
 
-				<div data-role="navbar">
+				<div data-role="navbar" >
 					<ul>
 						<li>
-							<a href="#pacientes" data-icon="user">Pacientes</a>
+							<a href="#pacientes" data-icon="user"></a>
 						</li>
 						<li>
-							<a href="#monitor" data-icon="eye" class="ui-btn-active">Monitor</a>
+							<a href="#monitor" data-icon="eye" class="ui-btn-active"></a>
 						</li>
 						<li>
-							<a href="#tabela" data-icon="grid">Ficha</a>
+							<a href="#tabela" data-icon="grid"></a>
 						</li>
 						<li>
-							<a href="#graficos" data-icon="action">Graficos</a>
+							<a href="#graficos" data-icon="action"></a>
 						</li>
 					</ul>
 				</div>
@@ -168,32 +168,51 @@
 
 				<form>
 
-					<ul data-role="listview" data-inset="true"data-divider-theme="b">
-						<li data-role="list-divider">
-							<h1>Nome do Paciente</h1>
-							<p class="ui-li-aside">
-								<strong>UTI 123</strong>
-							</p>
+					<ul data-role="listview" data-inset="true">
+						<li data-role="data-divider" data-theme="b">
+							<div class="ui-grid-a" >
+								<div class="ui-bar-a ui-grid-solo">
+									<img src="jquerymobile-files/images/icons-png/user-black.png"/> Maria Silva Dias da Cunha
+								</div>
+								<div class="ui-block-a ui-bar-a">
+									<img src="jquerymobile-files/images/icons-png/location-black.png"/> UTI 123
+								</div>
+								<div class="ui-block-b ui-bar-a ">
+									<img src="jquerymobile-files/images/icons-png/star-black.png"/> 45 anos
+								</div>
+								<div class="ui-block-a ui-bar-a">
+									<img src="jquerymobile-files/images/icons-png/plus-black.png"/> Leito 4
+								</div>
+								<div class="ui-block-b ui-bar-a">
+									<img src="jquerymobile-files/images/icons-png/tag-black.png"/> N.P. 654736
+								</div>
+								<div class="ui-bar-a ui-grid-solo">
+									<img src="jquerymobile-files/images/icons-png/edit-black.png"/> Diabética, Hipertensa
+								</div>
+							</div><!-- /grid-b -->
 						</li>
-
 						<li>
-							<img src="img/heart.png"/><h1><big><big><big>102 bpm</big></big></big></h1>
+							<div class="ui-grid-a">
+								<div class="ui-block-a ui-bar-a">
+									<a href="" class=""><img src="img/heart.png"/></a><big><big><big>102</big></big></big> bpm
+								</div>
+								<div class="ui-block-b ui-bar-a">
+									<img src="img/lung.png"/><big><big><big>20</big></big></big> mpm
+								</div>
+								<div class="ui-block-a ui-bar-a">
+									<img src="img/thermometer.png"/><big><big><big>38</big></big></big> ºC
+								</div>
+								<div class="ui-block-b ui-bar-a">
+									<img src="img/blood.png"/><big><big><big>98</big></big></big> %
+								</div>
+								<div class="ui-bar-a ui-grid-solo">
+									<img src="img/blood pressure.png"/> <big><big><big>130 / 85</big></big></big> mmHg 
+								</div>
+							</div>
 						</li>
-
-						<li>
-							<img src="img/thermometer.png"/><h1><big><big><big>38 °C</big></big></big></h1>
-						</li>
-
-						<li>
-							<img src="img/blood pressure.png"/><h1><big><big><big>130/85</big></big></big></h1>
-						</li>
-
-						<li>
-							<img src="img/blood.png"/><h1><big><big><big>95%</big></big></big></h1>
-						</li>
-
 					</ul>
 				</form>
+
 			</div>
 		</div>
 
@@ -203,21 +222,21 @@
 
 		<div data-role="page"id="graficos">
 
-			<div data-role="header" data-theme="b">
+			<div data-role="header" data-theme="b" data-position="fixed">
 
 				<div data-role="navbar">
 					<ul>
 						<li>
-							<a href="#pacientes" data-icon="user">Pacientes</a>
+							<a href="#pacientes" data-icon="user"></a>
 						</li>
 						<li>
-							<a href="#monitor" data-icon="eye">Monitor</a>
+							<a href="#monitor" data-icon="eye"></a>
 						</li>
 						<li>
-							<a href="#tabela" data-icon="grid">Ficha</a>
+							<a href="#tabela" data-icon="grid"></a>
 						</li>
 						<li>
-							<a href="#graficos" data-icon="action" class="ui-btn-active">Graficos</a>
+							<a href="#graficos" data-icon="action" class="ui-btn-active"></a>
 						</li>
 					</ul>
 				</div>
@@ -380,23 +399,41 @@
 
 		<!--Inicio da pagina da tabela-->
 		<div data-role="page" id="tabela">
-			<div data-role="header" data-theme="b">
+			<div data-role="header" data-theme="b" data-position="fixed" >
 
 				<div data-role="navbar">
 					<ul>
 						<li>
-							<a href="#pacientes" data-icon="user">Pacientes</a>
+							<a href="#pacientes" data-icon="user"></a>
 						</li>
 						<li>
-							<a href="#monitor" data-icon="eye">Monitor</a>
+							<a href="#monitor" data-icon="eye"></a>
 						</li>
 						<li>
-							<a href="#tabela" data-icon="grid" class="ui-btn-active">Ficha</a>
+							<a href="#tabela" data-icon="grid" class="ui-btn-active"></a>
 						</li>
 						<li>
-							<a href="#graficos" data-icon="action">Graficos</a>
+							<a href="#graficos" data-icon="action"></a>
 						</li>
 					</ul>
+				</div>
+				<div class="ui-grid-d" >
+					<div class="ui-block-a ui-bar-b">
+						hrs
+					</div>
+					<div class="ui-block-b ui-bar-b">
+						bpm
+					</div>
+					<div class="ui-block-c ui-bar-b">
+						ºC
+					</div>
+					<div class="ui-block-d ui-bar-b">
+						%
+					</div>
+					<div class="ui-block-e ui-bar-b">
+						mmHg
+					</div>
+
 				</div>
 			</div>
 			<div data-role="content">
@@ -421,9 +458,27 @@
 					</ul>
 				</div>
 
-				<ul data-role="listview" data-filter="true" data-filter-placeholder="Pesquise horario.." data-inset="">
+				<ul data-role="listview" data-filter="true" data-filter-placeholder="Pesquise horario.." data-inset="" data-icon="false">
 					<li>
-						<a href="#popupMonitor" data-rel="popup"data-position-to="origin">07h</a>
+						<a href="#popupMonitor" data-rel="popup"data-position-to="origin">
+						<div class="ui-grid-d" >
+							<div class="ui-block-a ui-bar-inherit">
+								07
+							</div>
+							<div class="ui-block-b ui-bar-inherit">
+								102
+							</div>
+							<div class="ui-block-c ui-bar-inherit">
+								38
+							</div>
+							<div class="ui-block-d ui-bar-inherit">
+								95
+							</div>
+							<div class="ui-block-e ui-bar-inherit">
+								130/85
+							</div>
+
+						</div> </a>
 					</li>
 					<li>
 						<a href="">08h</a>
