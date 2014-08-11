@@ -378,4 +378,9 @@ $(function () {
         });
     });
 
+	$(document).on('pageinit','#init',function(){
+    setTimeout(function(){
+        $.mobile.changePage("#pacientes", "fade");
+    }, 4000);
+});
 
