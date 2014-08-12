@@ -10,17 +10,37 @@
 		<link rel="stylesheet" href="jquerymobile-files/jquery.mobile.custom.theme.css" />
 		<link rel="stylesheet" href="jquerymobile-files/jquery.mobile.icons.min.css" />
 		<link rel="stylesheet" href="css/style.css"/>
-		<script src="jquerymobile-files/jquery-1.10.2.min.js"></script>
-		<script src="jquerymobile-files/jquery.mobile.custom.js"></script>
+		
+		
+		<link rel="stylesheet" href="css/jquery.mobile-1.4.3.min.css" />
+	<link type="text/css" href="css/jqm-datebox.min.css" rel="stylesheet" /> 
+
+	<link type="text/css" href="http://dev.jtsage.com/jQM-DateBox/css/demos.css" rel="stylesheet" /> 
+	
+	
+	
+	<!-- NOTE: Script load order is significant! -->
+	
+	<script type="text/javascript" src="jquerymobile-files/jquery-2.1.1.js"></script>
+	<script type="text/javascript" src="jquerymobile-files/jquery.mobile-1.4.3.min.js"></script>
+	
+	<script type="text/javascript" src="jquerymobile-files/jqm-datebox.core.min.js"></script>
+	<script type="text/javascript" src="jquerymobile-files/jqm-datebox.mode.calbox.min.js"></script>
+	
+	
+	
+	
 		<script src="js/highcharts.js"></script>
 		<script src="js/exporting.js"></script>
 		<script src="js/script.js"></script>
+
+		
 
 		<title>index</title>
 
 	</head>
 
-	<body onload="setButtonText()">
+	<body onload="setInputText()">
 
 		<!--Incio da pagina Inicial splah page-->
 		<div data-role="page" >
@@ -241,9 +261,13 @@
 					</ul>
 				</div>
 			</div>
-			<div data-role="content" onload="setButtonText()">
+			<div data-role="content" onload="setInputText()">
 
 				
+        	
+        		<input name="mode1" id="dataInput" type="text" data-role="datebox" data-options='{"mode":"calbox", "maxDays":0, "minDays":5, "useHeader":false}' style=""/>
+      
+      		
 				
 
 				<!--Gráficos individuais-->
@@ -296,42 +320,19 @@
 						mes = '0' + mes
 					}
 
-					var saida = diaMes + '/' + mes + '/' + ano + ' (' + diaSemana + ')'
+					var saida = diaMes + '/' + mes + '/' + ano
 
 					return saida;
 
 				}
 
-				function setButtonText() {
-
+				function setInputText(){
 					var data = new Date();
-					document.getElementById("botDiaAtual").innerHTML = getCompleteDate(data);
-
-					var diaMes = data.getDate();
-					data.setDate(diaMes - 1);
-					document.getElementById("botData1").innerHTML = getCompleteDate(data);
-
-					diaMes = data.getDate();
-					data.setDate(diaMes - 1);
-					document.getElementById("botData2").innerHTML = getCompleteDate(data);
-
-					diaMes = data.getDate();
-					data.setDate(diaMes - 1);
-					document.getElementById("botData3").innerHTML = getCompleteDate(data);
-
-					diaMes = data.getDate();
-					data.setDate(diaMes - 1);
-					document.getElementById("botData4").innerHTML = getCompleteDate(data);
-
-					diaMes = data.getDate();
-					data.setDate(diaMes - 1);
-					document.getElementById("botData5").innerHTML = getCompleteDate(data);
-
-					diaMes = data.getDate();
-					data.setDate(diaMes - 1);
-					document.getElementById("botData6").innerHTML = getCompleteDate(data);
-
+					var inputData = document.getElementById("dataInput");
+					inputData.value = getCompleteDate(data);
 				}
+
+				
 
 			</script>
 
