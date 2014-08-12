@@ -43,7 +43,7 @@
 	<body onload="setInputText()">
 
 		<!--Incio da pagina Inicial splah page-->
-		<div data-role="page" >
+		<div data-role="page" id="init">
 
 			<div data-role="header" data-theme="b">
 				<h1>MonitorApp</h1>
@@ -51,7 +51,7 @@
 
 			<div data-role="content">
 
-				<a href="#pacientes"> <h1 align="center"><img  src="img/monitor_icon.png"/></h1></a>
+				<a href="#pacientes" class="show-page-loading-msg"> <h1 align="center"><img  src="img/monitor_icon.png"/></h1></a>
 				<h2 align="center">Monitoramento de Sinais Vitais Humanos</h2>
 			</div>
 
@@ -69,7 +69,7 @@
 							<a href="#painel-config" data-icon="gear"></a>
 						</li>
 						<li>
-							<a href="" data-icon="user"></a>
+							<a href="" data-icon="user" class="ui-btn-active ui-state-persist"></a>
 						</li>
 					</ul>
 
@@ -77,7 +77,7 @@
 			</div>
 			<div data-role="content" >
 
-				<ul data-role="listview" data-icon="alert">
+				<ul data-role="listview" >
 
 					<li>
 						<a href="#monitor"><img src="img/paciente-fem.png"/> <h3>Maria da Silva</h3>
@@ -172,7 +172,7 @@
 							<a href="#pacientes" data-icon="user"></a>
 						</li>
 						<li>
-							<a href="#monitor" data-icon="eye" class="ui-btn-active"></a>
+							<a href="#monitor" data-icon="eye" class="ui-btn-active ui-state-persist"></a>
 						</li>
 						<li>
 							<a href="#tabela" data-icon="grid"></a>
@@ -188,33 +188,33 @@
 
 				<form>
 
-					<ul data-role="listview" data-inset="true">
+					<ul data-role="listview" data-inset="true" data-theme="b">
 						<li data-role="data-divider" data-theme="b">
 							<div class="ui-grid-a" >
-								<div class="ui-bar-a ui-grid-solo">
-									<img src="jquerymobile-files/images/icons-png/user-black.png"/> Maria Silva Dias da Cunha
+								<div class="ui-bar-b ui-grid-solo">
+									<img src="jquerymobile-files/images/icons-png/user-white.png"/> Maria Silva Dias da Cunha
 								</div>
-								<div class="ui-block-a ui-bar-a">
-									<img src="jquerymobile-files/images/icons-png/location-black.png"/> UTI 123
+								<div class="ui-block-a ui-bar-b">
+									<img src="jquerymobile-files/images/icons-png/location-white.png"/> UTI 123
 								</div>
-								<div class="ui-block-b ui-bar-a ">
-									<img src="jquerymobile-files/images/icons-png/star-black.png"/> 45 anos
+								<div class="ui-block-b ui-bar-b ">
+									<img src="jquerymobile-files/images/icons-png/star-white.png"/> 45 anos
 								</div>
-								<div class="ui-block-a ui-bar-a">
-									<img src="jquerymobile-files/images/icons-png/plus-black.png"/> Leito 4
+								<div class="ui-block-a ui-bar-b">
+									<img src="jquerymobile-files/images/icons-png/plus-white.png"/> Leito 4
 								</div>
-								<div class="ui-block-b ui-bar-a">
-									<img src="jquerymobile-files/images/icons-png/tag-black.png"/> N.P. 654736
+								<div class="ui-block-b ui-bar-b">
+									<img src="jquerymobile-files/images/icons-png/tag-white.png"/> N.P. 654736
 								</div>
-								<div class="ui-bar-a ui-grid-solo">
-									<img src="jquerymobile-files/images/icons-png/edit-black.png"/> Diabética, Hipertensa
+								<div class="ui-bar-b ui-grid-solo">
+									<img src="jquerymobile-files/images/icons-png/edit-white.png"/> Diabética, Hipertensa
 								</div>
 							</div><!-- /grid-b -->
 						</li>
 						<li>
-							<div class="ui-grid-a">
+							<div class="ui-grid-a ui-corner-all" >
 								<div class="ui-block-a ui-bar-a">
-									<a href="" class=""><img src="img/heart.png"/></a><big><big><big>102</big></big></big> bpm
+									<a href="#graficos" class=""><img src="img/heart.png"/></a><big><big><big>102</big></big></big> bpm
 								</div>
 								<div class="ui-block-b ui-bar-a">
 									<img src="img/lung.png"/><big><big><big>20</big></big></big> mpm
@@ -256,7 +256,7 @@
 							<a href="#tabela" data-icon="grid"></a>
 						</li>
 						<li>
-							<a href="#graficos" data-icon="action" class="ui-btn-active"></a>
+							<a href="#graficos" data-icon="action" class="ui-btn-active ui-state-persist"></a>
 						</li>
 					</ul>
 				</div>
@@ -353,7 +353,7 @@
 							<a href="#monitor" data-icon="eye"></a>
 						</li>
 						<li>
-							<a href="#tabela" data-icon="grid" class="ui-btn-active"></a>
+							<a href="#tabela" data-icon="grid" class="ui-btn-active ui-state-persist"></a>
 						</li>
 						<li>
 							<a href="#graficos" data-icon="action"></a>
