@@ -34,13 +34,51 @@
 		<script src="js/exporting.js"></script>
 		<script src="js/script.js"></script>
 
-		
+		<script>
+			
+			function geraListaPacientes() {
+  var p = document.getElementById('listap');
+  var filhos = p.childNodes;
+  
+
+
+  //botao icone
+  var aIcon = document.createElement('a');
+  aIcon.setAttribute('data-role', "icon");
+  aIcon.setAttribute('data-icon', "alarm");
+  aIcon.setAttribute('data-mini', "true");
+  aIcon.setAttribute('data-inconpos', "notext");
+  aIcon.setAttribute('data-inline', "true");
+  aIcon.setAttribute('data-theme', "true");
+  
+//BOTAO PACIENTE
+  var li = document.createElement('li');
+  var aPac = document.createElement('a');
+  var img = document.createElement('img');
+  var h3 = document.createElement('h3');
+  var paragrafo = document.createElement('p');
+  aPac.setAttribute('href', "http://google.com");
+  img.setAttribute('src', "img/paciente-fem.png");
+  h3.innerHTML = 'Teste';
+  paragrafo.innerHTML = 'UTI';
+  li.appendChild(aPac);
+  li.appendChild(aIcon);
+  aPac.appendChild(img);
+  aPac.appendChild(h3);
+  aPac.appendChild(paragrafo);
+  p.appendChild(li);
+  
+
+}
+			
+			
+		</script>
 
 		<title>index</title>
 
 	</head>
 
-	<body onload="setInputText()">
+	<body onload="setInputText(), geraListaPacientes();">
 
 		<!--Incio da pagina Inicial splah page-->
 		<div data-role="page" id="init">
@@ -77,7 +115,7 @@
 			</div>
 			<div data-role="content" >
 
-				<ul data-role="listview" >
+				<ul id="listap" data-role="listview" >
 
 					<li>
 						<a href="#monitor"><img src="img/paciente-fem.png"/> <h3>Maria da Silva</h3>
