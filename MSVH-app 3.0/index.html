@@ -37,39 +37,52 @@
 		<script>
 			
 			function geraListaPacientes() {
-  var p = document.getElementById('listap');
-  var filhos = p.childNodes;
-  
+				  var p = document.getElementById('listap');
+				  var filhos = p.childNodes;
+				  var i;
+
+				 for(i=1; i<21; i++){
+
+				  //botao icone
+				  var aIcon = document.createElement('a');
+				  aIcon.setAttribute('data-role', "icon");
+				  aIcon.setAttribute('data-icon', "alarm");
+				  aIcon.setAttribute('data-mini', "true");
+				  aIcon.setAttribute('data-inconpos', "notext");
+				  aIcon.setAttribute('data-inline', "true");
+				  aIcon.setAttribute('data-theme', "true");
+				  
+				//BOTAO PACIENTE
+				  var li = document.createElement('li');
+				  var aPac = document.createElement('a');
+				  var img = document.createElement('img');
+				  var h3 = document.createElement('h3');
+				  var paragrafo = document.createElement('p');
+				  aPac.setAttribute('href', "#monitor");
+
+				  //gera um numero aleatorio entre que pode ser 1 ou 2
+				  var numAle = Math.floor((Math.random() * 2) + 1);
+
+				  if(numAle == 1){
+				  	img.setAttribute('src', "img/paciente-fem.png");
+				 }else{
+			 		img.setAttribute('src', "img/paciente-mas.png");
+				 }
 
 
-  //botao icone
-  var aIcon = document.createElement('a');
-  aIcon.setAttribute('data-role', "icon");
-  aIcon.setAttribute('data-icon', "alarm");
-  aIcon.setAttribute('data-mini', "true");
-  aIcon.setAttribute('data-inconpos', "notext");
-  aIcon.setAttribute('data-inline', "true");
-  aIcon.setAttribute('data-theme', "true");
-  
-//BOTAO PACIENTE
-  var li = document.createElement('li');
-  var aPac = document.createElement('a');
-  var img = document.createElement('img');
-  var h3 = document.createElement('h3');
-  var paragrafo = document.createElement('p');
-  aPac.setAttribute('href', "http://google.com");
-  img.setAttribute('src', "img/paciente-fem.png");
-  h3.innerHTML = 'Teste';
-  paragrafo.innerHTML = 'UTI';
-  li.appendChild(aPac);
-  li.appendChild(aIcon);
-  aPac.appendChild(img);
-  aPac.appendChild(h3);
-  aPac.appendChild(paragrafo);
-  p.appendChild(li);
-  
+				  h3.innerHTML = 'Paciente '+i;
+				  paragrafo.innerHTML = 'UTI XXX';
 
-}
+				  //incopora os elementos
+				  li.appendChild(aPac);
+				  li.appendChild(aIcon);
+				  aPac.appendChild(img);
+				  aPac.appendChild(h3);
+				  aPac.appendChild(paragrafo);
+				  p.appendChild(li);
+  				}
+
+			}
 			
 			
 		</script>
@@ -117,43 +130,7 @@
 
 				<ul id="listap" data-role="listview" >
 
-					<li>
-						<a href="#monitor"><img src="img/paciente-fem.png"/> <h3>Maria da Silva</h3>
-						<p>
-							UTI 153
-						</p> </a>
-						<a href="" data-role="icon" data-icon='alarm' data-mini='true' data-iconpos='notext' data-inline='true' data-theme='a'></a>
-					</li>
-					<li data-icon="alarm">
-						<a href=""><img src="img/paciente-mas.png"/> <h3>Pedro Rocha</h3>
-						<p>
-							UTI 038
-						</p></a>
-					</li>
-					<li data-icon="alarm-off">
-						<a href=""><img src="img/paciente-fem.png"/> <h3>Isabel Ferreira</h3>
-						<p>
-							UTI 227
-						</p></a>
-					</li>
-					<li data-icon="alarm">
-						<a href=""><img src="img/paciente-mas.png"/> <h3>João Carlos</h3>
-						<p>
-							UTI 018
-						</p></a>
-					</li>
-					<li data-icon="alarm-off">
-						<a href=""><img src="img/paciente-fem.png"/> <h3>Rosana Matos</h3>
-						<p>
-							UTI 527
-						</p></a>
-					</li>
-					<li data-icon="alarm">
-						<a href=""><img src="img/paciente-mas.png"/> <h3>Bruno Ramos</h3>
-						<p>
-							UTI 018
-						</p> </a>
-					</li>
+					
 
 				</ul>
 
@@ -309,14 +286,13 @@
 				
 
 				<!--Gráficos individuais-->
-				<div id="pressao" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
-				<div id="pressaoVenosaEabominal" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
-				<div id="frequenciaCardiaca" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
-				<div id="temperaturaCorporea" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
-				<div id="frequenciaRespiratoria" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
-				<div id="glicemia" style="min-width: 320px; height: 400px; margin: 0 auto"></div>
-				<div id="graficoUnico" style="display: none; min-width: 320px; height: 400px; margin: 0 auto"></div>
-
+				<div id="pressao" style="min-width: 93%; height: 400px; margin: 0 auto"></div>
+				<div id="pressaoVenosaEabominal" style="min-width: 93%; height: 400px; margin: 0 auto"></div>
+				<div id="frequenciaCardiaca" style="min-width: 93%; height: 400px; margin: 0 auto"></div>
+				<div id="temperaturaCorporea" style="min-width: 93%; height: 400px; margin: 0 auto"></div>
+				<div id="frequenciaRespiratoria" style="min-width: 93%; height: 400px; margin: 0 auto"></div>
+				<div id="glicemia" style="min-width: 93%; height: 400px; margin: 0 auto"></div>
+				
 			</div>
 
 			
