@@ -77,3 +77,6 @@ td input, td input:focus {
 	width: 30px;
 }
 
+.bordagrafico {
+	border: 10px solid #333;	
+}
