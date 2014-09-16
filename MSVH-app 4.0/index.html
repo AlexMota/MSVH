@@ -32,7 +32,7 @@
 
 	</head>
 
-	<body onload="setInputText()">
+	<body>
 
 		<!--Incio da pagina Inicial splah page-->
 		<div data-role="page" id="init">
@@ -59,17 +59,17 @@
 			</div>
 			<div data-role="content" >
 
-				<ul data-role="listview" >
+				<ul id="lista" data-role="listview" >
 
 					<li>
 						<a href="#monitor"><img src="img/paciente-fem.png" class="borda" /><h3>Maria da Silva</h3>
 						<p>
 							UTI 153
 						</p> </a>
-						<a href="" data-role="icon" data-icon='audio' data-mini='true' data-iconpos='notext' data-inline='true' data-theme='a' class="ui-alt-icon"></a>
+						<a id="botaoAlarme" href="" data-role="icon" data-icon='alarm-off' data-mini='true' data-iconpos='notext' data-inline='true' data-theme='a'></a>
 					</li>
 					<li>
-						<a href=""><img src="img/paciente-mas.png"/><h3>Pedro Rocha</h3>
+						<a href="" ><img src="img/paciente-mas.png"/><h3>Pedro Rocha</h3>
 						<p>
 							UTI 038
 						</p> </a>

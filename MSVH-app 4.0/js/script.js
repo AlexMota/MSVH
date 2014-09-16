@@ -387,3 +387,32 @@ $(function () {
 $(function (){	
 	$( ".aviso-sonoro" ).slider( "disable" );
 });
+
+
+$(function (){
+
+    
+    $('#botaoAlarme').click(function(){
+        var botao = document.getElementById("botaoAlarme");
+        var icone = botao.getAttribute("data-icon");
+        
+        switch(icone){
+        case "alarm":
+            botao.setAttribute('data-icon', "alarm-off");
+            $(this).buttonMarkup({ icon: "alarm-off" });
+            break;
+
+        case "alarm-off":
+            botao.setAttribute('data-icon', "alarm");
+            $(this).buttonMarkup({ icon: "alarm" });
+            break;
+
+
+        }   
+        
+
+        
+    });
+
+});
+
