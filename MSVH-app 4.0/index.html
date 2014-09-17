@@ -120,7 +120,7 @@
 						</select>
 
 						<label for="volume">Volume:</label>
-						<input type="range" name="volume" id="volume" min="0" max="10" value="5" data-highlight="true"/>
+						<input  disabled="disabled" type="range" name="volume" id="volume" min="0" max="10" value="5" data-highlight="true"/>
 
 						<label for="aviso-visual">Alertas visuais:</label>
 						<select name="aviso-visual" id="aviso-visual" data-role="slider">
@@ -196,19 +196,19 @@
 						<li>
 							<div class="ui-grid-a ui-corner-all" >
 								<div class="ui-block-a ui-bar-a">
-									<a href="#graficos" class="" id="mn-heart" ><img src="img/heart.png"/></a><big><big><big>102</big></big></big> bpm
+									<a id="monFreqCard" href="#graficos" class="" ><img src="img/heart.png"/></a><big><big><big>102</big></big></big> bpm
 								</div>
 								<div class="ui-block-b ui-bar-a">
-									<a href=""><img src="img/lung.png"/></a><big><big><big>20</big></big></big> mpm
+									<a id="monFreqResp" href="#graficos"><img src="img/lung.png"/></a><big><big><big>20</big></big></big> mpm
 								</div>
 								<div class="ui-block-a ui-bar-a">
-									<img src="img/thermometer.png"/><big><big><big>38</big></big></big> ºC
+									<a id="monTempCorp" href="#graficos"><img src="img/thermometer.png"/></a><big><big><big>38</big></big></big> ºC
 								</div>
 								<div class="ui-block-b ui-bar-a">
-									<img src="img/blood.png"/><big><big><big>98</big></big></big> %
+									<a id="monSatOxig" href="#graficos"><img src="img/blood.png"/></a><big><big><big>98</big></big></big> %
 								</div>
 								<div class="ui-bar-a ui-grid-solo">
-									<img src="img/blood pressure.png"/><big><big><big>130 / 85</big></big></big> mmHg
+									<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big>130 / 85</big></big></big> mmHg
 								</div>
 							</div>
 						</li>
@@ -244,7 +244,7 @@
 				</div>
 
 			</div>
-			<div data-role="content" onload="setInputText()">
+			<div data-role="content" >
 
 				<input name="mode1" id="dataInput" type="text" data-role="datebox" data-options='{"mode":"calbox", "maxDays":0, "minDays":5, "useHeader":false}' style=""/>
 
@@ -252,19 +252,19 @@
 					<div data-role="navbar" data-theme="a" >
 						<ul>
 							<li>
-								<a href="#g1" class=" ui-btn-active ui-state-persist"><img src="img/blood pressure.png" class="imagensgraficos"/></a>
+								<a id="btPressaoArt"  class="ui-state-persist" href="#g1" ><img src="img/blood pressure.png" class="imagensgraficos"/></a>
 							</li>
 							<li>
-								<a href="#g2" id="btblood"><img src="img/blood.png" class="imagensgraficos"/></a>
+								<a id="btSatOxig" href="#g2" ><img src="img/blood.png" class="imagensgraficos"/></a>
 							</li>
 							<li>
-								<a href="#g3" ><img src="img/heart.png" class="imagensgraficos"/></a>
+								<a id="btFreqCar" href="#g3" ><img src="img/heart.png" class="imagensgraficos"/></a>
 							</li>
 							<li>
-								<a href="#g4" ><img src="img/thermometer.png" class="imagensgraficos" /></a>
+								<a id="btTempCorp" href="#g4" ><img src="img/thermometer.png" class="imagensgraficos" /></a>
 							</li>
 							<li>
-								<a href="#g5" ><img src="img/lung.png" class="imagensgraficos" /></a>
+								<a id="btFreqResp" href="#g5" ><img src="img/lung.png" class="imagensgraficos" /></a>
 							</li>
 
 						</ul>
