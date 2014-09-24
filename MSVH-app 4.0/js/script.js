@@ -432,62 +432,6 @@ $(document).on('pageshow', '#graficos', function(){
 
 
 
-
-
-
-/*
-$(function() {
-	$('#glicemia').highcharts({
-
-		exporting : {
-			enabled : false
-		},
-		credits : {
-			enabled : false
-		},
-		title : {
-			text : 'Glicemia',
-			x : -20 //center
-		},
-
-		xAxis : {
-			title : {
-				text : 'Horas'
-			},
-			categories : ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00', '01', '02', '03', '04', '05', '06']
-		},
-		yAxis : {
-			title : {
-				text : null
-			},
-			plotLines : [{
-				value : 0,
-				width : 1,
-				color : '#808080'
-			}]
-		},
-		tooltip : {
-
-			valueSuffix : 'mg/dl'
-		},
-		legend : {
-			labelFormatter : function() {
-				if (this.index == 0) {
-					return 'Glicemia';
-				}
-			},
-			layout : 'vertical',
-			align : 'center',
-			verticalAlign : 'bottom',
-			borderWidth : 0
-		},
-		series : [{
-			name : 'Glic.',
-			data : [55, 55, 54, 57, 60, 62, 61, 56, 70, 75, 72, 73, 80, 75, 74, 73, 65, 62, 59, 68, 76, 82, 75, 68]
-		}]
-	});
-});
-
 $(document).on('pageinit', '#init', function() {
 	setTimeout(function() {
 		$.mobile.changePage("#pacientes", "fade");
@@ -521,7 +465,7 @@ $(function() {
 
 });
 
-*/
+
 
 $(function() {
 
@@ -805,6 +749,38 @@ $(function() {
 $(function() {
 
 	$('#btPressaoArt').click(function() {
+
+		
+
+		var botaoPA = document.getElementById("btPressaoArt");
+		botaoPA.classList.add("ui-btn-active");
+		botaoPA.classList.add("ui-state-persist");
+		//console.log(botao);
+
+		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
+		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
+		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
+		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
+
+		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
+		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
+		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
+		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
+
+		$('#frequenciaCardiaca').css('display', 'none');
+		$('#saturacaoOxigenio').css('display', 'none');
+		$('#frequenciaRespiratoria').css('display', 'none');
+		$('#temperaturaCorporea').css('display', 'none');
+		$('#pressao').css('display', 'flex');
+
+	});
+
+});
+
+
+$(function() {
+
+	$('#monGraficos').click(function() {
 
 		var botaoPA = document.getElementById("btPressaoArt");
 		botaoPA.classList.add("ui-btn-active");
