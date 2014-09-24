@@ -440,7 +440,7 @@ $(document).on('pageinit', '#init', function() {
 
 $(function() {
 
-	$('#botaoAlarme').click(function() {
+	$("#botaoAlarme").click(function() {
 		var botao = document.getElementById("botaoAlarme");
 		var icone = botao.getAttribute("data-icon");
 
