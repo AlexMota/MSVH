@@ -16,13 +16,12 @@ $(document).on('pageshow', '#graficos', function(){
 
 
             title: {
-                text : 'Pressão Arterial',
-				x : -20 //center
+                text : null,
             },
             
             xAxis : {
 			title : {
-				text : 'Horas'
+				text : null
 			},
 			categories : ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00', '01', '02', '03', '04', '05', '06']
 		},
@@ -36,28 +35,35 @@ $(document).on('pageshow', '#graficos', function(){
 				color : '#808080'
 			}]
 		},
-		tooltip : {
+		tooltip: {
+            formatter: function () {
+                var s = '<b>' + this.x + 'hrs</b>';
 
-			pointFormat : '{series.name}: <b>{point.y}</b><br/>',
+                $.each(this.points, function () {
+                    s += '<br/>' + this.series.name + ': ' +
+                        this.y + ' mmHg';
+                });
 
-			shared : true
-
-		},
+                return s;
+            },
+            shared: true
+        },
             legend : {
 			labelFormatter : function() {
 				if (this.index == 0) {
-					return 'Pressão Arterial Sistólica';
+					return 'PAS';
 				} else if (this.index == 1) {
-					return 'Pressão Arterial Diastólica';
+					return 'PAD';
 				} else if (this.index == 2) {
-					return 'Pressão Arteria Média'
+					return 'PAM'
 				}
 			},
 
-			layout : 'vertical',
+			layout : 'horizontal',
 			align : 'center',
 			verticalAlign : 'bottom',
-			borderWidth : 0
+			margin: -2
+			
 		},
             series : [{
 
@@ -107,13 +113,12 @@ $(document).on('pageshow', '#graficos', function(){
 
             
             title: {
-                text : 'Sat. O2',
-				x : -20 //center
+                text : null,
             },
             
             xAxis : {
 			title : {
-				text : 'Horas'
+				text : null
 			},
 			categories : ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00', '01', '02', '03', '04', '05', '06']
 		},
@@ -129,7 +134,16 @@ $(document).on('pageshow', '#graficos', function(){
 		},
 		tooltip : {
 
-			pointFormat : '{series.name}: <b>{point.y}</b><br/>',
+			formatter: function () {
+                var s = '<b>' + this.x + 'hrs</b>';
+
+                $.each(this.points, function () {
+                    s += '<br/>' + this.series.name + ': ' +
+                        this.y + ' %';
+                });
+
+                return s;
+            },
 
 			shared : true
 
@@ -137,14 +151,14 @@ $(document).on('pageshow', '#graficos', function(){
             legend : {
 			labelFormatter : function() {
 				if (this.index == 0) {
-					return 'Saturação de Oxigênio';
+					return 'SaO2';
 				} 
 			},
 
 			layout : 'vertical',
 			align : 'center',
 			verticalAlign : 'bottom',
-			borderWidth : 0
+			margin: -2
 		},
             series : [{
 			name : 'Sat. O2',
@@ -179,13 +193,12 @@ $(document).on('pageshow', '#graficos', function(){
 
             
             title: {
-                text : 'Frequência Cardíaca',
-				x : -20 //center
+                text : null,
             },
             
             xAxis : {
 			title : {
-				text : 'Horas'
+				text : null
 			},
 			categories : ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00', '01', '02', '03', '04', '05', '06']
 		},
@@ -201,7 +214,16 @@ $(document).on('pageshow', '#graficos', function(){
 		},
 		tooltip : {
 
-			pointFormat : '{series.name}: <b>{point.y}</b><br/>',
+			formatter: function () {
+                var s = '<b>' + this.x + 'hrs</b>';
+
+                $.each(this.points, function () {
+                    s += '<br/>' + this.series.name + ': ' +
+                        this.y + ' bpm';
+                });
+
+                return s;
+            },
 
 			shared : true
 
@@ -209,14 +231,14 @@ $(document).on('pageshow', '#graficos', function(){
             legend : {
 			labelFormatter : function() {
 				if (this.index == 0) {
-					return 'Frequência Cardíaca';
+					return 'FC';
 				}
 			},
 
 			layout : 'vertical',
 			align : 'center',
 			verticalAlign : 'bottom',
-			borderWidth : 0
+			margin: -2
 		},
             series : [{
 			name : 'FC',
@@ -247,13 +269,12 @@ $(document).on('pageshow', '#graficos', function(){
 
             
             title: {
-                text : 'Temperatura Corpórea',
-				x : -20 //center
+                text : null,
             },
             
             xAxis : {
 			title : {
-				text : 'Horas'
+				text : null
 			},
 			categories : ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00', '01', '02', '03', '04', '05', '06']
 		},
@@ -269,7 +290,16 @@ $(document).on('pageshow', '#graficos', function(){
 		},
 		tooltip : {
 
-			pointFormat : '{series.name}: <b>{point.y}</b><br/>',
+			formatter: function () {
+                var s = '<b>' + this.x + 'hrs</b>';
+
+                $.each(this.points, function () {
+                    s += '<br/>' + this.series.name + ': ' +
+                        this.y + ' °C';
+                });
+
+                return s;
+            },
 
 			shared : true
 
@@ -277,14 +307,14 @@ $(document).on('pageshow', '#graficos', function(){
             legend : {
 			labelFormatter : function() {
 				if (this.index == 0) {
-					return 'Temperatura Corpórea';
+					return 'TC';
 				}
 			},
 
 			layout : 'vertical',
 			align : 'center',
 			verticalAlign : 'bottom',
-			borderWidth : 0
+			margin: -2
 		},
             series : [{
 			name : 'TC',
@@ -315,8 +345,7 @@ $(document).on('pageshow', '#graficos', function(){
 
             
             title: {
-                text : 'Temperatura Corpórea',
-				x : -20 //center
+                text : null,
             },
             
             xAxis : {
@@ -337,7 +366,16 @@ $(document).on('pageshow', '#graficos', function(){
 		},
 		tooltip : {
 
-			pointFormat : '{series.name}: <b>{point.y}</b><br/>',
+			formatter: function () {
+                var s = '<b>' + this.x + 'hrs</b>';
+
+                $.each(this.points, function () {
+                    s += '<br/>' + this.series.name + ': ' +
+                        this.y + ' °C';
+                });
+
+                return s;
+            },
 
 			shared : true
 
@@ -345,14 +383,14 @@ $(document).on('pageshow', '#graficos', function(){
             legend : {
 			labelFormatter : function() {
 				if (this.index == 0) {
-					return 'Temperatura Corpórea';
+					return 'TC';
 				}
 			},
 
 			layout : 'vertical',
 			align : 'center',
 			verticalAlign : 'bottom',
-			borderWidth : 0
+			margin: -2
 		},
             series : [{
 			name : 'TC',
@@ -382,13 +420,12 @@ $(document).on('pageshow', '#graficos', function(){
 
             
             title: {
-                text : 'Frequência Respiratória',
-				x : -20 //center
+                text : null,
             },
             
             xAxis : {
 			title : {
-				text : 'Horas'
+				text : null
 			},
 			categories : ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00', '01', '02', '03', '04', '05', '06']
 		},
@@ -404,7 +441,16 @@ $(document).on('pageshow', '#graficos', function(){
 		},
 		tooltip : {
 
-			pointFormat : '{series.name}: <b>{point.y}</b><br/>',
+			formatter: function () {
+                var s = '<b>' + this.x + 'hrs</b>';
+
+                $.each(this.points, function () {
+                    s += '<br/>' + this.series.name + ': ' +
+                        this.y + ' mpm';
+                });
+
+                return s;
+            },
 
 			shared : true
 
@@ -412,14 +458,14 @@ $(document).on('pageshow', '#graficos', function(){
             legend : {
 			labelFormatter : function() {
 				if (this.index == 0) {
-					return 'Frequência Respiratória';
+					return 'FR';
 				}
 			},
 
 			layout : 'vertical',
 			align : 'center',
 			verticalAlign : 'bottom',
-			borderWidth : 0
+			margin: -2
 		},
             series : [{
 			name : 'FR',
@@ -782,26 +828,26 @@ $(function() {
 
 	$('#monGraficos').click(function() {
 
-		var botaoPA = document.getElementById("btPressaoArt");
-		botaoPA.classList.add("ui-btn-active");
-		botaoPA.classList.add("ui-state-persist");
+		var botaoFC = document.getElementById("btFreqCar");
+		botaoFC.classList.add("ui-btn-active");
+		botaoFC.classList.add("ui-state-persist");
 		//console.log(botao);
 
-		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
-		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
 		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
 		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
+		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
+		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
 
-		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
-		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
 		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
 		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
+		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
+		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
 
-		$('#frequenciaCardiaca').css('display', 'none');
+		$('#pressao').css('display', 'none');
 		$('#saturacaoOxigenio').css('display', 'none');
 		$('#frequenciaRespiratoria').css('display', 'none');
 		$('#temperaturaCorporea').css('display', 'none');
-		$('#pressao').css('display', 'flex');
+		$('#frequenciaCardiaca').css('display', 'flex');
 
 	});
 
