@@ -478,38 +478,7 @@ $(document).on('pageshow', '#graficos', function(){
 
 
 
-$(document).on('pageinit', '#init', function() {
-	setTimeout(function() {
-		$.mobile.changePage("#pacientes", "fade");
-	}, 4000);
-});
 
-$(function() {
-
-	$("#botaoAlarme").click(function() {
-		var botao = document.getElementById("botaoAlarme");
-		var icone = botao.getAttribute("data-icon");
-
-		switch(icone) {
-			case "alarm":
-				botao.setAttribute('data-icon', "alarm-off");
-				$(this).buttonMarkup({
-					icon : "alarm-off"
-				});
-				break;
-
-			case "alarm-off":
-				botao.setAttribute('data-icon', "alarm");
-				$(this).buttonMarkup({
-					icon : "alarm"
-				});
-				break;
-
-		}
-
-	});
-
-});
 
 
 
@@ -854,6 +823,61 @@ $(function() {
 });
 
 
+$(document).on('pageinit', '#pacientes', function(){
+		
+						  var p = document.getElementById('listap');
+						  var filhos = p.childNodes;
+						  var i;
+
+						 for(i=1; i<21; i++){
+
+						  //botao icone
+						  var aIcon = document.createElement('a');
+						  aIcon.setAttribute('data-role', "icon");
+						  aIcon.setAttribute('data-icon', "alarm");
+						  aIcon.setAttribute('data-mini', "true");
+						  aIcon.setAttribute('data-inconpos', "notext");
+						  aIcon.setAttribute('data-inline', "true");
+						  aIcon.setAttribute('data-theme', "true");
+						  aIcon.setAttribute('class', "alarme");
+						  
+						//BOTAO PACIENTE
+						  var li = document.createElement('li');
+						  var aPac = document.createElement('a');
+						  var img = document.createElement('img');
+						  var h3 = document.createElement('h3');
+						  var paragrafo = document.createElement('p');
+						  aPac.setAttribute('href', "#monitor");
+
+						  //gera um numero aleatorio que pode ser 1 ou 2
+						  var numAle = Math.floor((Math.random() * 2) + 1);
+
+						  if(numAle == 1){
+						  	img.setAttribute('src', "img/paciente-fem.png");
+						 }else{
+					 		img.setAttribute('src', "img/paciente-mas.png");
+						 }
+
+
+						  h3.innerHTML = 'Paciente '+i;
+						  paragrafo.innerHTML = 'UTI XXX';
+
+						  //incopora os elementos
+						  li.appendChild(aPac);
+						  li.appendChild(aIcon);
+						  aPac.appendChild(img);
+						  aPac.appendChild(h3);
+						  aPac.appendChild(paragrafo);
+						  p.appendChild(li);
+		  				}
+
+
+		  				$("#listap").listview("refresh");
+
+					
+
+});
+
 
 
 $(function() {
@@ -870,4 +894,39 @@ $(function() {
 		}
 	});
 });
+
+
+
+$(function() {
+
+	$('#listap').on('click', '.alarme', function(event) {
+		var botao = $(this);
+		var icone = botao.attr("data-icon");
+
+		
+
+		switch(icone) {
+			case "alarm":
+				botao.attr('data-icon', "alarm-off");
+				$(this).buttonMarkup({
+					icon : "alarm-off"
+				});
+				break;
+
+			case "alarm-off":
+				botao.attr('data-icon', "alarm");
+				$(this).buttonMarkup({
+					icon : "alarm"
+				});
+				break;
+
+		}
+
+	});
+
+});
+
+
+
+
 
