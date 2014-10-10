@@ -809,22 +809,22 @@ $(document).on('pageinit', '#pacientes', function() {
 
 		switch (numAle) {
 			case 1:
-			img.setAttribute('src', "img/paciente-fem.png");
+				img.setAttribute('src', "img/paciente-fem.png");
 				break;
 			case 2:
-			img.setAttribute('src', "img/paciente-fem-ama.png");
+				img.setAttribute('src', "img/paciente-fem-ama.png");
 				break;
 			case 3:
-			img.setAttribute('src', "img/paciente-fem-ver.png");
+				img.setAttribute('src', "img/paciente-fem-ver.png");
 				break;
 			case 4:
-			img.setAttribute('src', "img/paciente-mas.png");
+				img.setAttribute('src', "img/paciente-mas.png");
 				break;
 			case 5:
-			img.setAttribute('src', "img/paciente-mas-ama.png");
+				img.setAttribute('src', "img/paciente-mas-ama.png");
 				break;
 			case  6:
-			img.setAttribute('src', "img/paciente-mas-ver.png");
+				img.setAttribute('src', "img/paciente-mas-ver.png");
 				break;
 		}
 
@@ -889,6 +889,24 @@ $(function() {
 		}
 
 	});
+
+});
+
+$(document).on('pageinit', '#tabela', function() {
+
+var hora;
+	for ( i = 0; i < 24; i++) {
+		
+		hora = i + 7;
+		
+		if(hora >= 24){
+			hora = hora - 24;
+		}
+		
+		var linha = '<tr><th>'+hora+'</th><td>45</td><td>38</td><td>39</td><td>74</td><td>24</td></tr>';
+		$('table').append(linha);
+		$("#lista-chegada").listview("refresh");
+	}
 
 });
 
