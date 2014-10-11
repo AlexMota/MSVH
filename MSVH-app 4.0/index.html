@@ -14,7 +14,7 @@
 		<link rel="stylesheet" href="css/jquery.mobile-1.4.3.min.css" />
 		<link type="text/css" href="css/jqm-datebox.min.css" rel="stylesheet" />
 
-		<link type="text/css" href="http://dev.jtsage.com/jQM-DateBox/css/demos.css" rel="stylesheet" />
+		<link type="text/css" href="css/demos.css" rel="stylesheet" />
 
 		<!-- NOTE: Script load order is significant! -->
 
@@ -317,34 +317,38 @@
 					</div>
 					<ul data-role="listview" data-icon="false">
 						<li>
-							<a href="#"><img src="img/ht-icon.png" class="ui-li-icon"/>Freq. Cardiaca: 102 bpm</a>
+							<a id="fcPopup" href="#"><img src="img/ht-icon.png" class="ui-li-icon"/><h3></h3></a>
 						</li>
 						<li>
-							<a href="#"><img src="img/th-icon.png" class="ui-li-icon"/>Temperatura: 38ºC</a>
+							<a id="tPopup" href="#"><img src="img/th-icon.png" class="ui-li-icon"/><h3></h3></a>
 						</li>
 						<li>
-							<a href="#"><img src="img/bp-icon.png" class="ui-li-icon"/>Pressão Arterial: 130/85</a>
+							<a id="frPopup" href="#"><img src="img/icons/l__icon.png" class="ui-li-icon"/><h3></h3></a>
+						</li>
+						
+						<li>
+							<a id="so2Popup" href="#"><img src="img/bs-icon.png" class="ui-li-icon"/><h3></h3></a>
 						</li>
 						<li>
-							<a href="#"><img src="img/bs-icon.png" class="ui-li-icon"/>Sat. Oxigênio: 95%</a>
+							<a id="paPopup" href="#"><img src="img/bp-icon.png" class="ui-li-icon"/><h3></h3></a>
+
 						</li>
 					</ul>
 				</div>
 
 				<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">
-     <thead>
-       <tr>
+     
+       <tr class="linha">
 		<th data-priority="1">Hrs</th>
-         <th data-priority="2">Freq. Card.</th>
-         <th>Freq. Resp</th>
-         <th data-priority="3">Temp.</th>
-         <th data-priority="6">Sat O2</th>
-         <th data-priority="5">Pressão</th>
+         <th data-priority="2">FC</th>
+         <th data-priority="3">FR</th>
+         <th data-priority="4">TC</th>
+         <th data-priority="5">SO2</th>
+         <th data-priority="6">PA</th>
+         <th data-priority="6">PAM</th>
        </tr>
-     </thead>
-     <tbody>
-
-     </tbody>
+     
+     
    </table>
 			</div>	
 

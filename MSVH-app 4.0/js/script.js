@@ -330,9 +330,7 @@ $(document).on('pageshow', '#graficos', function() {
 			},
 
 			xAxis : {
-				title : {
-					text : 'Horas'
-				},
+				
 				categories : ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00', '01', '02', '03', '04', '05', '06']
 			},
 			yAxis : {
@@ -892,6 +890,43 @@ $(function() {
 
 });
 
+
+
+$(function() {
+
+	$('#table-column-toggle').on('click', '.linha', function(event) {
+		
+		var hr = $(this).find('th').text();
+
+		var fc = $(this).find('td:eq(0)').text();
+		var fr = $(this).find('td:eq(1)').text();
+		var t = $(this).find('td:eq(2)').text();
+		var so2 = $(this).find('td:eq(3)').text();
+		var pa = $(this).find('td:eq(4)').text();
+		var pam = $(this).find('td:eq(5)').text();
+		
+		var $popup = $('#popupMonitor');
+		var $hrPopup = $popup.find('h1');
+		$hrPopup.text(hr+'h')
+		
+		$popup.find('h3:eq(0)').text("FC: "+fc+" bpm");
+		$popup.find('h3:eq(1)').text("FR: "+fr+" mpm");
+		$popup.find('h3:eq(2)').text("TC: "+t+" ºC");
+		$popup.find('h3:eq(3)').text("SO2: "+so2+" %");
+		$popup.find('h3:eq(4)').text("PA: "+pa+"; PAM: "+pam+" mmHg");
+
+
+		$popup.popup("open");
+
+
+		
+	
+
+});
+
+});
+
+
 $(document).on('pageinit', '#tabela', function() {
 
 var hora;
@@ -903,7 +938,7 @@ var hora;
 			hora = hora - 24;
 		}
 		
-		var linha = '<tr><th>'+hora+'</th><td>45</td><td>38</td><td>39</td><td>74</td><td>24</td></tr>';
+		var linha = '<tr class="linha"><th>'+hora+'</th><td>45</td><td>38</td><td>39</td><td>74</td><td>24</td><td>24</td></tr>';
 		$('table').append(linha);
 		$("#lista-chegada").listview("refresh");
 	}
