@@ -289,25 +289,7 @@
 						</li>
 					</ul>
 				</div>
-	
-				<div class="ui-grid-d" >
-					<div class="ui-block-a ui-bar-b">
-						 hrs
-					</div>
-					<div class="ui-block-b ui-bar-b">
-						bpm
-					</div>
-					<div class="ui-block-c ui-bar-b">
-						ºC
-					</div>
-					<div class="ui-block-d ui-bar-b">
-						%
-					</div>
-					<div class="ui-block-e ui-bar-b">
-						mmHg
-					</div>
 
-				</div>
 			</div>
 			<div data-role="content">
 
@@ -336,25 +318,29 @@
 					</ul>
 				</div>
 
-				<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">
+				<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" data-column-btn-text="Filtro" data-column-btn-theme="b">
      
-       <tr class="linha">
-		<th data-priority="1">Hrs</th>
+            <thead >
+	   <tr class="ui-bar-b">
+	   	<th data-priority="1">Hrs</th>
          <th data-priority="2">FC</th>
          <th data-priority="3">FR</th>
          <th data-priority="4">TC</th>
          <th data-priority="5">SO2</th>
          <th data-priority="6">PA</th>
          <th data-priority="6">PAM</th>
-       </tr>
+		 </tr>
+     </thead>
+
+	 <tbody>
+     </tbody>
+
      
      
    </table>
 			</div>	
 
-			<div data-role="footer" data-position="fixed">
-				<input name="mode1" id="dataInput" type="text" data-role="datebox" data-options='{"mode":"calbox", "maxDays":0, "minDays":5, "useHeader":false}' style=""/>
-
+			<div data-role="footer" data-position="fixed" data-theme="b">
 			</div>
 
 		</div>

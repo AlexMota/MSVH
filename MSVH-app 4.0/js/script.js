@@ -909,11 +909,11 @@ $(function() {
 		var $hrPopup = $popup.find('h1');
 		$hrPopup.text(hr+'h')
 		
-		$popup.find('h3:eq(0)').text("FC: "+fc+" bpm");
-		$popup.find('h3:eq(1)').text("FR: "+fr+" mpm");
-		$popup.find('h3:eq(2)').text("TC: "+t+" ºC");
-		$popup.find('h3:eq(3)').text("SO2: "+so2+" %");
-		$popup.find('h3:eq(4)').text("PA: "+pa+"; PAM: "+pam+" mmHg");
+		$popup.find('h3:eq(0)').text("Freq. Cardiaca: "+fc+" bpm");
+		$popup.find('h3:eq(1)').text("Freq. Respiratoria: "+fr+" mpm");
+		$popup.find('h3:eq(2)').text("Temp. Corporea: "+t+" ºC");
+		$popup.find('h3:eq(3)').text("Sat. Oxigenio: "+so2+" %");
+		$popup.find('h3:eq(4)').text("Press. Arterial: "+pa+"="+pam+" mmHg");
 
 
 		$popup.popup("open");
@@ -938,9 +938,13 @@ var hora;
 			hora = hora - 24;
 		}
 		
-		var linha = '<tr class="linha"><th>'+hora+'</th><td>45</td><td>38</td><td>39</td><td>74</td><td>24</td><td>24</td></tr>';
-		$('table').append(linha);
-		$("#lista-chegada").listview("refresh");
+		var linha = '<tr class="linha"><th>'+hora+'</th><td>45</td><td>38</td><td>39</td><td>74</td><td>24/24</td><td>24</td></tr>';
+		
+		$( "table#table-column-toggle tbody" )
+		.append(linha)
+		.closest( "table#table-column-toggle" )
+		.table( "refresh" )
+		.trigger( "create" );
 	}
 
 });
