@@ -913,10 +913,11 @@ $(function() {
 		$popup.find('h3:eq(1)').text("Freq. Respiratoria: "+fr+" mpm");
 		$popup.find('h3:eq(2)').text("Temp. Corporea: "+t+" ºC");
 		$popup.find('h3:eq(3)').text("Sat. Oxigenio: "+so2+" %");
-		$popup.find('h3:eq(4)').text("Press. Arterial: "+pa+"="+pam+" mmHg");
+		$popup.find('h3:eq(4)').text("Press. Arterial: "+pa+" ("+pam+") mmHg");
 
 
 		$popup.popup("open");
+		
 
 
 		
@@ -946,6 +947,7 @@ var hora;
 		.table( "refresh" )
 		.trigger( "create" );
 	}
+$(".ui-table-columntoggle-btn").detach().appendTo('#bloco2');
 
 });
 
