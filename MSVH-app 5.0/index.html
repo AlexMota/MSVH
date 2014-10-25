@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+		<meta name="description" content="">
+		<meta name="author" content="Alexandre Mota">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="jquerymobile-files/jquery.mobile.custom.structure.css" />
+		<link rel="stylesheet" href="jquerymobile-files/jquery.mobile.custom.theme.css" />
+		<link rel="stylesheet" href="jquerymobile-files/jquery.mobile.icons.min.css" />
+		<link rel="stylesheet" href="css/style.css"/>
+
+		<link rel="stylesheet" href="css/jquery.mobile-1.4.3.min.css" />
+		<link type="text/css" href="css/jqm-datebox.min.css" rel="stylesheet" />
+
+		<link type="text/css" href="css/demos.css" rel="stylesheet" />
+
+		<!-- NOTE: Script load order is significant! -->
+
+		<script type="text/javascript" src="jquerymobile-files/jquery-2.1.1.js"></script>
+		<script type="text/javascript" src="jquerymobile-files/jquery.mobile-1.4.3.min.js"></script>
+
+		<script type="text/javascript" src="jquerymobile-files/jqm-datebox.core.min.js"></script>
+		<script type="text/javascript" src="jquerymobile-files/jqm-datebox.mode.calbox.min.js"></script>
+
+		<script src="js/highcharts.js"></script>
+		<script src="js/exporting.js"></script>
+		<script src="js/script.js"></script>
+
+		<title>index</title>
+
+	</head>
+
+	<body>
+
+		<!--Incio da pagina Inicial splah page-->
+		<div data-role="page" id="init">
+
+			<div data-role="header" data-theme="b">
+				<h1>MonitorApp</h1>
+			</div>
+
+			<div data-role="content">
+
+				<a href="#pacientes" class="show-page-loading-msg"> <h1 align="center"><img  src="img/monitor_icon.png"/></h1></a>
+				<h2 align="center">Monitoramento de Sinais Vitais Humanos</h2>
+			</div>
+
+		</div>
+		<!--Fim da pagina Inicial splah page-->
+
+		<!--Incio da pagina de Pacientes-->
+
+		<div data-role="page" id="pacientes">
+			<div data-role="header" data-theme="b" data-position="fixed">
+				<h1>Pacientes</h1>
+				<a href="#painel-config" data-icon="bars" data-iconpos="notext">Configuracoes</a>
+			</div>
+			<div data-role="content" >
+
+				<ul id="listap" data-role="listview" >
+
+					
+				</ul>
+
+			</div>
+
+			<div data-role="panel" id="painel-config" data-display="overlay" data-position="left" data-theme="b">
+
+				<p>
+					<strong>Configurações Gerais</strong>
+
+				</p>
+				<div data-role="content">
+
+					<form>
+						<label for="aviso-sonoro">Alertas sonoros:</label>
+						<select name="aviso-sonoro" id="aviso-sonoro" data-role="slider">
+							<option value="off">Off</option>
+							<option value="on">On</option>
+						</select>
+
+						<label for="volume">Volume:</label>
+						<input  disabled="disabled" type="range" name="volume" id="volume" min="0" max="10" value="5" data-highlight="true"/>
+
+						<label for="aviso-visual">Alertas visuais:</label>
+						<select name="aviso-visual" id="aviso-visual" data-role="slider">
+							<option value="off">Off</option>
+							<option value="on">On</option>
+						</select>
+
+						<label for="aviso-visual">Alertas vibratorios:</label>
+						<select name="aviso-visual" id="aviso-visual" data-role="slider">
+							<option value="off">Off</option>
+							<option value="on">On</option>
+						</select>
+
+					</form>
+
+				</div>
+
+			</div><!-- /panel -->
+
+		</div>
+		<!--Fim da pagina de Pacientes-->
+
+		<!--Incio da pagina do Monitor-->
+		<div data-role="page" id="monitor" onload="redirecionarGrafico()">
+
+			<div data-role="header" data-theme="b" data-position="fixed">
+
+				<div data-role="navbar" >
+					<ul>
+						<li>
+							<a href="#pacientes" data-icon="user"></a>
+						</li>
+						<li>
+							<a href="#monitor" data-icon="eye" class="ui-btn-active ui-state-persist"></a>
+						</li>
+						<li>
+							<a href="#tabela" data-icon="grid"></a>
+						</li>
+						<li>
+							<a id="monGraficos" href="#graficos" data-icon="action"></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div data-role="content">
+
+				<form>
+
+					<ul data-role="listview" data-inset="true" data-theme="b">
+						<li data-role="data-divider" data-theme="b">
+							<div class="ui-grid-a" >
+								<div class="ui-bar-b ui-grid-solo">
+									<img src="jquerymobile-files/images/icons-png/user-white.png"/> Maria Silva Dias da Cunha
+								</div>
+								<div class="ui-block-a ui-bar-b">
+									<img src="jquerymobile-files/images/icons-png/location-white.png"/> UTI 123
+								</div>
+								<div class="ui-block-b ui-bar-b ">
+									<img src="jquerymobile-files/images/icons-png/star-white.png"/> 45 anos
+								</div>
+								<div class="ui-block-a ui-bar-b">
+									<img src="jquerymobile-files/images/icons-png/plus-white.png"/> Leito 4
+								</div>
+								<div class="ui-block-b ui-bar-b">
+									<img src="jquerymobile-files/images/icons-png/tag-white.png"/> N.P. 654736
+								</div>
+								<div class="ui-bar-b ui-grid-solo">
+									<img src="jquerymobile-files/images/icons-png/edit-white.png"/> Diabética, Hipertensa
+								</div>
+							</div><!-- /grid-b -->
+						</li>
+						<li>
+							<div class="ui-grid-a ui-corner-all" >
+								<div class="ui-block-a ui-bar-a">
+									<a id="monFreqCard" href="#graficos" class="" ><img src="img/heart.png"/></a><big><big><big>102</big></big></big> bpm
+								</div>
+								<div class="ui-block-b ui-bar-a">
+									<a id="monFreqResp" href="#graficos"><img src="img/lung.png"/></a><big><big><big>20</big></big></big> mpm
+								</div>
+								<div class="ui-block-a ui-bar-a">
+									<a id="monTempCorp" href="#graficos"><img src="img/thermometer.png"/></a><big><big><big>38</big></big></big> ºC
+								</div>
+								<div class="ui-block-b ui-bar-a">
+									<a id="monSatOxig" href="#graficos"><img src="img/blood.png"/></a><big><big><big>98</big></big></big> %
+								</div>
+								<div class="ui-bar-a ui-grid-solo">
+									<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big>130 / 85 (86)</big></big></big> mmHg
+								</div>
+							</div>
+						</li>
+					</ul>
+				</form>
+
+			</div>
+		</div>
+
+		<!--Fim da pagina do Monitor-->
+
+		<!--Inicio da pagina dos Graficos-->
+
+		<div data-role="page"id="graficos">
+
+			<div data-role="header" data-theme="b" data-position="fixed">
+
+				<div data-role="navbar">
+					<ul>
+						<li>
+							<a href="#pacientes" data-icon="user"></a>
+						</li>
+						<li>
+							<a href="#monitor" data-icon="eye"></a>
+						</li>
+						<li>
+							<a href="#tabela" data-icon="grid"></a>
+						</li>
+						<li>
+							<a href="#graficos" data-icon="action" class="ui-btn-active ui-state-persist"></a>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+			<div data-role="content" >
+
+				<input name="mode1" id="dataInput" type="text" data-role="datebox" data-options='{"mode":"calbox", "maxDays":0, "minDays":5, "useHeader":false}' style=""/>
+
+					
+				<div id="pressao" style="min-width: 87%; height: 400px; margin: 0 auto" class="bordagrafico"></div>
+					
+					
+				<div id="saturacaoOxigenio" style="min-width: 87%; height: 400px; margin: 0 auto" class="bordagrafico" ></div>
+					
+					
+				<div id="frequenciaCardiaca" style="min-width: 87%; height: 400px; margin: 0 auto" class="bordagrafico"></div>
+
+					
+					
+				<div id="temperaturaCorporea" style="min-width: 87%; height: 400px; margin: 0 auto" class="bordagrafico"></div>
+
+					
+					
+				<div id="frequenciaRespiratoria" style="min-width: 87%; height: 400px; margin: 0 auto"class="bordagrafico"></div>
+
+					
+
+				</div>
+
+			<div data-role="footer" data-position="fixed">
+			<div data-role="tabs" id="tabs">
+
+					<div data-role="navbar" data-theme="a" >
+						<ul>
+							<li>
+								<a id="btFreqCar"><img src="img/heart.png" class="imagensgraficos"/></a>
+								
+							</li>
+							<li>
+								<a id="btFreqResp"><img src="img/lung.png" class="imagensgraficos" /></a>
+								
+							</li>
+							<li>
+								<a id="btTempCorp"><img src="img/thermometer.png" class="imagensgraficos" /></a>
+								
+							</li>
+							<li>
+								<a id="btSatOxig"><img src="img/blood.png" class="imagensgraficos"/></a>
+								
+							</li>
+							<li>
+								<a id="btPressaoArt"  class="ui-state-persist"><img src="img/blood pressure.png" class="imagensgraficos"/></a>
+								
+							</li>
+
+						</ul>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+
+
+		<!--Fim da pagina do Graficos-->
+
+		<!--Inicio da pagina da tabela-->
+		<div data-role="page" id="tabela">
+			<div data-role="header" data-theme="b" data-position="fixed" >
+
+				<div data-role="navbar">
+					<ul>
+						<li>
+							<a href="#pacientes" data-icon="user"></a>
+						</li>
+						<li>
+							<a href="#monitor" data-icon="eye"></a>
+						</li>
+						<li>
+							<a href="#tabela" data-icon="grid" class="ui-btn-active ui-state-persist"></a>
+						</li>
+						<li>
+							<a href="#graficos" data-icon="action"></a>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+			<div data-role="content">
+
+				<div data-role="popup" id="popupMonitor" data-theme="a" data-transition="pop">
+					<div data-role="header" data-theme="b">
+						<h1> 07h - 11/05/2013</h1>
+					</div>
+					<ul data-role="listview" data-icon="false">
+						<li>
+							<a id="fcPopup" href="#"><img src="img/ht-icon.png" class="ui-li-icon"/><h3></h3></a>
+						</li>
+						<li>
+							<a id="tPopup" href="#"><img src="img/th-icon.png" class="ui-li-icon"/><h3></h3></a>
+						</li>
+						<li>
+							<a id="frPopup" href="#"><img src="img/icons/l__icon.png" class="ui-li-icon"/><h3></h3></a>
+						</li>
+						
+						<li>
+							<a id="so2Popup" href="#"><img src="img/bs-icon.png" class="ui-li-icon"/><h3></h3></a>
+						</li>
+						<li>
+							<a id="paPopup" href="#"><img src="img/bp-icon.png" class="ui-li-icon"/><h3></h3></a>
+
+						</li>
+					</ul>
+				</div>
+
+				<div class="ui-grid-a">
+    <div class="ui-block-a">
+	<input name="mode1" id="dataInput" type="text" data-role="datebox" data-options='{"mode":"calbox", "maxDays":0, "minDays":5, "useHeader":false}' style=""/>
+
+	</div>
+    <div class="ui-block-b"id="bloco2">
+	
+	</div>
+</div><!-- /grid-a -->
+				
+				
+				<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" data-column-btn-text="Filtro" data-column-btn-theme="b">
+     
+            <thead >
+	   <tr class="ui-bar-b">
+	   	<th data-priority="1">Hrs</th>
+         <th data-priority="2">FC</th>
+         <th data-priority="3">FR</th>
+         <th data-priority="4">TC</th>
+         <th data-priority="5">SO2</th>
+         <th data-priority="6">PA</th>
+         <th data-priority="6">PAM</th>
+		 </tr>
+     </thead>
+
+	 <tbody>
+     </tbody>
+
+     
+     
+   </table>
+			</div>	
+
+			<div data-role="footer" data-position="fixed" data-theme="b">
+			</div>
+
+		</div>
+		<!--Inicio da pagina da tabela-->
+
+	</body>
+</html>

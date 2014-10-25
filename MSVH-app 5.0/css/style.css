@@ -1,0 +1,86 @@
+body {
+}
+/*demo styles*/
+table {
+	border-collapse: collapse;
+	border-radius: 50px;
+}
+table.accessHide {
+	position: absolute;
+	left: -999999px;
+}
+td {
+	text-align: center;
+	border: 1px solid #ddd;
+	border-radius: 50px;
+	font-family: Verdana, sans-serif;
+}
+td.hover {
+	color: orange;
+}
+td.input {
+	padding: 0;
+}
+td input, td input:focus {
+	border: 1px solid orange;
+	outline: none;
+	padding: 2px;
+	margin: 1px;
+	width: 20px;
+}
+
+.tabela, .tabela td {
+	font-size: 80%;
+	font-family: Verdana, sans-serif;
+}
+
+.ui-icon-alarm:after {
+	background-image: url("../img/alarm.png");
+}
+
+.ui-icon-alarm-off:after {
+	background-image: url("../img/alarm-off.png");
+}
+
+.ui-icon-bp-icon:after {
+	background-image: url("../img/icons/bp_icon.png");
+}
+.ui-icon-b-icon:after {
+	background-image: url("../img/icons/b_icon.png");
+}
+
+.ui-icon-t-icon:after {
+	background-image: url("../img/icons/t_icon.png");
+}
+
+.ui-icon-l-icon:after {
+	background-image: url("../img/icons/l_icon.png");
+}
+
+.ui-icon-h-icon:after {
+	background-image: url("../img/icons/h_icon.png");
+}
+
+
+#nome-pac {
+	position: relative;
+}
+#uti-pac {
+	position: relative;
+	float: right;
+}
+.center {
+    text-align: center;
+}
+
+.imagensgraficos {
+	width: 20px;
+}
+
+.bordagrafico {
+	border: 10px solid #333;	
+}
+
+.alarme{
+	
+}
