@@ -781,17 +781,79 @@ $(document).on('pageinit', '#pacientes', function() {
 			//botao icone
 
 			if (pacientesJson[i].sexo == "feminino") {
-				listItem = '<li id="pac'+i+'"><a href="#monitor"><img src="img/paciente-fem.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
+				listItem = '<li class="paciente" id="pac'+i+'"><a href="#monitor"><img src="img/paciente-fem.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
 			} else if (pacientesJson[i].sexo == "masculino") {
-				listItem = '<li id="pac'+i+'"><a href="#monitor"><img src="img/paciente-mas.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
+				listItem = '<li class="paciente" id="pac'+i+'"><a href="#monitor"><img src="img/paciente-mas.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti +'</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
 			}
 			$('#listap').append(listItem)
 		}
 		$("#listap").listview("refresh");
 
+		
+
 	});
 
 });
+
+
+$(function() {
+
+	$('#listap').on('click', '.paciente', function(event) {
+		
+		var id = $(this).attr("id");
+		var numId = parseInt(id.substring(3, id.length));
+
+		var pacientesJson = [];
+
+	$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/pacientes', function(data) {
+
+		pacientesJson = data.items;
+		var nome = pacientesJson[numId].nome;
+		var idade = pacientesJson[numId].idade;
+		var numProntuario = pacientesJson[numId].prontuario;
+		var uti = pacientesJson[numId].uti;
+		var leito = pacientesJson[numId].leito;
+		var descricao = pacientesJson[numId].descricao;
+
+		var dias = pacientesJson[numId].diasMonitorados;
+		var dataMaisRecente = pacientesJson[numId].diasMonitorados[dias.length-1].data;
+		var horas = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras;
+		var horaMaisRecente = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].hora;
+
+		var tc = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].temperaturaCorporea;
+		var pas = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoSistolica;
+		var pad = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoDiastolica;
+		var pam = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoMedia;
+		var sato2 = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].saturacaoOxigenio;
+		var fc = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaCardiaca;
+		var fr = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaRespiratoria;
+
+		$("#nomeMonitor").html('<img  src="jquerymobile-files/images/icons-png/user-white.png"/> '+nome+'');
+		$("#utiMonitor").html('<img src="jquerymobile-files/images/icons-png/location-white.png"/> '+uti+'');
+		$("#idadeMonitor").html('<img src="jquerymobile-files/images/icons-png/star-white.png"/> '+idade+'');
+		$("#leitoMonitor").html('<img src="jquerymobile-files/images/icons-png/plus-white.png"/> Leito '+leito+'');
+		$("#prontuarioMonitor").html('<img src="jquerymobile-files/images/icons-png/tag-white.png"/> N.P. '+numProntuario+'');
+		$("#descricaoMonitor").html('<img src="jquerymobile-files/images/icons-png/edit-white.png"/> '+descricao+'');
+
+		$("#monitorFC").html('<a id="monFreqCard" href="#graficos" class="" ><img src="img/heart.png"/></a><big><big><big>'+fc+'</big></big></big> bpm');
+		$("#monitorFR").html('<a id="monFreqResp" href="#graficos"><img src="img/lung.png"/></a><big><big><big>'+fr+'</big></big></big> mpm');
+		$("#monitorTC").html('<a id="monTempCorp" href="#graficos"><img src="img/thermometer.png"/></a><big><big><big>'+tc+'</big></big></big> ºC');
+		$("#monitorSat").html('<a id="monSatOxig" href="#graficos"><img src="img/blood.png"/></a><big><big><big>'+sato2+'</big></big></big> %');
+		$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big>'+pas+' / '+pad+' ('+pam+')</big></big></big> mmHg');
+
+
+
+		
+			});
+
+		});
+
+	});
+
+	
+
+
+
 
 $(function() {
 	$('#aviso-sonoro').change(function() {
