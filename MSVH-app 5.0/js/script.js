@@ -1,3 +1,8 @@
+//Variaveis globais
+numIdPacAtual = 0;
+pacientesJson = [];
+
+
 $(document).on('pageshow', '#graficos', function() {
 	var chart;
 	$(document).ready(function() {
@@ -770,8 +775,6 @@ $(function() {
 
 });
 
-pacientesJson = [];
-
 $(document).on('pageinit', '#pacientes', function() {
 
 
@@ -802,28 +805,28 @@ $(function() {
 	$('#listap').on('click', '.paciente', function(event) {
 		
 		var id = $(this).attr("id");
-		var numId = parseInt(id.substring(3, id.length));
+		numIdPacAtual = parseInt(id.substring(3, id.length));
 
 
-		var nome = pacientesJson[numId].nome;
-		var idade = pacientesJson[numId].idade;
-		var numProntuario = pacientesJson[numId].prontuario;
-		var uti = pacientesJson[numId].uti;
-		var leito = pacientesJson[numId].leito;
-		var descricao = pacientesJson[numId].descricao;
+		var nome = pacientesJson[numIdPacAtual].nome;
+		var idade = pacientesJson[numIdPacAtual].idade;
+		var numProntuario = pacientesJson[numIdPacAtual].prontuario;
+		var uti = pacientesJson[numIdPacAtual].uti;
+		var leito = pacientesJson[numIdPacAtual].leito;
+		var descricao = pacientesJson[numIdPacAtual].descricao;
 
-		var dias = pacientesJson[numId].diasMonitorados;
-		var dataMaisRecente = pacientesJson[numId].diasMonitorados[dias.length-1].data;
-		var horas = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras;
-		var horaMaisRecente = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].hora;
+		var dias = pacientesJson[numIdPacAtual].diasMonitorados;
+		var dataMaisRecente = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].data;
+		var horas = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras;
+		var horaMaisRecente = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].hora;
 
-		var tc = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].temperaturaCorporea;
-		var pas = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoSistolica;
-		var pad = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoDiastolica;
-		var pam = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoMedia;
-		var sato2 = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].saturacaoOxigenio;
-		var fc = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaCardiaca;
-		var fr = pacientesJson[numId].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaRespiratoria;
+		var tc = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].temperaturaCorporea;
+		var pas = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoSistolica;
+		var pad = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoDiastolica;
+		var pam = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoMedia;
+		var sato2 = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].saturacaoOxigenio;
+		var fc = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaCardiaca;
+		var fr = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaRespiratoria;
 
 		$("#nomeMonitor").html('<img  src="jquerymobile-files/images/icons-png/user-white.png"/> '+nome+'');
 		$("#utiMonitor").html('<img src="jquerymobile-files/images/icons-png/location-white.png"/> '+uti+'');
@@ -837,8 +840,6 @@ $(function() {
 		$("#monitorTC").html('<a id="monTempCorp" href="#graficos"><img src="img/thermometer.png"/></a><big><big><big>'+tc+'</big></big></big> ºC');
 		$("#monitorSat").html('<a id="monSatOxig" href="#graficos"><img src="img/blood.png"/></a><big><big><big>'+sato2+'</big></big></big> %');
 		$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big>'+pas+' / '+pad+' ('+pam+')</big></big></big> mmHg');
-
-
 
 		
 
