@@ -770,9 +770,10 @@ $(function() {
 
 });
 
+pacientesJson = [];
+
 $(document).on('pageinit', '#pacientes', function() {
 
-	var pacientesJson = [];
 
 	$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/pacientes', function(data) {
 		pacientesJson = data.items;
@@ -803,11 +804,7 @@ $(function() {
 		var id = $(this).attr("id");
 		var numId = parseInt(id.substring(3, id.length));
 
-		var pacientesJson = [];
 
-	$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/pacientes', function(data) {
-
-		pacientesJson = data.items;
 		var nome = pacientesJson[numId].nome;
 		var idade = pacientesJson[numId].idade;
 		var numProntuario = pacientesJson[numId].prontuario;
@@ -844,7 +841,6 @@ $(function() {
 
 
 		
-			});
 
 		});
 
