@@ -783,9 +783,6 @@ $(function() {
 $(document).on('pageinit', '#pacientes', function() {
 
 
-	$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/pacientes', function(data) {
-		pacientesJson = data.items;
-
 		for ( i = 0; i < pacientesJson.length; i++) {
 			//botao icone
 
@@ -800,7 +797,7 @@ $(document).on('pageinit', '#pacientes', function() {
 
 		
 
-	});
+	
 
 });
 
@@ -873,9 +870,13 @@ $(function() {
 });
 
 $(document).on('pageinit', '#init', function() {
-	setTimeout(function() {
-		$.mobile.changePage("#pacientes", "fade");
-	}, 4000);
+	
+	$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/pacientes', function(data) {
+		pacientesJson = data.items;
+		setTimeout(function() {
+			$.mobile.changePage("#pacientes", "fade");
+	}, 2000);		
+	});	
 });
 
 $(function() {
