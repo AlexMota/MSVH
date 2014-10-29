@@ -936,16 +936,19 @@ $(function() {
 
 $(document).on('pageinit', '#tabela', function() {
 
+	var posDiaAtual = pacientesJson[numIdPacAtual].diasMonitorados.length -1;
+	var diaAtual = pacientesJson[numIdPacAtual].diasMonitorados[posDiaAtual];
+	var dadoAtual;
+	$( "#dataInputTab" ).val( diaAtual.data);
+	 $("#dataInputTab").datebox("option", {
+                highDates: ["2013-10-24", "2013-10-25"]
+            });
 	var hora;
 	for ( i = 0; i < 24; i++) {
 
-		hora = i + 7;
+	dadoAtual = diaAtual.dadosHoras[i];
 
-		if (hora >= 24) {
-			hora = hora - 24;
-		}
-
-		var linha = '<tr class="linha"><th>' + hora + '</th><td>45</td><td>38</td><td>39</td><td>74</td><td>24/24</td><td>24</td></tr>';
+		var linha = '<tr class="linha"><th>' + dadoAtual.hora + '</th><td>' + dadoAtual.frequenciaCardiaca + '</td><td>' + dadoAtual.frequenciaRespiratoria + '</td><td>' + dadoAtual.temperaturaCorporea + '</td><td>' + dadoAtual.saturacaoOxigenio + '</td><td>' + dadoAtual.pressaoSistolica +' / ' + dadoAtual.pressaoDiastolica + '</td><td>' + dadoAtual.pressaoMedia + '</td></tr>';
 
 		$("table#table-column-toggle tbody").append(linha).closest("table#table-column-toggle").table("refresh").trigger("create");
 	}
