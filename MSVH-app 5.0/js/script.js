@@ -837,11 +837,11 @@ $(function() {
 		$("#prontuarioMonitor").html('<img src="jquerymobile-files/images/icons-png/tag-white.png"/> N.P. '+numProntuario+'');
 		$("#descricaoMonitor").html('<img src="jquerymobile-files/images/icons-png/edit-white.png"/> '+descricao+'');
 
-		$("#monitorFC").html('<a id="monFreqCard" href="#graficos"><img src="img/heart.png"/></a><big><big><big>'+fc+'</big></big></big> bpm');
-		$("#monitorFR").html('<a id="monFreqResp" href="#graficos"><img src="img/lung.png"/></a><big><big><big>'+fr+'</big></big></big> mpm');
-		$("#monitorTC").html('<a id="monTempCorp" href="#graficos"><img src="img/thermometer.png"/></a><big><big><big>'+tc+'</big></big></big> ºC');
-		$("#monitorSat").html('<a id="monSatOxig" href="#graficos"><img src="img/blood.png"/></a><big><big><big>'+sato2+'</big></big></big> %');
-		$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big>'+pas+' / '+pad+' ('+pam+')</big></big></big> mmHg');
+		$("#monitorFC").html('<a id="monFreqCard" href="#graficos"><img src="img/heart.png"/></a><big><big><big>'+fc+'</big></big></big><small> bpm</small>');
+		$("#monitorFR").html('<a id="monFreqResp" href="#graficos"><img src="img/lung.png"/></a><big><big><big>'+fr+'</big></big></big><small> mpm</small>');
+		$("#monitorTC").html('<a id="monTempCorp" href="#graficos"><img src="img/thermometer.png"/></a><big><big><big>'+tc+'</big></big></big><small> ºC</small>');
+		$("#monitorSat").html('<a id="monSatOxig" href="#graficos"><img src="img/blood.png"/></a><big><big><big>'+sato2+'</big></big></big><small> %</small>');
+		$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big>'+pas+'/'+pad+' ('+pam+')</big></big></big><small> mmHg</small>');
 
 		
 
@@ -916,8 +916,9 @@ $(function() {
 		var fr = $(this).find('td:eq(1)').text();
 		var t = $(this).find('td:eq(2)').text();
 		var so2 = $(this).find('td:eq(3)').text();
-		var pa = $(this).find('td:eq(4)').text();
-		var pam = $(this).find('td:eq(5)').text();
+		var pas = $(this).find('td:eq(4)').text();
+		var pad = $(this).find('td:eq(5)').text();
+		var pam = $(this).find('td:eq(6)').text();
 
 		var $popup = $('#popupMonitor');
 		var $hrPopup = $popup.find('h1');
@@ -927,7 +928,7 @@ $(function() {
 		$popup.find('h3:eq(1)').text("Freq. Respiratoria: " + fr + " mpm");
 		$popup.find('h3:eq(2)').text("Temp. Corporea: " + t + " ºC");
 		$popup.find('h3:eq(3)').text("Sat. Oxigenio: " + so2 + " %");
-		$popup.find('h3:eq(4)').text("Press. Arterial: " + pa + " (" + pam + ") mmHg");
+		$popup.find('h3:eq(4)').text("Press. Arterial: " + pas +"/" + pad + " (" + pam + ") mmHg");
 
 		$popup.popup("open");
 
@@ -949,7 +950,7 @@ $(document).on('pageinit', '#tabela', function() {
 
 	dadoAtual = diaAtual.dadosHoras[i];
 
-		var linha = '<tr class="linha"><th>' + dadoAtual.hora + '</th><td>' + dadoAtual.frequenciaCardiaca + '</td><td>' + dadoAtual.frequenciaRespiratoria + '</td><td>' + dadoAtual.temperaturaCorporea + '</td><td>' + dadoAtual.saturacaoOxigenio + '</td><td>' + dadoAtual.pressaoSistolica +' / ' + dadoAtual.pressaoDiastolica + '</td><td>' + dadoAtual.pressaoMedia + '</td></tr>';
+		var linha = '<tr class="linha"><th>' + dadoAtual.hora + '</th><td>' + dadoAtual.frequenciaCardiaca + '</td><td>' + dadoAtual.frequenciaRespiratoria + '</td><td>' + dadoAtual.temperaturaCorporea + '</td><td>' + dadoAtual.saturacaoOxigenio + '</td><td>' + dadoAtual.pressaoSistolica +'</td><td>' + dadoAtual.pressaoDiastolica + '</td><td>' + dadoAtual.pressaoMedia + '</td></tr>';
 
 		$("table#table-column-toggle tbody").append(linha).closest("table#table-column-toggle").table("refresh").trigger("create");
 	}
