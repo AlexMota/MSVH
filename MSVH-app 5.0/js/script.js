@@ -869,6 +869,9 @@ $(function() {
 			});
 		}
 	});
+		$('#selecionaData').change(function() {
+		console.log($(this).val());
+	});
 });
 
 $(document).on('pageinit', '#init', function() {
