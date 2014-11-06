@@ -822,13 +822,14 @@ $(function() {
 		var horas = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras;
 		var horaMaisRecente = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].hora;
 
-		var tc = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].temperaturaCorporea;
-		var pas = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoSistolica;
-		var pad = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoDiastolica;
-		var pam = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoMedia;
-		var sato2 = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].saturacaoOxigenio;
-		var fc = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaCardiaca;
-		var fr = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaRespiratoria;
+		var tc = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].temperaturaCorporea);
+		var pas = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoSistolica);
+		var pad = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoDiastolica);
+		var calcPam = (pas - pad)/3 + pad;
+		var pam = calcPam.toFixed(1);
+		var sato2 = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].saturacaoOxigenio);
+		var fc = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaCardiaca);
+		var fr = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaRespiratoria);
 
 		$("#nomeMonitor").html('<img  src="jquerymobile-files/images/icons-png/user-white.png"/> '+nome+'');
 		$("#utiMonitor").html('<img src="jquerymobile-files/images/icons-png/location-white.png"/> '+uti+'');
@@ -839,12 +840,47 @@ $(function() {
 		$("#dataHoraDados").html('<h1 align="center"><big><big>'+dataMaisRecente+' - '+horaMaisRecente+' hrs</big></big></h1>');
 
 
-		$("#monitorFC").html('<a id="monFreqCard" href="#graficos"><img src="img/heart.png"/></a><big><big><big>'+fc+'</big></big></big><small> bpm</small>');
-		$("#monitorFR").html('<a id="monFreqResp" href="#graficos"><img src="img/lung.png"/></a><big><big><big>'+fr+'</big></big></big><small> mpm</small>');
-		$("#monitorTC").html('<a id="monTempCorp" href="#graficos"><img src="img/thermometer.png"/></a><big><big><big>'+tc+'</big></big></big><small> ºC</small>');
-		$("#monitorSat").html('<a id="monSatOxig" href="#graficos"><img src="img/blood.png"/></a><big><big><big>'+sato2+'</big></big></big><small> %</small>');
-		$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big>'+pas+'/'+pad+' ('+pam+')</big></big></big><small> mmHg</small>');
+		if(fc < 60 || fc > 100){		
+			$("#monitorFC").html('<a id="monFreqCard" href="#graficos"><img src="img/heart.png"/></a><big><big><big style="color: red">'+fc+'</big></big></big><small> bpm</small>');
+		}else{
+			$("#monitorFC").html('<a id="monFreqCard" href="#graficos"><img src="img/heart.png"/></a><big><big><big>'+fc+'</big></big></big><small> bpm</small>');
+		}
 
+		if(fr < 12 || fr > 20){
+			$("#monitorFR").html('<a id="monFreqResp" href="#graficos"><img src="img/lung.png"/></a><big><big><big style="color: red">'+fr+'</big></big></big><small> mpm</small>');
+		}else{
+			$("#monitorFR").html('<a id="monFreqResp" href="#graficos"><img src="img/lung.png"/></a><big><big><big>'+fr+'</big></big></big><small> mpm</small>');
+		}
+
+		if(tc < 30 || tc > 37){
+			$("#monitorTC").html('<a id="monTempCorp" href="#graficos"><img src="img/thermometer.png"/></a><big><big><big style="color: red">'+tc+'</big></big></big><small> ºC</small>');
+		}else{
+			$("#monitorTC").html('<a id="monTempCorp" href="#graficos"><img src="img/thermometer.png"/></a><big><big><big>'+tc+'</big></big></big><small> ºC</small>');
+		}
+
+		if(sato2 < 95){
+			$("#monitorSat").html('<a id="monSatOxig" href="#graficos"><img src="img/blood.png"/></a><big><big><big style="color: red">'+sato2+'</big></big></big><small> %</small>');
+		}else{
+			$("#monitorSat").html('<a id="monSatOxig" href="#graficos"><img src="img/blood.png"/></a><big><big><big>'+sato2+'</big></big></big><small> %</small>');
+		}
+
+
+		if(pas < 90 || pas > 139){
+			if(pad > 89){
+				$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big style="color: red">'+pas+'/</big><big style="color: red">'+pad+' </big><big>('+pam+')</big></big></big><small> mmHg</small>');
+			}else{
+				$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big style="color: red">'+pas+'/</big><big>'+pad+' </big><big>('+pam+')</big></big></big><small> mmHg</small>');
+
+			}
+		}else{
+			if(pad > 89){
+				$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big>'+pas+'/</big><big style="color: red">'+pad+' </big><big>('+pam+')</big></big></big><small> mmHg</small>');
+			}else{
+				$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big>'+pas+'/</big><big>'+pad+' </big><big>('+pam+')</big></big></big><small> mmHg</small>');
+
+			}
+
+		}
 		
 
 		});
@@ -954,8 +990,65 @@ $(document).on('pageinit', '#tabela', function() {
 	for ( i = 0; i < 24; i++) {
 
 	dadoAtual = diaAtual.dadosHoras[i];
+	var frequenciaCardiaca = parseFloat(dadoAtual.frequenciaCardiaca);
+	var frequenciaRespiratoria = parseFloat(dadoAtual.frequenciaRespiratoria);
+	var temperaturaCorporea = parseFloat(dadoAtual.temperaturaCorporea);
+	var saturacaoOxigenio = parseFloat(dadoAtual.saturacaoOxigenio);
+	var pressaoSistolica = parseFloat(dadoAtual.pressaoSistolica);
+	var pressaoDiastolica = parseFloat(dadoAtual.pressaoDiastolica);
+	var calcPam = (pressaoSistolica - pressaoDiastolica)/3 + pressaoDiastolica;
+	var pressaoMedia = calcPam.toFixed(1);
 
-		var linha = '<tr class="linha"><th>' + dadoAtual.hora + '</th><td>' + dadoAtual.frequenciaCardiaca + '</td><td>' + dadoAtual.frequenciaRespiratoria + '</td><td>' + dadoAtual.temperaturaCorporea + '</td><td>' + dadoAtual.saturacaoOxigenio + '</td><td>' + dadoAtual.pressaoSistolica +'</td><td>' + dadoAtual.pressaoDiastolica + '</td><td>' + dadoAtual.pressaoMedia + '</td></tr>';
+	var linha = '';
+	var cont = 0;
+
+	if(frequenciaCardiaca < 60 || frequenciaCardiaca > 100){
+		linha += '<td style="color: red">'+frequenciaCardiaca+'</td>';
+		cont++;
+	}else{
+		linha += '<td>'+frequenciaCardiaca+'</td>'
+	}
+
+	if(frequenciaRespiratoria < 12 || frequenciaRespiratoria > 20){
+		linha += '<td style="color: red">'+frequenciaRespiratoria+'</td>';
+		cont++;
+	}else{
+		linha += '<td>'+frequenciaCardiaca+'</td>'
+	}
+
+	if(temperaturaCorporea < 30 || temperaturaCorporea > 37){
+		linha += '<td style="color: red">'+temperaturaCorporea+'</td>';
+		cont++;
+	}else{
+		linha += '<td>'+temperaturaCorporea+'</td>'
+	}
+
+	if(saturacaoOxigenio < 95){
+		linha += '<td style="color: red">'+saturacaoOxigenio+'</td>';
+		cont++;
+	}else{
+		linha += '<td>'+saturacaoOxigenio+'</td>'
+	}
+
+	if(pressaoSistolica < 90 || pressaoSistolica > 139){
+		linha += '<td style="color: red">'+pressaoSistolica+'</td>';
+		cont++;
+	}else{
+		linha += '<td>'+pressaoSistolica+'</td>'
+	}
+
+	if(pressaoDiastolica > 89){
+		linha += '<td style="color: red">'+pressaoDiastolica+'</td>';
+		cont++;
+	}else{
+		linha += '<td>'+pressaoDiastolica+'</td>'
+	}
+
+	if(cont > 0){
+		linha = '<tr class="linha"><th style="color: red">'+dadoAtual.hora+'</th>'+linha+'<td>'+pressaoMedia+'</td></tr>';
+	}else{
+		linha = '<tr class="linha"><th>'+dadoAtual.hora+'</th>'+linha+'<td>'+pressaoMedia+'</td></tr>';
+	}
 
 		$("table#table-column-toggle tbody").append(linha).closest("table#table-column-toggle").table("refresh").trigger("create");
 	}
