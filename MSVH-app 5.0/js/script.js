@@ -10,12 +10,13 @@ $(document).on('pageshow', '#graficos', function() {
 	var arrayPAS = [];
 	var arrayPAD = [];
 	var arrayPAM = [];
+	var arrayHoras = [];
 
 	for(var i=0; i<arrayDadosHora.length; i++){
 		arrayPAS.push([i, parseFloat(arrayDadosHora[i].pressaoSistolica)]);
 		arrayPAD.push([i, parseFloat(arrayDadosHora[i].pressaoDiastolica)]);
 		arrayPAM.push([i, parseFloat(arrayDadosHora[i].pressaoMedia)]);
-		
+		arrayHoras.push([arrayDadosHora[i].hora]);
 	}
 
 	
@@ -44,7 +45,7 @@ $(document).on('pageshow', '#graficos', function() {
 				title : {
 					text : null
 				},
-				categories : ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00', '01', '02', '03', '04', '05', '06']
+				categories : []
 			},
 			yAxis : {
 				title : {
@@ -117,6 +118,7 @@ $(document).on('pageshow', '#graficos', function() {
 				chart.series[0].setData(arrayPAS);
 				chart.series[1].setData(arrayPAD);
 				chart.series[2].setData(arrayPAM);
+				chart.xAxis[0].setCategories(arrayHoras);
 
 });
 
@@ -125,9 +127,11 @@ $(document).on('pageshow', '#graficos', function() {
 	var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
 	var arrayDadosHora = pacientesJson[numIdPacAtual].diasMonitorados[arrayDiasMonitorados.length-1].dadosHoras;
 	var arraySAT = [];
+	var arrayHoras = [];
 
 	for(var i=0; i<arrayDadosHora.length; i++){
 		arraySAT.push([i, parseFloat(arrayDadosHora[i].saturacaoOxigenio)]);
+		arrayHoras.push([arrayDadosHora[i].hora]);
 		
 	}
 
@@ -153,7 +157,7 @@ $(document).on('pageshow', '#graficos', function() {
 				title : {
 					text : null
 				},
-				categories : ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00', '01', '02', '03', '04', '05', '06']
+				categories : []
 			},
 			yAxis : {
 				title : {
@@ -203,6 +207,7 @@ $(document).on('pageshow', '#graficos', function() {
 	});
 
 			chart.series[0].setData(arraySAT);
+			chart.xAxis[0].setCategories(arrayHoras);
 
 });
 
@@ -211,9 +216,11 @@ $(document).on('pageshow', '#graficos', function() {
 	var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
 	var arrayDadosHora = pacientesJson[numIdPacAtual].diasMonitorados[arrayDiasMonitorados.length-1].dadosHoras;
 	var arrayFC = [];
+	var arrayHoras = [];
 
 	for(var i=0; i<arrayDadosHora.length; i++){
 		arrayFC.push([i, parseFloat(arrayDadosHora[i].frequenciaCardiaca)]);
+		arrayHoras.push([arrayDadosHora[i].hora]);
 		
 	}
 
@@ -240,7 +247,7 @@ $(document).on('pageshow', '#graficos', function() {
 				title : {
 					text : null
 				},
-				categories : ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00', '01', '02', '03', '04', '05', '06']
+				categories : []
 			},
 			yAxis : {
 				title : {
@@ -288,6 +295,7 @@ $(document).on('pageshow', '#graficos', function() {
 
 
 			chart.series[0].setData(arrayFC);
+			chart.xAxis[0].setCategories(arrayHoras);
 
 });
 
@@ -296,9 +304,11 @@ $(document).on('pageshow', '#graficos', function() {
 	var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
 	var arrayDadosHora = pacientesJson[numIdPacAtual].diasMonitorados[arrayDiasMonitorados.length-1].dadosHoras;
 	var arrayTC = [];
+	var arrayHoras = [];
 
 	for(var i=0; i<arrayDadosHora.length; i++){
 		arrayTC.push([i, parseFloat(arrayDadosHora[i].temperaturaCorporea)]);
+		arrayHoras.push([arrayDadosHora[i].hora]);
 		
 	}
 
@@ -325,7 +335,7 @@ $(document).on('pageshow', '#graficos', function() {
 				title : {
 					text : null
 				},
-				categories : ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00', '01', '02', '03', '04', '05', '06']
+				categories : []
 			},
 			yAxis : {
 				title : {
@@ -372,6 +382,7 @@ $(document).on('pageshow', '#graficos', function() {
 	});
 
 			chart.series[0].setData(arrayTC);
+			chart.xAxis[0].setCategories(arrayHoras);
 
 });
 
@@ -382,9 +393,11 @@ $(document).on('pageshow', '#graficos', function() {
 	var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
 	var arrayDadosHora = pacientesJson[numIdPacAtual].diasMonitorados[arrayDiasMonitorados.length-1].dadosHoras;
 	var arrayFR = [];
+	var arrayHoras = [];
 
 	for(var i=0; i<arrayDadosHora.length; i++){
 		arrayFR.push([i, parseFloat(arrayDadosHora[i].frequenciaRespiratoria)]);
+		arrayHoras.push([arrayDadosHora[i].hora]);
 		
 	}
 
@@ -410,7 +423,7 @@ $(document).on('pageshow', '#graficos', function() {
 				title : {
 					text : null
 				},
-				categories : ['07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00', '01', '02', '03', '04', '05', '06']
+				categories : []
 			},
 			yAxis : {
 				title : {
@@ -458,6 +471,7 @@ $(document).on('pageshow', '#graficos', function() {
 
 
 			chart.series[0].setData(arrayFR);
+			chart.xAxis[0].setCategories(arrayHoras);
 
 });
 
