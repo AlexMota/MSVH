@@ -1070,3 +1070,27 @@ $(document).on('pageinit', '#tabela', function() {
 
 });
 
+
+$(document).on('pageinit', '#tabela', function() {
+
+var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
+var datas = {};
+
+for(var i = 0; i<arrayDiasMonitorados.length; i++){
+	var valor = 'data'+(i+1);
+	datas[valor] = arrayDiasMonitorados[i].data;
+}
+
+
+
+$.each(datas, function(val, text) {
+    $('#selecionaData').append(new Option(text,val));
+
+    });
+
+
+	$('#selecionaData').selectmenu('refresh');
+
+});
+
+
