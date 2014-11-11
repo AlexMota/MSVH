@@ -822,6 +822,7 @@ $(function() {
 		
 		var id = $(this).attr("id");
 		numIdPacAtual = parseInt(id.substring(3, id.length));
+		
 
 
 		var nome = pacientesJson[numIdPacAtual].nome;
@@ -991,15 +992,12 @@ $(function() {
 
 });
 
-$(document).on('pageinit', '#tabela', function() {
+$(document).on('pageshow', '#tabela', function() {
 
 	var posDiaAtual = pacientesJson[numIdPacAtual].diasMonitorados.length -1;
 	var diaAtual = pacientesJson[numIdPacAtual].diasMonitorados[posDiaAtual];
 	var dadoAtual;
-	$( "#dataInputTab" ).val( diaAtual.data);
-	 $("#dataInputTab").datebox("option", {
-                highDates: ["2013-10-24", "2013-10-25"]
-            });
+	
 	var hora;
 	for ( i = 0; i < 24; i++) {
 
@@ -1012,6 +1010,9 @@ $(document).on('pageinit', '#tabela', function() {
 	var pressaoDiastolica = parseFloat(dadoAtual.pressaoDiastolica);
 	var calcPam = (pressaoSistolica - pressaoDiastolica)/3 + pressaoDiastolica;
 	var pressaoMedia = calcPam.toFixed(1);
+
+	
+	
 
 	var linha = '';
 	var cont = 0;
@@ -1027,7 +1028,7 @@ $(document).on('pageinit', '#tabela', function() {
 		linha += '<td style="color: red">'+frequenciaRespiratoria+'</td>';
 		cont++;
 	}else{
-		linha += '<td>'+frequenciaCardiaca+'</td>'
+		linha += '<td>'+frequenciaRespiratoria+'</td>'
 	}
 
 	if(temperaturaCorporea < 30 || temperaturaCorporea > 37){
@@ -1071,7 +1072,7 @@ $(document).on('pageinit', '#tabela', function() {
 });
 
 
-$(document).on('pageinit', '#tabela', function() {
+$(document).on('pageinit', '#monitor', function() {
 
 var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
 var datas = {};
@@ -1084,13 +1085,34 @@ for(var i = 0; i<arrayDiasMonitorados.length; i++){
 
 
 $.each(datas, function(val, text) {
-    $('#selecionaData').append(new Option(text,val));
+    $('.comboboxData').append(new Option(text,val));
 
     });
 
 
-	$('#selecionaData').selectmenu('refresh');
+	$('.comboboxData').selectmenu().selectmenu('refresh');
 
 });
+
+
+$(document).on('change', 'select', function() {
+
+var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
+var dataEscolhida = $('#dataTabela option:selected').text();
+
+var matriz = [];
+matriz.push([1, 2, 3, 4, 5]);
+matriz.push([6, 7, 8, 9, 10]);
+matriz.push([11, 12, 13, 14, 15]);
+matriz.push([16, 17, 18, 19, 20]);
+
+
+console.log(matriz[0][0]);
+
+$('#table-column-toggle').table('refresh');
+
+
+});
+
 
 
