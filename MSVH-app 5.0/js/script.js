@@ -997,17 +997,123 @@ $(document).on('pageshow', '#tabela', function() {
 	var posDiaAtual = pacientesJson[numIdPacAtual].diasMonitorados.length -1;
 	var diaAtual = pacientesJson[numIdPacAtual].diasMonitorados[posDiaAtual];
 	var dadoAtual;
+	var dadosPaciente = [];
 	
-	var hora;
+	
 	for ( i = 0; i < 24; i++) {
 
 	dadoAtual = diaAtual.dadosHoras[i];
+	var hora = dadoAtual.hora;
 	var frequenciaCardiaca = parseFloat(dadoAtual.frequenciaCardiaca);
 	var frequenciaRespiratoria = parseFloat(dadoAtual.frequenciaRespiratoria);
 	var temperaturaCorporea = parseFloat(dadoAtual.temperaturaCorporea);
 	var saturacaoOxigenio = parseFloat(dadoAtual.saturacaoOxigenio);
 	var pressaoSistolica = parseFloat(dadoAtual.pressaoSistolica);
 	var pressaoDiastolica = parseFloat(dadoAtual.pressaoDiastolica);
+	var calcPam = (pressaoSistolica - pressaoDiastolica)/3 + pressaoDiastolica;
+	var pressaoMedia = calcPam.toFixed(1);
+	
+	dadosPaciente.push([hora, frequenciaCardiaca, frequenciaRespiratoria, temperaturaCorporea, saturacaoOxigenio, pressaoSistolica, pressaoDiastolica, pressaoMedia]);
+	}
+
+
+	atualizaTabela(dadosPaciente);
+	
+});
+
+$(document).on('pageinit', '#monitor', function() {
+
+var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
+var datas = {};
+
+for(var i = 0; i<arrayDiasMonitorados.length; i++){
+	var valor = 'data'+(i+1);
+	datas[valor] = arrayDiasMonitorados[i].data;
+}
+
+
+
+$.each(datas, function(val, text) {
+    $('.comboboxData').append(new Option(text,val));
+
+    });
+
+
+	$('.comboboxData').selectmenu().selectmenu('refresh');
+
+});
+
+
+$(document).on('change', 'select', function() {
+
+var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
+var dataEscolhida = $('#dataTabela option:selected').text();
+
+var diasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
+var dadosDaEncontrado = '';
+var dadosPaciente = [];
+/*
+var matriz = [];
+matriz.push([1, 2, 3, 4, 5]);
+matriz.push([6, 7, 8, 9, 10]);
+matriz.push([11, 12, 13, 14, 15]);
+matriz.push([16, 17, 18, 19, 20]);
+*/
+
+
+for(var i=0; i<diasMonitorados.length; i++){
+	if(diasMonitorados[i].data == dataEscolhida){
+		dadosDiaEncontrado = diasMonitorados[i].dadosHoras;
+		break;
+	}
+}
+
+
+for ( i = 0; i < dadosDiaEncontrado.length; i++) {
+
+	
+	var hora = dadosDiaEncontrado[i].hora;
+	var frequenciaCardiaca = parseFloat(dadosDiaEncontrado[i].frequenciaCardiaca);
+	var frequenciaRespiratoria = parseFloat(dadosDiaEncontrado[i].frequenciaRespiratoria);
+	var temperaturaCorporea = parseFloat(dadosDiaEncontrado[i].temperaturaCorporea);
+	var saturacaoOxigenio = parseFloat(dadosDiaEncontrado[i].saturacaoOxigenio);
+	var pressaoSistolica = parseFloat(dadosDiaEncontrado[i].pressaoSistolica);
+	var pressaoDiastolica = parseFloat(dadosDiaEncontrado[i].pressaoDiastolica);
+	var calcPam = (pressaoSistolica - pressaoDiastolica)/3 + pressaoDiastolica;
+	var pressaoMedia = calcPam.toFixed(1);
+	
+	dadosPaciente.push([hora, frequenciaCardiaca, frequenciaRespiratoria, temperaturaCorporea, saturacaoOxigenio, pressaoSistolica, pressaoDiastolica, pressaoMedia]);
+	}
+
+
+
+
+atualizaTabela(dadosPaciente);
+
+
+});
+
+
+function atualizaTabela(dados){
+
+/*
+  hr	fc	fr	tc	so2	pas	pad	pam
+
+*/
+
+
+$("#table-column-toggle tr").remove();
+
+for ( i = 0; i < dados.length; i++) {
+  
+
+	var hora = dados[i][0];
+	var frequenciaCardiaca = parseFloat(dados[i][1]);
+	var frequenciaRespiratoria = parseFloat(dados[i][2]);
+	var temperaturaCorporea = parseFloat(dados[i][3]);
+	var saturacaoOxigenio = parseFloat(dados[i][4]);
+	var pressaoSistolica = parseFloat(dados[i][5]);
+	var pressaoDiastolica = parseFloat(dados[i][6]);
 	var calcPam = (pressaoSistolica - pressaoDiastolica)/3 + pressaoDiastolica;
 	var pressaoMedia = calcPam.toFixed(1);
 
@@ -1060,59 +1166,24 @@ $(document).on('pageshow', '#tabela', function() {
 	}
 
 	if(cont > 0){
-		linha = '<tr class="linha"><th style="color: red">'+dadoAtual.hora+'</th>'+linha+'<td>'+pressaoMedia+'</td></tr>';
+		linha = '<tr class="linha"><th style="color: red">'+hora+'</th>'+linha+'<td>'+pressaoMedia+'</td></tr>';
 	}else{
-		linha = '<tr class="linha"><th>'+dadoAtual.hora+'</th>'+linha+'<td>'+pressaoMedia+'</td></tr>';
+		linha = '<tr class="linha"><th>'+hora+'</th>'+linha+'<td>'+pressaoMedia+'</td></tr>';
 	}
 
-		$("table#table-column-toggle tbody").append(linha).closest("table#table-column-toggle").table("refresh").trigger("create");
+		$("table#table-column-toggle tbody").append(linha).closest("table#table-column-toggle").table("refresh");
 	}
+
+
 	$(".ui-table-columntoggle-btn").detach().appendTo('#bloco2');
 
-});
 
 
-$(document).on('pageinit', '#monitor', function() {
 
-var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-var datas = {};
-
-for(var i = 0; i<arrayDiasMonitorados.length; i++){
-	var valor = 'data'+(i+1);
-	datas[valor] = arrayDiasMonitorados[i].data;
 }
 
 
 
-$.each(datas, function(val, text) {
-    $('.comboboxData').append(new Option(text,val));
-
-    });
-
-
-	$('.comboboxData').selectmenu().selectmenu('refresh');
-
-});
-
-
-$(document).on('change', 'select', function() {
-
-var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-var dataEscolhida = $('#dataTabela option:selected').text();
-
-var matriz = [];
-matriz.push([1, 2, 3, 4, 5]);
-matriz.push([6, 7, 8, 9, 10]);
-matriz.push([11, 12, 13, 14, 15]);
-matriz.push([16, 17, 18, 19, 20]);
-
-
-console.log(matriz[0][0]);
-
-$('#table-column-toggle').table('refresh');
-
-
-});
 
 
 
