@@ -1,7 +1,7 @@
 //Variaveis globais
 numIdPacAtual = 0;
 pacientesJson = [];
-
+//novosDados = [];
 
 $(document).on('pageshow', '#graficos', function() {
 	var chart;
@@ -992,7 +992,7 @@ $(function() {
 });
 
 $(document).on('pageshow', '#tabela', function() {
-
+	$(".ui-table-columntoggle-btn").detach().appendTo('#bloco2');
 	var posDiaAtual = pacientesJson[numIdPacAtual].diasMonitorados.length -1;
 	var diaAtual = pacientesJson[numIdPacAtual].diasMonitorados[posDiaAtual];
 	var dadoAtual;
@@ -1105,7 +1105,7 @@ function atualizaTabela(dados){
 */
 
 
-$("#table-column-toggle tr").remove();
+$("#table-column-toggle tbody tr").remove();
 
 for ( i = 0; i < dados.length; i++) {
   
@@ -1176,9 +1176,6 @@ for ( i = 0; i < dados.length; i++) {
 
 		$("table#table-column-toggle tbody").append(linha).closest("table#table-column-toggle").table("refresh");
 	}
-
-
-	$(".ui-table-columntoggle-btn").detach().appendTo('#bloco2');
 
 }
 
@@ -1261,9 +1258,55 @@ chartPressao.series[2].setData(dadosPM);
 function atualizaGraficos(){
 
 
-
-
 }
+
+$(function() {
+    setInterval(function(){
+		$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/dadosdia?data=03%2F11%2F2014&hora=21', function(data) {
+		    var novosDados = data.items;
+		    var encontrado = false;
+		    var tamDados = novosDados.length;
+		    var dataPesq;
+		    var indice;
+		    var dias = [];
+		    var tamDias
+			var modeloDado = pacientesJson[0].diasMonitorados[0].dadosHoras[0];
+		    
+		    for ( var i = 0; i < tamDados; i++ ) {
+		    dias = pacientesJson[i].diasMonitorados;
+		    dataPesq =  novosDados[i].data;
+		    tamDias = dias.length;
+				for ( var j = 0; j < tamDias; j++ ) {
+			  
+					if(dias[j].data == dataPesq){
+			  		  encontrado = true;
+					  modeloDado.hora = novosDados[i].dadosHoras[0].hora;
+					  modeloDado.temperaturaCorporea = novosDados[i].dadosHoras[0].temperaturaCorporea;
+					  modeloDado.pressaoSistolica = novosDados[i].dadosHoras[0].pressaoSistolica;
+					  modeloDado.pressaoDiastolica = novosDados[i].dadosHoras[0].pressaoDiastolica;
+					  modeloDado.pressaoMedia = novosDados[i].dadosHoras[0].pressaoMedia;
+					  modeloDado.saturacaoOxigenio = novosDados[i].dadosHoras[0].saturacaoOxigenio;
+					  modeloDado.frequenciaCardiaca = novosDados[i].dadosHoras[0].frequenciaCardiaca;
+					  modeloDado.frequenciaRespiratoria = novosDados[i].dadosHoras[0].frequenciaRespiratoria;
+
+
+					  console.log("encontrado");
+					  pacientesJson[i].diasMonitorados[j].push(modeloDado);
+					  break;
+					}
+				}
+				if(encontrado = false){
+				console.log("nao encontrado");
+				pacientesJson[i].push(novosDados[i]);
+				}
+		    }
+
+
+		    console.log("Dias: "+tamDias);
+});
+}, 10000);
+
+});
 
 
 
