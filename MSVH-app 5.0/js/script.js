@@ -840,8 +840,7 @@ $(function() {
 		var tc = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].temperaturaCorporea);
 		var pas = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoSistolica);
 		var pad = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoDiastolica);
-		var calcPam = (pas - pad)/3 + pad;
-		var pam = calcPam.toFixed(1);
+		var pam = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoMedia);
 		var sato2 = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].saturacaoOxigenio);
 		var fc = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaCardiaca);
 		var fr = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaRespiratoria);
@@ -1021,13 +1020,16 @@ $(document).on('pageshow', '#tabela', function() {
 	
 });
 
-$(document).on('pageinit', '#monitor', function() {
+$(document).on('pageshow', '#monitor', function() {
+
+$('#dataTabela').empty();
+$('#dataGrafico').empty();
 
 var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
 var datas = {};
 
-for(var i = 0; i<arrayDiasMonitorados.length; i++){
-	var valor = 'data'+(i+1);
+for(var i = arrayDiasMonitorados.length-1; i>=0; i--){
+	var valor = 'data'+(i-1);
 	datas[valor] = arrayDiasMonitorados[i].data;
 }
 
@@ -1039,12 +1041,13 @@ $.each(datas, function(val, text) {
     });
 
 
-	$('.comboboxData').selectmenu().selectmenu('refresh');
+	$('#dataTabela').selectmenu().selectmenu('refresh');
+	$('#dataGrafico').selectmenu().selectmenu('refresh');
 
 });
 
 
-$(document).on('change', 'select', function() {
+$(document).on('change', '#dataTabela', function() {
 
 var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
 var dataEscolhida = $('#dataTabela option:selected').text();
@@ -1176,6 +1179,86 @@ for ( i = 0; i < dados.length; i++) {
 
 
 	$(".ui-table-columntoggle-btn").detach().appendTo('#bloco2');
+
+}
+
+
+
+
+$(document).on('change', '#dataGrafico', function() {
+
+var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
+var dataEscolhida = $('#dataGrafico option:selected').text();
+
+var diasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
+var dadosDaEncontrado = [];
+var dadosPaciente = [];
+
+var dadosFC = [];
+var dadosFR = [];
+var dadosTC = [];
+var dadosSAT = [];
+var dadosPS = [];
+var dadosPD = [];
+var dadosPM = [];
+
+
+
+
+
+/*
+var matriz = [];
+matriz.push([1, 2, 3, 4, 5]);
+matriz.push([6, 7, 8, 9, 10]);
+matriz.push([11, 12, 13, 14, 15]);
+matriz.push([16, 17, 18, 19, 20]);
+*/
+
+
+for(var i=0; i<diasMonitorados.length; i++){
+	if(diasMonitorados[i].data == dataEscolhida){
+		dadosDiaEncontrado = diasMonitorados[i].dadosHoras;
+		break;
+	}
+}
+
+
+for ( i = 0; i < dadosDiaEncontrado.length; i++) {
+
+	
+	var hora = dadosDiaEncontrado[i].hora;
+	dadosFC.push([i, parseFloat(dadosDiaEncontrado[i].frequenciaCardiaca)]);
+	dadosFR.push([i, parseFloat(dadosDiaEncontrado[i].frequenciaRespiratoria)]);
+	dadosTC.push([i, parseFloat(dadosDiaEncontrado[i].temperaturaCorporea)]);
+	dadosSAT.push([i, parseFloat(dadosDiaEncontrado[i].saturacaoOxigenio)]);
+	dadosPS.push([i, parseFloat(dadosDiaEncontrado[i].pressaoSistolica)]);
+	dadosPD.push([i, parseFloat(dadosDiaEncontrado[i].pressaoDiastolica)]);
+	dadosPM.push([i, parseFloat(dadosDiaEncontrado[i].pressaoMedia)]);
+		
+	}
+
+var chartFrequenciaCardiaca = $('#frequenciaCardiaca').highcharts();
+var chartFrequenciaRespiratoria = $('#frequenciaRespiratoria').highcharts();
+var chartTemperaturaCorporea = $('#temperaturaCorporea').highcharts();
+var chartSaturacaoOxigenio = $('#saturacaoOxigenio').highcharts();
+var chartPressao = $('#pressao').highcharts();
+
+chartFrequenciaCardiaca.series[0].setData(dadosFC);
+chartFrequenciaRespiratoria.series[0].setData(dadosFR);
+chartTemperaturaCorporea.series[0].setData(dadosTC);
+chartSaturacaoOxigenio.series[0].setData(dadosSAT);
+chartPressao.series[0].setData(dadosPS);
+chartPressao.series[1].setData(dadosPD);
+chartPressao.series[2].setData(dadosPM);
+
+
+
+
+});
+
+
+
+function atualizaGraficos(){
 
 
 
