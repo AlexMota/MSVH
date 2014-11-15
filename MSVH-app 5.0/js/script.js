@@ -160,6 +160,8 @@ $(document).on('pageshow', '#graficos', function() {
 				categories : []
 			},
 			yAxis : {
+				max: 110,
+				min: 90,
 				title : {
 					text : null
 				},
@@ -250,6 +252,8 @@ $(document).on('pageshow', '#graficos', function() {
 				categories : []
 			},
 			yAxis : {
+				max: 90,
+				min: 60,
 				title : {
 					text : null
 				},
@@ -338,6 +342,8 @@ $(document).on('pageshow', '#graficos', function() {
 				categories : []
 			},
 			yAxis : {
+				max: 60,
+				min: 20,
 				title : {
 					text : null
 				},
@@ -419,13 +425,15 @@ $(document).on('pageshow', '#graficos', function() {
 				text : null,
 			},
 
-			xAxis : {
+			xAxis : {				
 				title : {
 					text : null
 				},
 				categories : []
 			},
 			yAxis : {
+				max: 30,
+				min: 5,
 				title : {
 					text : null
 				},
