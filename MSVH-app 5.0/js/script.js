@@ -1017,8 +1017,7 @@ $(document).on('pageshow', '#tabela', function() {
 	var saturacaoOxigenio = parseFloat(dadoAtual.saturacaoOxigenio);
 	var pressaoSistolica = parseFloat(dadoAtual.pressaoSistolica);
 	var pressaoDiastolica = parseFloat(dadoAtual.pressaoDiastolica);
-	var calcPam = (pressaoSistolica - pressaoDiastolica)/3 + pressaoDiastolica;
-	var pressaoMedia = calcPam.toFixed(1);
+	var pressaoMedia = parseFloat(dadoAtual.pressaoMedia);
 	
 	dadosPaciente.push([hora, frequenciaCardiaca, frequenciaRespiratoria, temperaturaCorporea, saturacaoOxigenio, pressaoSistolica, pressaoDiastolica, pressaoMedia]);
 	}
@@ -1090,8 +1089,7 @@ for ( i = 0; i < dadosDiaEncontrado.length; i++) {
 	var saturacaoOxigenio = parseFloat(dadosDiaEncontrado[i].saturacaoOxigenio);
 	var pressaoSistolica = parseFloat(dadosDiaEncontrado[i].pressaoSistolica);
 	var pressaoDiastolica = parseFloat(dadosDiaEncontrado[i].pressaoDiastolica);
-	var calcPam = (pressaoSistolica - pressaoDiastolica)/3 + pressaoDiastolica;
-	var pressaoMedia = calcPam.toFixed(1);
+	var pressaoMedia = parseFloat(dadosDiaEncontrado[i].pressaoMedia);
 	
 	dadosPaciente.push([hora, frequenciaCardiaca, frequenciaRespiratoria, temperaturaCorporea, saturacaoOxigenio, pressaoSistolica, pressaoDiastolica, pressaoMedia]);
 	}
@@ -1125,8 +1123,7 @@ for ( i = 0; i < dados.length; i++) {
 	var saturacaoOxigenio = parseFloat(dados[i][4]);
 	var pressaoSistolica = parseFloat(dados[i][5]);
 	var pressaoDiastolica = parseFloat(dados[i][6]);
-	var calcPam = (pressaoSistolica - pressaoDiastolica)/3 + pressaoDiastolica;
-	var pressaoMedia = calcPam.toFixed(1);
+	var pressaoMedia = parseFloat(dados[i][7]);
 
 	
 	
@@ -1261,12 +1258,6 @@ chartPressao.series[2].setData(dadosPM);
 
 });
 
-
-
-function atualizaGraficos(){
-
-
-}
 
 $(function() {
     setInterval(function(){
