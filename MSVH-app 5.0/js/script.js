@@ -1007,9 +1007,12 @@ $(document).on('pageshow', '#tabela', function() {
 	var dadosPaciente = [];
 	
 	
-	for ( i = 0; i < 24; i++) {
+	
+	
+	for ( i = 0; i < diaAtual.dadosHoras.length; i++) {
 
 	dadoAtual = diaAtual.dadosHoras[i];
+	
 	var hora = dadoAtual.hora;
 	var frequenciaCardiaca = parseFloat(dadoAtual.frequenciaCardiaca);
 	var frequenciaRespiratoria = parseFloat(dadoAtual.frequenciaRespiratoria);
@@ -1258,10 +1261,9 @@ chartPressao.series[2].setData(dadosPM);
 
 });
 
-
 $(function() {
     setInterval(function(){
-		$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/dadosdia?data=03%2F11%2F2014&hora=21', function(data) {
+		$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/dadosdia?data=03%2F11%2F2014&hora=23', function(data) {
 		    var novosDados = data.items;
 		    var encontrado = false;
 		    var tamDados = novosDados.length;
@@ -1269,14 +1271,15 @@ $(function() {
 		    var indice;
 		    var dias = [];
 		    var tamDias
-			var modeloDado = pacientesJson[0].diasMonitorados[0].dadosHoras[0];
+			var modeloDado = {};
 		    
 		    for ( var i = 0; i < tamDados; i++ ) {
+			console.log("for1");
 		    dias = pacientesJson[i].diasMonitorados;
 		    dataPesq =  novosDados[i].data;
 		    tamDias = dias.length;
 				for ( var j = 0; j < tamDias; j++ ) {
-			  
+			console.log("for2");	
 					if(dias[j].data == dataPesq){
 			  		  encontrado = true;
 					  modeloDado.hora = novosDados[i].dadosHoras[0].hora;
@@ -1288,15 +1291,16 @@ $(function() {
 					  modeloDado.frequenciaCardiaca = novosDados[i].dadosHoras[0].frequenciaCardiaca;
 					  modeloDado.frequenciaRespiratoria = novosDados[i].dadosHoras[0].frequenciaRespiratoria;
 
-
+					  
 					  console.log("encontrado");
-					  pacientesJson[i].diasMonitorados[j].push(modeloDado);
+					  pacientesJson[i].diasMonitorados[j].dadosHoras.push(modeloDado);
+					  
 					  break;
 					}
 				}
-				if(encontrado = false){
+				if(encontrado == false){
 				console.log("nao encontrado");
-				pacientesJson[i].push(novosDados[i]);
+				pacientesJson[i].diasMonitorados.push(novosDados[i]);
 				}
 		    }
 
@@ -1306,7 +1310,6 @@ $(function() {
 }, 10000);
 
 });
-
 
 
 
