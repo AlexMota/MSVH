@@ -859,7 +859,7 @@ $(function() {
 		$("#leitoMonitor").html('<img src="jquerymobile-files/images/icons-png/plus-white.png"/> Leito '+leito+'');
 		$("#prontuarioMonitor").html('<img src="jquerymobile-files/images/icons-png/tag-white.png"/> N.P. '+numProntuario+'');
 		$("#descricaoMonitor").html('<img src="jquerymobile-files/images/icons-png/edit-white.png"/> '+descricao+'');
-		$("#dataHoraDados").html('<h1 align="center"><big><big>'+dataMaisRecente+' - '+horaMaisRecente+' hrs</big></big></h1>');
+		$("#dataHoraDados").html('<h1 align="center"><big>Ultima atualização: '+dataMaisRecente+' - '+horaMaisRecente+'h</big></h1>');
 
 
 		if(fc < 60 || fc > 100){		
