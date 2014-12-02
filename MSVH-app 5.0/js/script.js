@@ -1206,6 +1206,7 @@ var dadosSAT = [];
 var dadosPS = [];
 var dadosPD = [];
 var dadosPM = [];
+var arrayHoras = [];
 
 
 
@@ -1239,6 +1240,7 @@ for ( i = 0; i < dadosDiaEncontrado.length; i++) {
 	dadosPS.push([i, parseFloat(dadosDiaEncontrado[i].pressaoSistolica)]);
 	dadosPD.push([i, parseFloat(dadosDiaEncontrado[i].pressaoDiastolica)]);
 	dadosPM.push([i, parseFloat(dadosDiaEncontrado[i].pressaoMedia)]);
+	arrayHoras.push([hora]);
 		
 	}
 
@@ -1249,12 +1251,17 @@ var chartSaturacaoOxigenio = $('#saturacaoOxigenio').highcharts();
 var chartPressao = $('#pressao').highcharts();
 
 chartFrequenciaCardiaca.series[0].setData(dadosFC);
+chartFrequenciaCardiaca.xAxis[0].setCategories(arrayHoras);
 chartFrequenciaRespiratoria.series[0].setData(dadosFR);
+chartFrequenciaRespiratoria.xAxis[0].setCategories(arrayHoras);
 chartTemperaturaCorporea.series[0].setData(dadosTC);
+chartTemperaturaCorporea.xAxis[0].setCategories(arrayHoras);
 chartSaturacaoOxigenio.series[0].setData(dadosSAT);
+chartSaturacaoOxigenio.xAxis[0].setCategories(arrayHoras);
 chartPressao.series[0].setData(dadosPS);
 chartPressao.series[1].setData(dadosPD);
 chartPressao.series[2].setData(dadosPM);
+chartPressao.xAxis[0].setCategories(arrayHoras);
 
 
 
