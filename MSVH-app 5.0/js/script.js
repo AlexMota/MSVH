@@ -853,12 +853,12 @@ $(function() {
 		var fc = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaCardiaca);
 		var fr = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaRespiratoria);
 
-		$("#nomeMonitor").html('<img  src="jquerymobile-files/images/icons-png/user-white.png"/> '+nome+'');
-		$("#utiMonitor").html('<img src="jquerymobile-files/images/icons-png/location-white.png"/> '+uti+'');
-		$("#idadeMonitor").html('<img src="jquerymobile-files/images/icons-png/star-white.png"/> '+idade+'');
-		$("#leitoMonitor").html('<img src="jquerymobile-files/images/icons-png/plus-white.png"/> Leito '+leito+'');
-		$("#prontuarioMonitor").html('<img src="jquerymobile-files/images/icons-png/tag-white.png"/> N.P. '+numProntuario+'');
-		$("#descricaoMonitor").html('<img src="jquerymobile-files/images/icons-png/edit-white.png"/> '+descricao+'');
+		$("#nomeMonitor").html('<img  src="js/jquerymobile-files/images/icons-png/user-white.png"/> '+nome+'');
+		$("#utiMonitor").html('<img src="js/jquerymobile-files/images/icons-png/location-white.png"/> '+uti+'');
+		$("#idadeMonitor").html('<img src="js/jquerymobile-files/images/icons-png/star-white.png"/> '+idade+'');
+		$("#leitoMonitor").html('<img src="js/jquerymobile-files/images/icons-png/plus-white.png"/> Leito '+leito+'');
+		$("#prontuarioMonitor").html('<img src="js/jquerymobile-files/images/icons-png/tag-white.png"/> N.P. '+numProntuario+'');
+		$("#descricaoMonitor").html('<img src="js/jquerymobile-files/images/icons-png/edit-white.png"/> '+descricao+'');
 		$("#dataHoraDados").html('<h1 align="center"><big>Ultima atualização: '+dataMaisRecente+' - '+horaMaisRecente+'h</big></h1>');
 
 
