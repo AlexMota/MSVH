@@ -2,6 +2,685 @@
 numIdPacAtual = 0;
 pacientesJson = [];
 
+//CARREGAMENTO DE DADOS INICIAL
+$(document).on('pageinit', '#init', function() {
+	
+	$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/pacientes', function(data) {
+		pacientesJson = data.items;
+		setTimeout(function() {
+			$.mobile.changePage("#pacientes", "fade");
+	}, 2000);		
+	});	
+});
+
+//RECEBENDO MAIS DADOS DO SERVIDOR
+
+$(function() {
+    setInterval(function(){
+		$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/dadosdia?data=03%2F11%2F2014&hora=23', function(data) {
+		    var novosDados = data.items;
+		    var encontrado = false;
+		    var tamDados = novosDados.length;
+		    var dataPesq;
+		    var indice;
+		    var dias = [];
+		    var tamDias
+			var modeloDado = {};
+		    
+		    for ( var i = 0; i < tamDados; i++ ) {
+			console.log("for1");
+		    dias = pacientesJson[i].diasMonitorados;
+		    dataPesq =  novosDados[i].data;
+		    tamDias = dias.length;
+				for ( var j = 0; j < tamDias; j++ ) {
+			console.log("for2");	
+					if(dias[j].data == dataPesq){
+			  		  encontrado = true;
+					  modeloDado.hora = novosDados[i].dadosHoras[0].hora;
+					  modeloDado.temperaturaCorporea = novosDados[i].dadosHoras[0].temperaturaCorporea;
+					  modeloDado.pressaoSistolica = novosDados[i].dadosHoras[0].pressaoSistolica;
+					  modeloDado.pressaoDiastolica = novosDados[i].dadosHoras[0].pressaoDiastolica;
+					  modeloDado.pressaoMedia = novosDados[i].dadosHoras[0].pressaoMedia;
+					  modeloDado.saturacaoOxigenio = novosDados[i].dadosHoras[0].saturacaoOxigenio;
+					  modeloDado.frequenciaCardiaca = novosDados[i].dadosHoras[0].frequenciaCardiaca;
+					  modeloDado.frequenciaRespiratoria = novosDados[i].dadosHoras[0].frequenciaRespiratoria;
+
+					  
+					  console.log("encontrado");
+					  pacientesJson[i].diasMonitorados[j].dadosHoras.push(modeloDado);
+					  
+					  break;
+					}
+				}
+				if(encontrado == false){
+				console.log("nao encontrado");
+				pacientesJson[i].diasMonitorados.push(novosDados[i]);
+				}
+		    }
+
+		    console.log("Dias: "+tamDias);
+});
+}, 10000);
+
+});
+
+
+//CONFIGURACAO DO APLICATIVO
+
+$(function() {
+	$('#aviso-sonoro').change(function() {
+		if (($(this).val()) == 'off') {
+			$("#volume").slider({
+				disabled : true
+			});
+		}
+		if (($(this).val()) == 'on') {
+			$("#volume").slider({
+				disabled : false
+			});
+		}
+	});
+		$('#selecionaData').change(function() {
+		console.log($(this).val());
+	});
+});
+
+
+//LISTA DE PACIENTES
+
+$(document).on('pageinit', '#pacientes', function() {
+
+		for ( i = 0; i < pacientesJson.length; i++) {
+			//botao icone
+
+			if (pacientesJson[i].sexo == "feminino") {
+				listItem = '<li class="paciente" id="pac'+i+'"><a href="#monitor"><img src="img/paciente-fem.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
+			} else if (pacientesJson[i].sexo == "masculino") {
+				listItem = '<li class="paciente" id="pac'+i+'"><a href="#monitor"><img src="img/paciente-mas.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti +'</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
+			}
+			$('#listap').append(listItem)
+		}
+		$("#listap").listview("refresh");
+});
+
+
+//BOTAO DE ALARME DOS PACIENTES
+$(function() {
+
+	$('#listap').on('click', '.alarme', function(event) {
+		var botao = $(this);
+		var icone = botao.attr("data-icon");
+
+		switch(icone) {
+			case "alarm":
+				botao.attr('data-icon', "alarm-off");
+				$(this).buttonMarkup({
+					icon : "alarm-off"
+				});
+				break;
+
+			case "alarm-off":
+				botao.attr('data-icon', "alarm");
+				$(this).buttonMarkup({
+					icon : "alarm"
+				});
+				break;
+		}
+	});
+});
+
+
+//MONITOR DO PACIENTE CLICLADO
+
+
+$(function() {
+	$('#listap').on('click', '.paciente', function(event) {
+		
+		var id = $(this).attr("id");
+		numIdPacAtual = parseInt(id.substring(3, id.length));	
+
+		var nome = pacientesJson[numIdPacAtual].nome;
+		var idade = pacientesJson[numIdPacAtual].idade;
+		var numProntuario = pacientesJson[numIdPacAtual].prontuario;
+		var uti = pacientesJson[numIdPacAtual].uti;
+		var leito = pacientesJson[numIdPacAtual].leito;
+		var descricao = pacientesJson[numIdPacAtual].descricao;
+
+		var dias = pacientesJson[numIdPacAtual].diasMonitorados;
+		var dataMaisRecente = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].data;
+		var horas = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras;
+		var horaMaisRecente = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].hora;
+
+		var tc = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].temperaturaCorporea);
+		var pas = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoSistolica);
+		var pad = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoDiastolica);
+		var pam = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoMedia);
+		var sato2 = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].saturacaoOxigenio);
+		var fc = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaCardiaca);
+		var fr = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaRespiratoria);
+
+		$("#nomeMonitor").html('<img  src="js/jquerymobile-files/images/icons-png/user-white.png"/> '+nome+'');
+		$("#utiMonitor").html('<img src="js/jquerymobile-files/images/icons-png/location-white.png"/> '+uti+'');
+		$("#idadeMonitor").html('<img src="js/jquerymobile-files/images/icons-png/star-white.png"/> '+idade+'');
+		$("#leitoMonitor").html('<img src="js/jquerymobile-files/images/icons-png/plus-white.png"/> Leito '+leito+'');
+		$("#prontuarioMonitor").html('<img src="js/jquerymobile-files/images/icons-png/tag-white.png"/> N.P. '+numProntuario+'');
+		$("#descricaoMonitor").html('<img src="js/jquerymobile-files/images/icons-png/edit-white.png"/> '+descricao+'');
+		$("#dataHoraDados").html('<h1 align="center"><big>Ultima atualização: '+dataMaisRecente+' - '+horaMaisRecente+'h</big></h1>');
+
+
+		if(fc < 60 || fc > 100){		
+			$("#monitorFC").html('<a id="monFreqCard" href="#graficos"><img src="img/heart.png"/></a><big><big><big style="color: red">'+fc+'</big></big></big><small> bpm</small>');
+		}else{
+			$("#monitorFC").html('<a id="monFreqCard" href="#graficos"><img src="img/heart.png"/></a><big><big><big>'+fc+'</big></big></big><small> bpm</small>');
+		}
+
+		if(fr < 12 || fr > 20){
+			$("#monitorFR").html('<a id="monFreqResp" href="#graficos"><img src="img/lung.png"/></a><big><big><big style="color: red">'+fr+'</big></big></big><small> mpm</small>');
+		}else{
+			$("#monitorFR").html('<a id="monFreqResp" href="#graficos"><img src="img/lung.png"/></a><big><big><big>'+fr+'</big></big></big><small> mpm</small>');
+		}
+
+		if(tc < 30 || tc > 37){
+			$("#monitorTC").html('<a id="monTempCorp" href="#graficos"><img src="img/thermometer.png"/></a><big><big><big style="color: red">'+tc+'</big></big></big><small> ºC</small>');
+		}else{
+			$("#monitorTC").html('<a id="monTempCorp" href="#graficos"><img src="img/thermometer.png"/></a><big><big><big>'+tc+'</big></big></big><small> ºC</small>');
+		}
+
+		if(sato2 < 95){
+			$("#monitorSat").html('<a id="monSatOxig" href="#graficos"><img src="img/blood.png"/></a><big><big><big style="color: red">'+sato2+'</big></big></big><small> %</small>');
+		}else{
+			$("#monitorSat").html('<a id="monSatOxig" href="#graficos"><img src="img/blood.png"/></a><big><big><big>'+sato2+'</big></big></big><small> %</small>');
+		}
+
+
+		if(pas < 90 || pas > 139){
+			if(pad > 89){
+				$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big style="color: red">'+pas+'/</big><big style="color: red">'+pad+' </big><big>('+pam+')</big></big></big><small> mmHg</small>');
+			}else{
+				$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big style="color: red">'+pas+'/</big><big>'+pad+' </big><big>('+pam+')</big></big></big><small> mmHg</small>');
+
+			}
+		}else{
+			if(pad > 89){
+				$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big>'+pas+'/</big><big style="color: red">'+pad+' </big><big>('+pam+')</big></big></big><small> mmHg</small>');
+			}else{
+				$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big>'+pas+'/</big><big>'+pad+' </big><big>('+pam+')</big></big></big><small> mmHg</small>');
+
+			}
+
+		}
+		
+		});
+
+	});
+
+
+//ICONES DO MONITOR
+
+//1
+
+$(function() {
+	$('#monitorFC').on('click', 'a', function() {
+		var botaoFC = document.getElementById("btFreqCar");
+		botaoFC.classList.add("ui-btn-active");
+		botaoFC.classList.add("ui-state-persist");
+		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
+		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
+		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
+		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
+		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
+		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
+		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
+		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
+		$('#pressao').css('display', 'none');
+		$('#saturacaoOxigenio').css('display', 'none');
+		$('#frequenciaRespiratoria').css('display', 'none');
+		$('#temperaturaCorporea').css('display', 'none');
+		$('#frequenciaCardiaca').css('display', 'flex');
+	});
+});
+
+//2
+
+$(function() {
+	$('#monitorFR').on('click', 'a', function() {
+		var botaoFR = document.getElementById("btFreqResp");
+		botaoFR.classList.add("ui-btn-active");
+		botaoFR.classList.add("ui-state-persist");
+		//console.log(botao);	
+		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
+		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
+		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
+		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
+		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
+		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
+		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
+		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
+		$('#pressao').css('display', 'none');
+		$('#saturacaoOxigenio').css('display', 'none');
+		$('#frequenciaCardiaca').css('display', 'none');
+		$('#temperaturaCorporea').css('display', 'none');
+		$('#frequenciaRespiratoria').css('display', 'flex');
+	});
+});
+
+//3
+
+$(function() {
+
+	$('#monitorTC').on('click', 'a', function() {
+		var botaoTC = document.getElementById("btTempCorp");
+		botaoTC.classList.add("ui-btn-active");
+		botaoTC.classList.add("ui-state-persist");
+		//console.log(botao);
+
+		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
+		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
+		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
+		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
+
+		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
+		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
+		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
+		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
+
+		$('#pressao').css('display', 'none');
+		$('#saturacaoOxigenio').css('display', 'none');
+		$('#frequenciaRespiratoria').css('display', 'none');
+		$('#frequenciaCardiaca').css('display', 'none');
+		$('#temperaturaCorporea').css('display', 'flex');
+	});
+});
+
+//4
+
+$(function() {
+
+	$('#monitorSat').on('click', 'a', function() {
+		var botaoSO = document.getElementById("btSatOxig");
+		botaoSO.classList.add("ui-btn-active");
+		botaoSO.classList.add("ui-state-persist");
+		//console.log(botao);
+
+		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
+		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
+		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
+		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
+
+		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
+		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
+		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
+		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
+
+		$('#pressao').css('display', 'none');
+		$('#frequenciaCardiaca').css('display', 'none');
+		$('#frequenciaRespiratoria').css('display', 'none');
+		$('#temperaturaCorporea').css('display', 'none');
+		$('#saturacaoOxigenio').css('display', 'flex');
+	});
+});
+
+//5
+
+$(function() {
+
+	$('#monitorPA').on('click', 'a', function() {
+		var botaoPA = document.getElementById("btPressaoArt");
+		botaoPA.classList.add("ui-btn-active");
+		botaoPA.classList.add("ui-state-persist");
+		//console.log(botao);
+
+		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
+		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
+		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
+		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
+
+		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
+		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
+		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
+		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
+
+		$('#frequenciaCardiaca').css('display', 'none');
+		$('#saturacaoOxigenio').css('display', 'none');
+		$('#frequenciaRespiratoria').css('display', 'none');
+		$('#temperaturaCorporea').css('display', 'none');
+		$('#pressao').css('display', 'flex');
+	});
+});
+
+
+// TABELA DE DADOS 
+
+$(document).on('pageshow', '#tabela', function() {
+	$(".ui-table-columntoggle-btn").detach().appendTo('#bloco2');
+	var posDiaAtual = pacientesJson[numIdPacAtual].diasMonitorados.length -1;
+	var diaAtual = pacientesJson[numIdPacAtual].diasMonitorados[posDiaAtual];
+	var dadoAtual;
+	var dadosPaciente = [];
+
+	for ( i = 0; i < diaAtual.dadosHoras.length; i++) {
+	dadoAtual = diaAtual.dadosHoras[i];	
+	var hora = dadoAtual.hora;
+	var frequenciaCardiaca = parseFloat(dadoAtual.frequenciaCardiaca);
+	var frequenciaRespiratoria = parseFloat(dadoAtual.frequenciaRespiratoria);
+	var temperaturaCorporea = parseFloat(dadoAtual.temperaturaCorporea);
+	var saturacaoOxigenio = parseFloat(dadoAtual.saturacaoOxigenio);
+	var pressaoSistolica = parseFloat(dadoAtual.pressaoSistolica);
+	var pressaoDiastolica = parseFloat(dadoAtual.pressaoDiastolica);
+	var pressaoMedia = parseFloat(dadoAtual.pressaoMedia);
+	
+	dadosPaciente.push([hora, frequenciaCardiaca, frequenciaRespiratoria, temperaturaCorporea, saturacaoOxigenio, pressaoSistolica, pressaoDiastolica, pressaoMedia]);
+	}
+
+	atualizaTabela(dadosPaciente);	
+});
+
+// ATUALIZA TABELA
+
+function atualizaTabela(dados){
+
+$("#table-column-toggle tbody tr").remove();
+
+for ( i = 0; i < dados.length; i++) {
+  
+	var hora = dados[i][0];
+	var frequenciaCardiaca = parseFloat(dados[i][1]);
+	var frequenciaRespiratoria = parseFloat(dados[i][2]);
+	var temperaturaCorporea = parseFloat(dados[i][3]);
+	var saturacaoOxigenio = parseFloat(dados[i][4]);
+	var pressaoSistolica = parseFloat(dados[i][5]);
+	var pressaoDiastolica = parseFloat(dados[i][6]);
+	var pressaoMedia = parseFloat(dados[i][7]);
+
+	var linha = '';
+	var cont = 0;
+
+	if(frequenciaCardiaca < 60 || frequenciaCardiaca > 100){
+		linha += '<td style="color: red">'+frequenciaCardiaca+'</td>';
+		cont++;
+	}else{
+		linha += '<td>'+frequenciaCardiaca+'</td>'
+	}
+
+	if(frequenciaRespiratoria < 12 || frequenciaRespiratoria > 20){
+		linha += '<td style="color: red">'+frequenciaRespiratoria+'</td>';
+		cont++;
+	}else{
+		linha += '<td>'+frequenciaRespiratoria+'</td>'
+	}
+
+	if(temperaturaCorporea < 30 || temperaturaCorporea > 37){
+		linha += '<td style="color: red">'+temperaturaCorporea+'</td>';
+		cont++;
+	}else{
+		linha += '<td>'+temperaturaCorporea+'</td>'
+	}
+
+	if(saturacaoOxigenio < 95){
+		linha += '<td style="color: red">'+saturacaoOxigenio+'</td>';
+		cont++;
+	}else{
+		linha += '<td>'+saturacaoOxigenio+'</td>'
+	}
+
+	if(pressaoSistolica < 90 || pressaoSistolica > 139){
+		linha += '<td style="color: red">'+pressaoSistolica+'</td>';
+		cont++;
+	}else{
+		linha += '<td>'+pressaoSistolica+'</td>'
+	}
+
+	if(pressaoDiastolica > 89){
+		linha += '<td style="color: red">'+pressaoDiastolica+'</td>';
+		cont++;
+	}else{
+		linha += '<td>'+pressaoDiastolica+'</td>'
+	}
+
+	if(cont > 0){
+		linha = '<tr class="linha"><th style="color: red">'+hora+'</th>'+linha+'<td>'+pressaoMedia+'</td></tr>';
+	}else{
+		linha = '<tr class="linha"><th>'+hora+'</th>'+linha+'<td>'+pressaoMedia+'</td></tr>';
+	}
+
+		$("table#table-column-toggle tbody").append(linha).closest("table#table-column-toggle").table("refresh");
+	}
+
+}
+
+//DATA DA TABELA
+
+$(document).on('change', '#dataTabela', function() {
+
+var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
+var dataEscolhida = $('#dataTabela option:selected').text();
+
+var diasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
+var dadosDaEncontrado = '';
+var dadosPaciente = [];
+
+for(var i=0; i<diasMonitorados.length; i++){
+	if(diasMonitorados[i].data == dataEscolhida){
+		dadosDiaEncontrado = diasMonitorados[i].dadosHoras;
+		break;
+	}
+}
+
+for ( i = 0; i < dadosDiaEncontrado.length; i++) {	
+	var hora = dadosDiaEncontrado[i].hora;
+	var frequenciaCardiaca = parseFloat(dadosDiaEncontrado[i].frequenciaCardiaca);
+	var frequenciaRespiratoria = parseFloat(dadosDiaEncontrado[i].frequenciaRespiratoria);
+	var temperaturaCorporea = parseFloat(dadosDiaEncontrado[i].temperaturaCorporea);
+	var saturacaoOxigenio = parseFloat(dadosDiaEncontrado[i].saturacaoOxigenio);
+	var pressaoSistolica = parseFloat(dadosDiaEncontrado[i].pressaoSistolica);
+	var pressaoDiastolica = parseFloat(dadosDiaEncontrado[i].pressaoDiastolica);
+	var pressaoMedia = parseFloat(dadosDiaEncontrado[i].pressaoMedia);
+	
+	dadosPaciente.push([hora, frequenciaCardiaca, frequenciaRespiratoria, temperaturaCorporea, saturacaoOxigenio, pressaoSistolica, pressaoDiastolica, pressaoMedia]);
+	}
+atualizaTabela(dadosPaciente);
+
+});
+
+
+// BOTOES DO MENU DOS GRAFICOS
+
+$(function() {
+//frequencia Cardiaca
+	$('#btFreqCar').click(function() {
+		var botaoFC = document.getElementById("btFreqCar");
+		botaoFC.classList.add("ui-btn-active");
+		botaoFC.classList.add("ui-state-persist");
+		//console.log(botao);
+
+		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
+		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
+		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
+		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
+
+		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
+		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
+		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
+		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
+
+		$('#pressao').css('display', 'none');
+		$('#saturacaoOxigenio').css('display', 'none');
+		$('#frequenciaRespiratoria').css('display', 'none');
+		$('#temperaturaCorporea').css('display', 'none');
+		$('#frequenciaCardiaca').css('display', 'flex');
+	});
+//Frequencia Respiratoria
+	$('#btFreqResp').click(function() {
+		var botaoFR = document.getElementById("btFreqResp");
+		botaoFR.classList.add("ui-btn-active");
+		botaoFR.classList.add("ui-state-persist");
+		//console.log(botao);
+		
+		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
+		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
+		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
+		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
+
+		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
+		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
+		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
+		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
+
+		$('#pressao').css('display', 'none');
+		$('#saturacaoOxigenio').css('display', 'none');
+		$('#frequenciaCardiaca').css('display', 'none');
+		$('#temperaturaCorporea').css('display', 'none');
+		$('#frequenciaRespiratoria').css('display', 'flex');
+	});
+//Temperatura Corporea
+	$('#btTempCorp').click(function() {
+		var botaoTC = document.getElementById("btTempCorp");
+		botaoTC.classList.add("ui-btn-active");
+		botaoTC.classList.add("ui-state-persist");
+		//console.log(botao);
+
+		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
+		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
+		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
+		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
+
+		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
+		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
+		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
+		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
+
+		$('#pressao').css('display', 'none');
+		$('#saturacaoOxigenio').css('display', 'none');
+		$('#frequenciaRespiratoria').css('display', 'none');
+		$('#frequenciaCardiaca').css('display', 'none');
+		$('#temperaturaCorporea').css('display', 'flex');
+	});	
+//Saturacao de Oxigenio
+	$('#btSatOxig').click(function() {
+		var botaoSO = document.getElementById("btSatOxig");
+		botaoSO.classList.add("ui-btn-active");
+		botaoSO.classList.add("ui-state-persist");
+		//console.log(botao);
+
+		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
+		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
+		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
+		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
+
+		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
+		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
+		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
+		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
+
+		$('#pressao').css('display', 'none');
+		$('#frequenciaCardiaca').css('display', 'none');
+		$('#frequenciaRespiratoria').css('display', 'none');
+		$('#temperaturaCorporea').css('display', 'none');
+		$('#saturacaoOxigenio').css('display', 'flex');
+	});
+// Pressao Arterial	
+	$('#btPressaoArt').click(function() {
+		var botaoPA = document.getElementById("btPressaoArt");
+		botaoPA.classList.add("ui-btn-active");
+		botaoPA.classList.add("ui-state-persist");
+		//console.log(botao);
+		
+		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
+		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
+		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
+		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
+
+		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
+		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
+		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
+		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
+
+		$('#frequenciaCardiaca').css('display', 'none');
+		$('#saturacaoOxigenio').css('display', 'none');
+		$('#frequenciaRespiratoria').css('display', 'none');
+		$('#temperaturaCorporea').css('display', 'none');
+		$('#pressao').css('display', 'flex');
+	});
+//Padrao
+	$('#monGraficos').click(function() {
+		var botaoFC = document.getElementById("btFreqCar");
+		botaoFC.classList.add("ui-btn-active");
+		botaoFC.classList.add("ui-state-persist");
+		//console.log(botao);
+
+		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
+		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
+		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
+		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
+
+		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
+		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
+		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
+		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
+
+		$('#pressao').css('display', 'none');
+		$('#saturacaoOxigenio').css('display', 'none');
+		$('#frequenciaRespiratoria').css('display', 'none');
+		$('#temperaturaCorporea').css('display', 'none');
+		$('#frequenciaCardiaca').css('display', 'flex');
+
+	});
+	
+	
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //GRAFICOS
 $(document).on('pageshow', '#graficos', function() {
@@ -437,449 +1116,14 @@ $(document).on('pageshow', '#graficos', function() {
 			chart.xAxis[0].setCategories(arrayHoras);
 });
 
-//MONITOR
 
-$(function() {
 
-	$('#monitorFC').on('click', 'a', function() {
 
-		var botaoFC = document.getElementById("btFreqCar");
-		botaoFC.classList.add("ui-btn-active");
-		botaoFC.classList.add("ui-state-persist");
-		//console.log(botao);
 
-		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
-		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
-		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
-		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
 
-		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
-		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
-		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
-		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
 
-		$('#pressao').css('display', 'none');
-		$('#saturacaoOxigenio').css('display', 'none');
-		$('#frequenciaRespiratoria').css('display', 'none');
-		$('#temperaturaCorporea').css('display', 'none');
-		$('#frequenciaCardiaca').css('display', 'flex');
-	});
-});
 
 
-$(function() {
-
-	$('#btFreqCar').click(function() {
-		var botaoFC = document.getElementById("btFreqCar");
-		botaoFC.classList.add("ui-btn-active");
-		botaoFC.classList.add("ui-state-persist");
-		//console.log(botao);
-
-		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
-		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
-		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
-		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
-
-		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
-		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
-		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
-		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
-
-		$('#pressao').css('display', 'none');
-		$('#saturacaoOxigenio').css('display', 'none');
-		$('#frequenciaRespiratoria').css('display', 'none');
-		$('#temperaturaCorporea').css('display', 'none');
-		$('#frequenciaCardiaca').css('display', 'flex');
-	});
-});
-
-$(function() {
-
-	$('#monitorFR').on('click', 'a', function() {
-		var botaoFR = document.getElementById("btFreqResp");
-		botaoFR.classList.add("ui-btn-active");
-		botaoFR.classList.add("ui-state-persist");
-		//console.log(botao);
-		
-		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
-		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
-		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
-		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
-
-		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
-		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
-		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
-		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
-
-		$('#pressao').css('display', 'none');
-		$('#saturacaoOxigenio').css('display', 'none');
-		$('#frequenciaCardiaca').css('display', 'none');
-		$('#temperaturaCorporea').css('display', 'none');
-		$('#frequenciaRespiratoria').css('display', 'flex');
-	});
-});
-
-$(function() {
-	$('#btFreqResp').click(function() {
-		var botaoFR = document.getElementById("btFreqResp");
-		botaoFR.classList.add("ui-btn-active");
-		botaoFR.classList.add("ui-state-persist");
-		//console.log(botao);
-		
-		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
-		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
-		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
-		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
-
-		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
-		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
-		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
-		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
-
-		$('#pressao').css('display', 'none');
-		$('#saturacaoOxigenio').css('display', 'none');
-		$('#frequenciaCardiaca').css('display', 'none');
-		$('#temperaturaCorporea').css('display', 'none');
-		$('#frequenciaRespiratoria').css('display', 'flex');
-	});
-});
-
-$(function() {
-
-	$('#monitorTC').on('click', 'a', function() {
-		var botaoTC = document.getElementById("btTempCorp");
-		botaoTC.classList.add("ui-btn-active");
-		botaoTC.classList.add("ui-state-persist");
-		//console.log(botao);
-
-		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
-		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
-		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
-		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
-
-		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
-		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
-		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
-		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
-
-		$('#pressao').css('display', 'none');
-		$('#saturacaoOxigenio').css('display', 'none');
-		$('#frequenciaRespiratoria').css('display', 'none');
-		$('#frequenciaCardiaca').css('display', 'none');
-		$('#temperaturaCorporea').css('display', 'flex');
-	});
-});
-
-$(function() {
-
-	$('#btTempCorp').click(function() {
-		var botaoTC = document.getElementById("btTempCorp");
-		botaoTC.classList.add("ui-btn-active");
-		botaoTC.classList.add("ui-state-persist");
-		//console.log(botao);
-
-		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
-		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
-		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
-		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
-
-		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
-		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
-		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
-		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
-
-		$('#pressao').css('display', 'none');
-		$('#saturacaoOxigenio').css('display', 'none');
-		$('#frequenciaRespiratoria').css('display', 'none');
-		$('#frequenciaCardiaca').css('display', 'none');
-		$('#temperaturaCorporea').css('display', 'flex');
-	});
-});
-
-$(function() {
-
-	$('#monitorSat').on('click', 'a', function() {
-		var botaoSO = document.getElementById("btSatOxig");
-		botaoSO.classList.add("ui-btn-active");
-		botaoSO.classList.add("ui-state-persist");
-		//console.log(botao);
-
-		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
-		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
-		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
-		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
-
-		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
-		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
-		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
-		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
-
-		$('#pressao').css('display', 'none');
-		$('#frequenciaCardiaca').css('display', 'none');
-		$('#frequenciaRespiratoria').css('display', 'none');
-		$('#temperaturaCorporea').css('display', 'none');
-		$('#saturacaoOxigenio').css('display', 'flex');
-	});
-});
-
-$(function() {
-
-	$('#btSatOxig').click(function() {
-		var botaoSO = document.getElementById("btSatOxig");
-		botaoSO.classList.add("ui-btn-active");
-		botaoSO.classList.add("ui-state-persist");
-		//console.log(botao);
-
-		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
-		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
-		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
-		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
-
-		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
-		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
-		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
-		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
-
-		$('#pressao').css('display', 'none');
-		$('#frequenciaCardiaca').css('display', 'none');
-		$('#frequenciaRespiratoria').css('display', 'none');
-		$('#temperaturaCorporea').css('display', 'none');
-		$('#saturacaoOxigenio').css('display', 'flex');
-	});
-});
-
-$(function() {
-
-	$('#monitorPA').on('click', 'a', function() {
-		var botaoPA = document.getElementById("btPressaoArt");
-		botaoPA.classList.add("ui-btn-active");
-		botaoPA.classList.add("ui-state-persist");
-		//console.log(botao);
-
-		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
-		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
-		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
-		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
-
-		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
-		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
-		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
-		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
-
-		$('#frequenciaCardiaca').css('display', 'none');
-		$('#saturacaoOxigenio').css('display', 'none');
-		$('#frequenciaRespiratoria').css('display', 'none');
-		$('#temperaturaCorporea').css('display', 'none');
-		$('#pressao').css('display', 'flex');
-	});
-});
-
-$(function() {
-
-	$('#btPressaoArt').click(function() {
-		var botaoPA = document.getElementById("btPressaoArt");
-		botaoPA.classList.add("ui-btn-active");
-		botaoPA.classList.add("ui-state-persist");
-		//console.log(botao);
-		
-		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
-		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
-		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
-		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
-
-		document.getElementById('btFreqCar').classList.remove('ui-state-persist');
-		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
-		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
-		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
-
-		$('#frequenciaCardiaca').css('display', 'none');
-		$('#saturacaoOxigenio').css('display', 'none');
-		$('#frequenciaRespiratoria').css('display', 'none');
-		$('#temperaturaCorporea').css('display', 'none');
-		$('#pressao').css('display', 'flex');
-	});
-});
-
-$(function() {
-	$('#monGraficos').click(function() {
-		var botaoFC = document.getElementById("btFreqCar");
-		botaoFC.classList.add("ui-btn-active");
-		botaoFC.classList.add("ui-state-persist");
-		//console.log(botao);
-
-		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
-		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
-		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
-		document.getElementById('btPressaoArt').classList.remove('ui-btn-active');
-
-		document.getElementById('btFreqResp').classList.remove('ui-state-persist');
-		document.getElementById('btSatOxig').classList.remove('ui-state-persist');
-		document.getElementById('btTempCorp').classList.remove('ui-state-persist');
-		document.getElementById('btPressaoArt').classList.remove('ui-state-persist');
-
-		$('#pressao').css('display', 'none');
-		$('#saturacaoOxigenio').css('display', 'none');
-		$('#frequenciaRespiratoria').css('display', 'none');
-		$('#temperaturaCorporea').css('display', 'none');
-		$('#frequenciaCardiaca').css('display', 'flex');
-
-	});
-
-});
-
-//PACIENTES
-
-$(document).on('pageinit', '#pacientes', function() {
-
-		for ( i = 0; i < pacientesJson.length; i++) {
-			//botao icone
-
-			if (pacientesJson[i].sexo == "feminino") {
-				listItem = '<li class="paciente" id="pac'+i+'"><a href="#monitor"><img src="img/paciente-fem.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
-			} else if (pacientesJson[i].sexo == "masculino") {
-				listItem = '<li class="paciente" id="pac'+i+'"><a href="#monitor"><img src="img/paciente-mas.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti +'</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
-			}
-			$('#listap').append(listItem)
-		}
-		$("#listap").listview("refresh");
-});
-
-
-$(function() {
-	$('#listap').on('click', '.paciente', function(event) {
-		
-		var id = $(this).attr("id");
-		numIdPacAtual = parseInt(id.substring(3, id.length));	
-
-		var nome = pacientesJson[numIdPacAtual].nome;
-		var idade = pacientesJson[numIdPacAtual].idade;
-		var numProntuario = pacientesJson[numIdPacAtual].prontuario;
-		var uti = pacientesJson[numIdPacAtual].uti;
-		var leito = pacientesJson[numIdPacAtual].leito;
-		var descricao = pacientesJson[numIdPacAtual].descricao;
-
-		var dias = pacientesJson[numIdPacAtual].diasMonitorados;
-		var dataMaisRecente = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].data;
-		var horas = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras;
-		var horaMaisRecente = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].hora;
-
-		var tc = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].temperaturaCorporea);
-		var pas = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoSistolica);
-		var pad = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoDiastolica);
-		var pam = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoMedia);
-		var sato2 = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].saturacaoOxigenio);
-		var fc = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaCardiaca);
-		var fr = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaRespiratoria);
-
-		$("#nomeMonitor").html('<img  src="js/jquerymobile-files/images/icons-png/user-white.png"/> '+nome+'');
-		$("#utiMonitor").html('<img src="js/jquerymobile-files/images/icons-png/location-white.png"/> '+uti+'');
-		$("#idadeMonitor").html('<img src="js/jquerymobile-files/images/icons-png/star-white.png"/> '+idade+'');
-		$("#leitoMonitor").html('<img src="js/jquerymobile-files/images/icons-png/plus-white.png"/> Leito '+leito+'');
-		$("#prontuarioMonitor").html('<img src="js/jquerymobile-files/images/icons-png/tag-white.png"/> N.P. '+numProntuario+'');
-		$("#descricaoMonitor").html('<img src="js/jquerymobile-files/images/icons-png/edit-white.png"/> '+descricao+'');
-		$("#dataHoraDados").html('<h1 align="center"><big>Ultima atualização: '+dataMaisRecente+' - '+horaMaisRecente+'h</big></h1>');
-
-
-		if(fc < 60 || fc > 100){		
-			$("#monitorFC").html('<a id="monFreqCard" href="#graficos"><img src="img/heart.png"/></a><big><big><big style="color: red">'+fc+'</big></big></big><small> bpm</small>');
-		}else{
-			$("#monitorFC").html('<a id="monFreqCard" href="#graficos"><img src="img/heart.png"/></a><big><big><big>'+fc+'</big></big></big><small> bpm</small>');
-		}
-
-		if(fr < 12 || fr > 20){
-			$("#monitorFR").html('<a id="monFreqResp" href="#graficos"><img src="img/lung.png"/></a><big><big><big style="color: red">'+fr+'</big></big></big><small> mpm</small>');
-		}else{
-			$("#monitorFR").html('<a id="monFreqResp" href="#graficos"><img src="img/lung.png"/></a><big><big><big>'+fr+'</big></big></big><small> mpm</small>');
-		}
-
-		if(tc < 30 || tc > 37){
-			$("#monitorTC").html('<a id="monTempCorp" href="#graficos"><img src="img/thermometer.png"/></a><big><big><big style="color: red">'+tc+'</big></big></big><small> ºC</small>');
-		}else{
-			$("#monitorTC").html('<a id="monTempCorp" href="#graficos"><img src="img/thermometer.png"/></a><big><big><big>'+tc+'</big></big></big><small> ºC</small>');
-		}
-
-		if(sato2 < 95){
-			$("#monitorSat").html('<a id="monSatOxig" href="#graficos"><img src="img/blood.png"/></a><big><big><big style="color: red">'+sato2+'</big></big></big><small> %</small>');
-		}else{
-			$("#monitorSat").html('<a id="monSatOxig" href="#graficos"><img src="img/blood.png"/></a><big><big><big>'+sato2+'</big></big></big><small> %</small>');
-		}
-
-
-		if(pas < 90 || pas > 139){
-			if(pad > 89){
-				$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big style="color: red">'+pas+'/</big><big style="color: red">'+pad+' </big><big>('+pam+')</big></big></big><small> mmHg</small>');
-			}else{
-				$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big style="color: red">'+pas+'/</big><big>'+pad+' </big><big>('+pam+')</big></big></big><small> mmHg</small>');
-
-			}
-		}else{
-			if(pad > 89){
-				$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big>'+pas+'/</big><big style="color: red">'+pad+' </big><big>('+pam+')</big></big></big><small> mmHg</small>');
-			}else{
-				$("#monitorPA").html('<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big>'+pas+'/</big><big>'+pad+' </big><big>('+pam+')</big></big></big><small> mmHg</small>');
-
-			}
-
-		}
-		
-		});
-
-	});
-
-//CONFIGURACAO
-
-$(function() {
-	$('#aviso-sonoro').change(function() {
-		if (($(this).val()) == 'off') {
-			$("#volume").slider({
-				disabled : true
-			});
-		}
-		if (($(this).val()) == 'on') {
-			$("#volume").slider({
-				disabled : false
-			});
-		}
-	});
-		$('#selecionaData').change(function() {
-		console.log($(this).val());
-	});
-});
-//CARREGAMENTO DE DADOS INICIAL
-$(document).on('pageinit', '#init', function() {
-	
-	$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/pacientes', function(data) {
-		pacientesJson = data.items;
-		setTimeout(function() {
-			$.mobile.changePage("#pacientes", "fade");
-	}, 2000);		
-	});	
-});
-
-//BOTAO DE ALARME
-$(function() {
-
-	$('#listap').on('click', '.alarme', function(event) {
-		var botao = $(this);
-		var icone = botao.attr("data-icon");
-
-		switch(icone) {
-			case "alarm":
-				botao.attr('data-icon', "alarm-off");
-				$(this).buttonMarkup({
-					icon : "alarm-off"
-				});
-				break;
-
-			case "alarm-off":
-				botao.attr('data-icon', "alarm");
-				$(this).buttonMarkup({
-					icon : "alarm"
-				});
-				break;
-		}
-	});
-});
 
 $(function() {
 
@@ -911,197 +1155,6 @@ $(function() {
 
 });
 
-$(document).on('pageshow', '#tabela', function() {
-	$(".ui-table-columntoggle-btn").detach().appendTo('#bloco2');
-	var posDiaAtual = pacientesJson[numIdPacAtual].diasMonitorados.length -1;
-	var diaAtual = pacientesJson[numIdPacAtual].diasMonitorados[posDiaAtual];
-	var dadoAtual;
-	var dadosPaciente = [];
-	
-	
-	
-	
-	for ( i = 0; i < diaAtual.dadosHoras.length; i++) {
-
-	dadoAtual = diaAtual.dadosHoras[i];
-	
-	var hora = dadoAtual.hora;
-	var frequenciaCardiaca = parseFloat(dadoAtual.frequenciaCardiaca);
-	var frequenciaRespiratoria = parseFloat(dadoAtual.frequenciaRespiratoria);
-	var temperaturaCorporea = parseFloat(dadoAtual.temperaturaCorporea);
-	var saturacaoOxigenio = parseFloat(dadoAtual.saturacaoOxigenio);
-	var pressaoSistolica = parseFloat(dadoAtual.pressaoSistolica);
-	var pressaoDiastolica = parseFloat(dadoAtual.pressaoDiastolica);
-	var pressaoMedia = parseFloat(dadoAtual.pressaoMedia);
-	
-	dadosPaciente.push([hora, frequenciaCardiaca, frequenciaRespiratoria, temperaturaCorporea, saturacaoOxigenio, pressaoSistolica, pressaoDiastolica, pressaoMedia]);
-	}
-
-
-	atualizaTabela(dadosPaciente);
-	
-});
-
-$(document).on('pageshow', '#monitor', function() {
-
-$('#dataTabela').empty();
-$('#dataGrafico').empty();
-
-var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-var datas = {};
-
-for(var i = arrayDiasMonitorados.length-1; i>=0; i--){
-	var valor = 'data'+(i-1);
-	datas[valor] = arrayDiasMonitorados[i].data;
-}
-
-
-
-$.each(datas, function(val, text) {
-    $('.comboboxData').append(new Option(text,val));
-
-    });
-
-
-	$('#dataTabela').selectmenu().selectmenu('refresh');
-	$('#dataGrafico').selectmenu().selectmenu('refresh');
-
-});
-
-
-$(document).on('change', '#dataTabela', function() {
-
-var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-var dataEscolhida = $('#dataTabela option:selected').text();
-
-var diasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-var dadosDaEncontrado = '';
-var dadosPaciente = [];
-/*
-var matriz = [];
-matriz.push([1, 2, 3, 4, 5]);
-matriz.push([6, 7, 8, 9, 10]);
-matriz.push([11, 12, 13, 14, 15]);
-matriz.push([16, 17, 18, 19, 20]);
-*/
-
-
-for(var i=0; i<diasMonitorados.length; i++){
-	if(diasMonitorados[i].data == dataEscolhida){
-		dadosDiaEncontrado = diasMonitorados[i].dadosHoras;
-		break;
-	}
-}
-
-
-for ( i = 0; i < dadosDiaEncontrado.length; i++) {
-
-	
-	var hora = dadosDiaEncontrado[i].hora;
-	var frequenciaCardiaca = parseFloat(dadosDiaEncontrado[i].frequenciaCardiaca);
-	var frequenciaRespiratoria = parseFloat(dadosDiaEncontrado[i].frequenciaRespiratoria);
-	var temperaturaCorporea = parseFloat(dadosDiaEncontrado[i].temperaturaCorporea);
-	var saturacaoOxigenio = parseFloat(dadosDiaEncontrado[i].saturacaoOxigenio);
-	var pressaoSistolica = parseFloat(dadosDiaEncontrado[i].pressaoSistolica);
-	var pressaoDiastolica = parseFloat(dadosDiaEncontrado[i].pressaoDiastolica);
-	var pressaoMedia = parseFloat(dadosDiaEncontrado[i].pressaoMedia);
-	
-	dadosPaciente.push([hora, frequenciaCardiaca, frequenciaRespiratoria, temperaturaCorporea, saturacaoOxigenio, pressaoSistolica, pressaoDiastolica, pressaoMedia]);
-	}
-
-
-
-
-atualizaTabela(dadosPaciente);
-
-
-});
-
-
-function atualizaTabela(dados){
-
-/*
-  hr	fc	fr	tc	so2	pas	pad	pam
-
-*/
-
-
-$("#table-column-toggle tbody tr").remove();
-
-for ( i = 0; i < dados.length; i++) {
-  
-
-	var hora = dados[i][0];
-	var frequenciaCardiaca = parseFloat(dados[i][1]);
-	var frequenciaRespiratoria = parseFloat(dados[i][2]);
-	var temperaturaCorporea = parseFloat(dados[i][3]);
-	var saturacaoOxigenio = parseFloat(dados[i][4]);
-	var pressaoSistolica = parseFloat(dados[i][5]);
-	var pressaoDiastolica = parseFloat(dados[i][6]);
-	var pressaoMedia = parseFloat(dados[i][7]);
-
-	
-	
-
-	var linha = '';
-	var cont = 0;
-
-	if(frequenciaCardiaca < 60 || frequenciaCardiaca > 100){
-		linha += '<td style="color: red">'+frequenciaCardiaca+'</td>';
-		cont++;
-	}else{
-		linha += '<td>'+frequenciaCardiaca+'</td>'
-	}
-
-	if(frequenciaRespiratoria < 12 || frequenciaRespiratoria > 20){
-		linha += '<td style="color: red">'+frequenciaRespiratoria+'</td>';
-		cont++;
-	}else{
-		linha += '<td>'+frequenciaRespiratoria+'</td>'
-	}
-
-	if(temperaturaCorporea < 30 || temperaturaCorporea > 37){
-		linha += '<td style="color: red">'+temperaturaCorporea+'</td>';
-		cont++;
-	}else{
-		linha += '<td>'+temperaturaCorporea+'</td>'
-	}
-
-	if(saturacaoOxigenio < 95){
-		linha += '<td style="color: red">'+saturacaoOxigenio+'</td>';
-		cont++;
-	}else{
-		linha += '<td>'+saturacaoOxigenio+'</td>'
-	}
-
-	if(pressaoSistolica < 90 || pressaoSistolica > 139){
-		linha += '<td style="color: red">'+pressaoSistolica+'</td>';
-		cont++;
-	}else{
-		linha += '<td>'+pressaoSistolica+'</td>'
-	}
-
-	if(pressaoDiastolica > 89){
-		linha += '<td style="color: red">'+pressaoDiastolica+'</td>';
-		cont++;
-	}else{
-		linha += '<td>'+pressaoDiastolica+'</td>'
-	}
-
-	if(cont > 0){
-		linha = '<tr class="linha"><th style="color: red">'+hora+'</th>'+linha+'<td>'+pressaoMedia+'</td></tr>';
-	}else{
-		linha = '<tr class="linha"><th>'+hora+'</th>'+linha+'<td>'+pressaoMedia+'</td></tr>';
-	}
-
-		$("table#table-column-toggle tbody").append(linha).closest("table#table-column-toggle").table("refresh");
-	}
-
-}
-
-
-
-
 $(document).on('change', '#dataGrafico', function() {
 
 var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
@@ -1119,19 +1172,6 @@ var dadosPS = [];
 var dadosPD = [];
 var dadosPM = [];
 var arrayHoras = [];
-
-
-
-
-
-/*
-var matriz = [];
-matriz.push([1, 2, 3, 4, 5]);
-matriz.push([6, 7, 8, 9, 10]);
-matriz.push([11, 12, 13, 14, 15]);
-matriz.push([16, 17, 18, 19, 20]);
-*/
-
 
 for(var i=0; i<diasMonitorados.length; i++){
 	if(diasMonitorados[i].data == dataEscolhida){
@@ -1179,55 +1219,34 @@ chartPressao.xAxis[0].setCategories(arrayHoras);
 
 });
 
-$(function() {
-    setInterval(function(){
-		$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/dadosdia?data=03%2F11%2F2014&hora=23', function(data) {
-		    var novosDados = data.items;
-		    var encontrado = false;
-		    var tamDados = novosDados.length;
-		    var dataPesq;
-		    var indice;
-		    var dias = [];
-		    var tamDias
-			var modeloDado = {};
-		    
-		    for ( var i = 0; i < tamDados; i++ ) {
-			console.log("for1");
-		    dias = pacientesJson[i].diasMonitorados;
-		    dataPesq =  novosDados[i].data;
-		    tamDias = dias.length;
-				for ( var j = 0; j < tamDias; j++ ) {
-			console.log("for2");	
-					if(dias[j].data == dataPesq){
-			  		  encontrado = true;
-					  modeloDado.hora = novosDados[i].dadosHoras[0].hora;
-					  modeloDado.temperaturaCorporea = novosDados[i].dadosHoras[0].temperaturaCorporea;
-					  modeloDado.pressaoSistolica = novosDados[i].dadosHoras[0].pressaoSistolica;
-					  modeloDado.pressaoDiastolica = novosDados[i].dadosHoras[0].pressaoDiastolica;
-					  modeloDado.pressaoMedia = novosDados[i].dadosHoras[0].pressaoMedia;
-					  modeloDado.saturacaoOxigenio = novosDados[i].dadosHoras[0].saturacaoOxigenio;
-					  modeloDado.frequenciaCardiaca = novosDados[i].dadosHoras[0].frequenciaCardiaca;
-					  modeloDado.frequenciaRespiratoria = novosDados[i].dadosHoras[0].frequenciaRespiratoria;
 
-					  
-					  console.log("encontrado");
-					  pacientesJson[i].diasMonitorados[j].dadosHoras.push(modeloDado);
-					  
-					  break;
-					}
-				}
-				if(encontrado == false){
-				console.log("nao encontrado");
-				pacientesJson[i].diasMonitorados.push(novosDados[i]);
-				}
-		    }
+//PROBLEMA
 
-		    console.log("Dias: "+tamDias);
-});
-}, 10000);
+$(document).on('pageshow', '#monitor', function() {
+
+$('#dataTabela').empty();
+$('#dataGrafico').empty();
+
+var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
+var datas = {};
+
+for(var i = arrayDiasMonitorados.length-1; i>=0; i--){
+	var valor = 'data'+(i-1);
+	datas[valor] = arrayDiasMonitorados[i].data;
+}
+
+
+
+$.each(datas, function(val, text) {
+    $('.comboboxData').append(new Option(text,val));
+
+    });
+
+
+	$('#dataTabela').selectmenu().selectmenu('refresh');
+	$('#dataGrafico').selectmenu().selectmenu('refresh');
 
 });
-
 
 
 
