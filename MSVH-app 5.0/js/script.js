@@ -146,6 +146,14 @@ for(var i=0; i< diasMonitorados.length; i++){
 return dados;
 }
 
+function dadosDiaAtual() {
+
+	var posDiaAtual = pacientesJson[numIdPacAtual].diasMonitorados.length -1;
+	var dadosdiaAtual = pacientesJson[numIdPacAtual].diasMonitorados[posDiaAtual];
+
+return dadosDiaAtual;
+}
+
 
 
 
@@ -372,8 +380,7 @@ $(function() {
 
 $(document).on('pageshow', '#tabela', function() {
 	$(".ui-table-columntoggle-btn").detach().appendTo('#bloco2');
-	var posDiaAtual = pacientesJson[numIdPacAtual].diasMonitorados.length -1;
-	var diaAtual = pacientesJson[numIdPacAtual].diasMonitorados[posDiaAtual];
+	var diaAtual = dadosDiaAtual();
 	var dadoAtual;
 	var dadosPaciente = [];
 
@@ -474,7 +481,7 @@ $(document).on('change', '#dataTabela', function() {
 var dataEscolhida = $('#dataTabela option:selected').text();
 
 var dadosDiaEncontrado = dadosDiaPacienteAtual(dataEscolhida);
-var dadosPaciente = [];
+var dados = [];
 
 for ( i = 0; i < dadosDiaEncontrado.length; i++) {	
 	var hora = dadosDiaEncontrado[i].hora;
@@ -486,9 +493,9 @@ for ( i = 0; i < dadosDiaEncontrado.length; i++) {
 	var pressaoDiastolica = parseFloat(dadosDiaEncontrado[i].pressaoDiastolica);
 	var pressaoMedia = parseFloat(dadosDiaEncontrado[i].pressaoMedia);
 	
-	dadosPaciente.push([hora, frequenciaCardiaca, frequenciaRespiratoria, temperaturaCorporea, saturacaoOxigenio, pressaoSistolica, pressaoDiastolica, pressaoMedia]);
+	dados.push([hora, frequenciaCardiaca, frequenciaRespiratoria, temperaturaCorporea, saturacaoOxigenio, pressaoSistolica, pressaoDiastolica, pressaoMedia]);
 	}
-atualizaTabela(dadosPaciente);
+atualizaTabela(dados);
 
 });
 
@@ -1238,6 +1245,8 @@ $.each(datas, function(val, text) {
 
 });
 
+function atualizaComBoxTabela(f) {
 
+}
 
 
