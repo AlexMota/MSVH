@@ -130,6 +130,25 @@ $(function() {
 });
 
 
+//DADOS DO PACIENTE CLICADO
+
+function dadosDiaPacienteAtual(dataEscolhida) {
+
+var diasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
+var dados;
+for(var i=0; i< diasMonitorados.length; i++){
+	if(diasMonitorados[i].data == dataEscolhida){
+		dados = diasMonitorados[i].dadosHoras;
+		break;
+	}
+}
+
+return dados;
+}
+
+
+
+
 //MONITOR DO PACIENTE CLICLADO
 
 
@@ -452,19 +471,10 @@ for ( i = 0; i < dados.length; i++) {
 
 $(document).on('change', '#dataTabela', function() {
 
-var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
 var dataEscolhida = $('#dataTabela option:selected').text();
 
-var diasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-var dadosDaEncontrado = '';
+var dadosDiaEncontrado = dadosDiaPacienteAtual(dataEscolhida);
 var dadosPaciente = [];
-
-for(var i=0; i<diasMonitorados.length; i++){
-	if(diasMonitorados[i].data == dataEscolhida){
-		dadosDiaEncontrado = diasMonitorados[i].dadosHoras;
-		break;
-	}
-}
 
 for ( i = 0; i < dadosDiaEncontrado.length; i++) {	
 	var hora = dadosDiaEncontrado[i].hora;
@@ -479,6 +489,38 @@ for ( i = 0; i < dadosDiaEncontrado.length; i++) {
 	dadosPaciente.push([hora, frequenciaCardiaca, frequenciaRespiratoria, temperaturaCorporea, saturacaoOxigenio, pressaoSistolica, pressaoDiastolica, pressaoMedia]);
 	}
 atualizaTabela(dadosPaciente);
+
+});
+
+// POPUP DA TABELA
+
+$(function() {
+
+	$('#table-column-toggle').on('click', '.linha', function(event) {
+
+		var hr = $(this).find('th').text();
+
+		var fc = $(this).find('td:eq(0)').text();
+		var fr = $(this).find('td:eq(1)').text();
+		var t = $(this).find('td:eq(2)').text();
+		var so2 = $(this).find('td:eq(3)').text();
+		var pas = $(this).find('td:eq(4)').text();
+		var pad = $(this).find('td:eq(5)').text();
+		var pam = $(this).find('td:eq(6)').text();
+
+		var $popup = $('#popupMonitor');
+		var $hrPopup = $popup.find('h1');
+		$hrPopup.text(hr + 'h')
+
+		$popup.find('h3:eq(0)').text("Freq. Cardiaca: " + fc + " bpm");
+		$popup.find('h3:eq(1)').text("Freq. Respiratoria: " + fr + " mpm");
+		$popup.find('h3:eq(2)').text("Temp. Corporea: " + t + " ºC");
+		$popup.find('h3:eq(3)').text("Sat. Oxigenio: " + so2 + " %");
+		$popup.find('h3:eq(4)').text("Press. Arterial: " + pas +"/" + pad + " (" + pam + ") mmHg");
+
+		$popup.popup("open");
+
+	});
 
 });
 
@@ -628,56 +670,6 @@ $(function() {
 	
 	
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1125,44 +1117,49 @@ $(document).on('pageshow', '#graficos', function() {
 
 
 
-$(function() {
 
-	$('#table-column-toggle').on('click', '.linha', function(event) {
 
-		var hr = $(this).find('th').text();
 
-		var fc = $(this).find('td:eq(0)').text();
-		var fr = $(this).find('td:eq(1)').text();
-		var t = $(this).find('td:eq(2)').text();
-		var so2 = $(this).find('td:eq(3)').text();
-		var pas = $(this).find('td:eq(4)').text();
-		var pad = $(this).find('td:eq(5)').text();
-		var pam = $(this).find('td:eq(6)').text();
 
-		var $popup = $('#popupMonitor');
-		var $hrPopup = $popup.find('h1');
-		$hrPopup.text(hr + 'h')
 
-		$popup.find('h3:eq(0)').text("Freq. Cardiaca: " + fc + " bpm");
-		$popup.find('h3:eq(1)').text("Freq. Respiratoria: " + fr + " mpm");
-		$popup.find('h3:eq(2)').text("Temp. Corporea: " + t + " ºC");
-		$popup.find('h3:eq(3)').text("Sat. Oxigenio: " + so2 + " %");
-		$popup.find('h3:eq(4)').text("Press. Arterial: " + pas +"/" + pad + " (" + pam + ") mmHg");
 
-		$popup.popup("open");
 
-	});
 
-});
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// DATA DO GRAFICO
 
 $(document).on('change', '#dataGrafico', function() {
 
-var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
+
 var dataEscolhida = $('#dataGrafico option:selected').text();
 
-var diasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-var dadosDaEncontrado = [];
-var dadosPaciente = [];
+var dadosDiaEncontrado = dadosDiaPacienteAtual(dataEscolhida);
 
 var dadosFC = [];
 var dadosFR = [];
@@ -1172,13 +1169,6 @@ var dadosPS = [];
 var dadosPD = [];
 var dadosPM = [];
 var arrayHoras = [];
-
-for(var i=0; i<diasMonitorados.length; i++){
-	if(diasMonitorados[i].data == dataEscolhida){
-		dadosDiaEncontrado = diasMonitorados[i].dadosHoras;
-		break;
-	}
-}
 
 
 for ( i = 0; i < dadosDiaEncontrado.length; i++) {
