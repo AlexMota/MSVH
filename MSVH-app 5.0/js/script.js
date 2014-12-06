@@ -135,7 +135,7 @@ $(function() {
 function dadosDiaPacienteAtual(dataEscolhida) {
 
 var diasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-var dados;
+var dados = [];
 for(var i=0; i< diasMonitorados.length; i++){
 	if(diasMonitorados[i].data == dataEscolhida){
 		dados = diasMonitorados[i].dadosHoras;
@@ -146,10 +146,17 @@ for(var i=0; i< diasMonitorados.length; i++){
 return dados;
 }
 
-function dadosDiaAtual() {
+function diasMonitoradosPaciente() {
 
-	var posDiaAtual = pacientesJson[numIdPacAtual].diasMonitorados.length -1;
-	var dadosdiaAtual = pacientesJson[numIdPacAtual].diasMonitorados[posDiaAtual];
+var diasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
+
+return diasMonitorados;
+}
+
+function dadosDiaAtual(diasMonitorados) {
+
+	var posDiaAtual = diasMonitorados.length -1;
+	var dadosDiaAtual = diasMonitorados[posDiaAtual];
 
 return dadosDiaAtual;
 }
@@ -380,7 +387,11 @@ $(function() {
 
 $(document).on('pageshow', '#tabela', function() {
 	$(".ui-table-columntoggle-btn").detach().appendTo('#bloco2');
-	var diaAtual = dadosDiaAtual();
+	
+	var diasMonitorados = diasMonitoradosPaciente();
+	atualizaComBoxTabela(diasMonitorados);
+	
+	var diaAtual = dadosDiaAtual(diasMonitorados);
 	var dadoAtual;
 	var dadosPaciente = [];
 
@@ -481,6 +492,8 @@ $(document).on('change', '#dataTabela', function() {
 var dataEscolhida = $('#dataTabela option:selected').text();
 
 var dadosDiaEncontrado = dadosDiaPacienteAtual(dataEscolhida);
+	console.log(dadosDiaEncontrado);
+
 var dados = [];
 
 for ( i = 0; i < dadosDiaEncontrado.length; i++) {	
@@ -1245,8 +1258,31 @@ $.each(datas, function(val, text) {
 
 });
 
-function atualizaComBoxTabela(f) {
+function atualizaComBoxTabela(arrayDiasMonitorados) {
+$('#dataTabela').empty();
+var datas = {};
+for(var i = arrayDiasMonitorados.length-1; i>=0; i--){
+	var valor = 'data'+(i-1);
+	datas[valor] = arrayDiasMonitorados[i].data;
+}
+$.each(datas, function(val, text) {
+    $('#dataTabela').append(new Option(text,val));
 
+    });
+$('#dataTabela').selectmenu().selectmenu('refresh');
 }
 
+function atualizaComBoxGrafico(arrayDiasMonitorados) {
+$('#dataGrafico').empty();
+var datas = {};
+for(var i = arrayDiasMonitorados.length-1; i>=0; i--){
+	var valor = 'data'+(i-1);
+	datas[valor] = arrayDiasMonitorados[i].data;
+}
+$.each(datas, function(val, text) {
+    $('#dataGrafico').append(new Option(text,val));
+
+    });
+$('#dataGrafico').selectmenu().selectmenu('refresh');
+}
 
