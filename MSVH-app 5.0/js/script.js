@@ -13,11 +13,18 @@ $(document).on('pageinit', '#init', function() {
 	});	
 });
 
+
+
 //RECEBENDO MAIS DADOS DO SERVIDOR
 
 $(function() {
     setInterval(function(){
-		$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/dadosdia?data=03%2F11%2F2014&hora=23', function(data) {
+	var ultimoDado = ultimoDado();
+	var data = ultimoDado.data.value;
+	var hora = ultimoDado.hora.value;
+	console.log(ultimoDado);
+
+		$.getJSON("https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/dadosdia?data="+data+"&hora="+hora+"", function(data) {
 		    var novosDados = data.items;
 		    var encontrado = false;
 		    var tamDados = novosDados.length;
@@ -129,6 +136,18 @@ $(function() {
 	});
 });
 
+//DIA E HORA DO ULTIMO DADO
+
+
+function ultimoDado() {
+var diasMonitorados = diasMonitoradosPaciente();
+var diaAtual = dadosDiaAtual(diasMonitorados);
+var quantHoras = diaAtual.length;
+var ultimoDado = {data:""+diaAtual.data+"", hora:""+diaAtual.dadosHoras[quantHoras - 1]+""};
+
+return ultimoDado;
+}
+
 
 //DADOS DO PACIENTE CLICADO
 
@@ -146,12 +165,16 @@ for(var i=0; i< diasMonitorados.length; i++){
 return dados;
 }
 
+//TODOS OS DIAS MONITORADOS DO PACIENTE
+
 function diasMonitoradosPaciente() {
 
 var diasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
 
 return diasMonitorados;
 }
+
+//DIA ATUAL MONITORADO DO PACIENTE
 
 function dadosDiaAtual(diasMonitorados) {
 
@@ -161,37 +184,39 @@ function dadosDiaAtual(diasMonitorados) {
 return dadosDiaAtual;
 }
 
+//INFORMAÇOES DO PACIENTE
 
+function infoPaciente() {
 
+	var paciente = pacientesJson[numIdPacAtual];
 
-//MONITOR DO PACIENTE CLICLADO
+return paciente;
+}
 
+// ATUALIZAR MONITOR
 
-$(function() {
-	$('#listap').on('click', '.paciente', function(event) {
+function atualizaMonitor(diasMonitorados) {
 		
-		var id = $(this).attr("id");
-		numIdPacAtual = parseInt(id.substring(3, id.length));	
+		var paciente = infoPaciente();
+		var nome = paciente.nome;
+		var idade = paciente.idade;
+		var numProntuario = paciente.prontuario;
+		var uti = paciente.uti;
+		var leito = paciente.leito;
+		var descricao = paciente.descricao;
 
-		var nome = pacientesJson[numIdPacAtual].nome;
-		var idade = pacientesJson[numIdPacAtual].idade;
-		var numProntuario = pacientesJson[numIdPacAtual].prontuario;
-		var uti = pacientesJson[numIdPacAtual].uti;
-		var leito = pacientesJson[numIdPacAtual].leito;
-		var descricao = pacientesJson[numIdPacAtual].descricao;
+		var diaMaisRecente = dadosDiaAtual(diasMonitorados);
+		var data = diaMaisRecente.data;
+		var horas = diaMaisRecente.dadosHoras;
+		var horaMaisRecente = diaMaisRecente.dadosHoras[horas.length-1].hora;
 
-		var dias = pacientesJson[numIdPacAtual].diasMonitorados;
-		var dataMaisRecente = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].data;
-		var horas = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras;
-		var horaMaisRecente = pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].hora;
-
-		var tc = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].temperaturaCorporea);
-		var pas = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoSistolica);
-		var pad = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoDiastolica);
-		var pam = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].pressaoMedia);
-		var sato2 = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].saturacaoOxigenio);
-		var fc = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaCardiaca);
-		var fr = parseFloat(pacientesJson[numIdPacAtual].diasMonitorados[dias.length-1].dadosHoras[horas.length-1].frequenciaRespiratoria);
+		var tc = parseFloat(diaMaisRecente.dadosHoras[horas.length-1].temperaturaCorporea);
+		var pas = parseFloat(diaMaisRecente.dadosHoras[horas.length-1].pressaoSistolica);
+		var pad = parseFloat(diaMaisRecente.dadosHoras[horas.length-1].pressaoDiastolica);
+		var pam = parseFloat(diaMaisRecente.dadosHoras[horas.length-1].pressaoMedia);
+		var sato2 = parseFloat(diaMaisRecente.dadosHoras[horas.length-1].saturacaoOxigenio);
+		var fc = parseFloat(diaMaisRecente.dadosHoras[horas.length-1].frequenciaCardiaca);
+		var fr = parseFloat(diaMaisRecente.dadosHoras[horas.length-1].frequenciaRespiratoria);
 
 		$("#nomeMonitor").html('<img  src="js/jquerymobile-files/images/icons-png/user-white.png"/> '+nome+'');
 		$("#utiMonitor").html('<img src="js/jquerymobile-files/images/icons-png/location-white.png"/> '+uti+'');
@@ -199,7 +224,7 @@ $(function() {
 		$("#leitoMonitor").html('<img src="js/jquerymobile-files/images/icons-png/plus-white.png"/> Leito '+leito+'');
 		$("#prontuarioMonitor").html('<img src="js/jquerymobile-files/images/icons-png/tag-white.png"/> N.P. '+numProntuario+'');
 		$("#descricaoMonitor").html('<img src="js/jquerymobile-files/images/icons-png/edit-white.png"/> '+descricao+'');
-		$("#dataHoraDados").html('<h1 align="center"><big>Ultima atualização: '+dataMaisRecente+' - '+horaMaisRecente+'h</big></h1>');
+		$("#dataHoraDados").html('<h1 align="center"><big>Ultima atualização: '+data+' - '+horaMaisRecente+'h</big></h1>');
 
 
 		if(fc < 60 || fc > 100){		
@@ -244,10 +269,30 @@ $(function() {
 
 		}
 		
-		});
+}
+
+//MONITOR DO PACIENTE CLICLADO
+
+
+$(function() {
+	$('#listap').on('click', '.paciente', function(event) {
+		
+		var id = $(this).attr("id");
+		numIdPacAtual = parseInt(id.substring(3, id.length));
+		var diasMonitorados = diasMonitoradosPaciente();
+		atualizaMonitor(diasMonitorados);
 
 	});
+});
 
+// MONITOR DO PACIENTE
+
+$(document).on('pageshow', '#monitor', function() {
+
+		var diasMonitorados = diasMonitoradosPaciente();
+		atualizaMonitor(diasMonitorados);
+
+});
 
 //ICONES DO MONITOR
 
@@ -492,7 +537,6 @@ $(document).on('change', '#dataTabela', function() {
 var dataEscolhida = $('#dataTabela option:selected').text();
 
 var dadosDiaEncontrado = dadosDiaPacienteAtual(dataEscolhida);
-	console.log(dadosDiaEncontrado);
 
 var dados = [];
 
@@ -695,10 +739,8 @@ $(function() {
 
 
 //GRAFICOS
-$(document).on('pageshow', '#graficos', function() {
+function graficoPressaoArterial(arrayDadosHora) {
 	var chart;
-	var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-	var arrayDadosHora = pacientesJson[numIdPacAtual].diasMonitorados[arrayDiasMonitorados.length-1].dadosHoras;
 	var arrayPAS = [];
 	var arrayPAD = [];
 	var arrayPAM = [];
@@ -808,12 +850,10 @@ $(document).on('pageshow', '#graficos', function() {
 				chart.series[2].setData(arrayPAM);
 				chart.xAxis[0].setCategories(arrayHoras);
 
-});
+}
 
-$(document).on('pageshow', '#graficos', function() {
+function graficoSaturacaoOxigenio(arrayDadosHora) {
 	var chart;
-	var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-	var arrayDadosHora = pacientesJson[numIdPacAtual].diasMonitorados[arrayDiasMonitorados.length-1].dadosHoras;
 	var arraySAT = [];
 	var arrayHoras = [];
 
@@ -899,12 +939,10 @@ $(document).on('pageshow', '#graficos', function() {
 			chart.series[0].setData(arraySAT);
 			chart.xAxis[0].setCategories(arrayHoras);
 
-});
+}
 
-$(document).on('pageshow', '#graficos', function() {
+function graficoFrequenciaCardiaca(arrayDadosHora) {
 	var chart;
-	var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-	var arrayDadosHora = pacientesJson[numIdPacAtual].diasMonitorados[arrayDiasMonitorados.length-1].dadosHoras;
 	var arrayFC = [];
 	var arrayHoras = [];
 
@@ -976,12 +1014,10 @@ $(document).on('pageshow', '#graficos', function() {
 	});
 			chart.series[0].setData(arrayFC);
 			chart.xAxis[0].setCategories(arrayHoras);
-});
+}
 
-$(document).on('pageshow', '#graficos', function() {
+function graficoTemperaturaCorporea(arrayDadosHora) {
 	var chart;
-	var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-	var arrayDadosHora = pacientesJson[numIdPacAtual].diasMonitorados[arrayDiasMonitorados.length-1].dadosHoras;
 	var arrayTC = [];
 	var arrayHoras = [];
 
@@ -1050,12 +1086,10 @@ $(document).on('pageshow', '#graficos', function() {
 	});
 			chart.series[0].setData(arrayTC);
 			chart.xAxis[0].setCategories(arrayHoras);
-});
+}
 
-$(document).on('pageshow', '#graficos', function() {
+function graficoFrequenciaRespiratoria(arrayDadosHora) {
 	var chart;
-	var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-	var arrayDadosHora = pacientesJson[numIdPacAtual].diasMonitorados[arrayDiasMonitorados.length-1].dadosHoras;
 	var arrayFR = [];
 	var arrayHoras = [];
 
@@ -1126,59 +1160,30 @@ $(document).on('pageshow', '#graficos', function() {
 	});
 			chart.series[0].setData(arrayFR);
 			chart.xAxis[0].setCategories(arrayHoras);
+}
+
+
+//GRAFICO INICIAL
+
+$(document).on('pageshow', '#graficos', function() {
+	var diasMonitorados = diasMonitoradosPaciente();
+	atualizaComBoxGrafico(diasMonitorados);
+	var diaAtual = dadosDiaAtual(diasMonitorados);
+	
+	graficoPressaoArterial(diaAtual.dadosHoras);
+	graficoSaturacaoOxigenio(diaAtual.dadosHoras);
+	graficoFrequenciaCardiaca(diaAtual.dadosHoras);
+	graficoTemperaturaCorporea(diaAtual.dadosHoras);
+	graficoFrequenciaRespiratoria(diaAtual.dadosHoras);
+
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//
-//
-//
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// DATA DO GRAFICO
+// TROCA DATA DO GRAFICO
 
 $(document).on('change', '#dataGrafico', function() {
 
-
 var dataEscolhida = $('#dataGrafico option:selected').text();
-
 var dadosDiaEncontrado = dadosDiaPacienteAtual(dataEscolhida);
 
 var dadosFC = [];
@@ -1190,10 +1195,8 @@ var dadosPD = [];
 var dadosPM = [];
 var arrayHoras = [];
 
-
 for ( i = 0; i < dadosDiaEncontrado.length; i++) {
 
-	
 	var hora = dadosDiaEncontrado[i].hora;
 	dadosFC.push([i, parseFloat(dadosDiaEncontrado[i].frequenciaCardiaca)]);
 	dadosFR.push([i, parseFloat(dadosDiaEncontrado[i].frequenciaRespiratoria)]);
@@ -1202,9 +1205,9 @@ for ( i = 0; i < dadosDiaEncontrado.length; i++) {
 	dadosPS.push([i, parseFloat(dadosDiaEncontrado[i].pressaoSistolica)]);
 	dadosPD.push([i, parseFloat(dadosDiaEncontrado[i].pressaoDiastolica)]);
 	dadosPM.push([i, parseFloat(dadosDiaEncontrado[i].pressaoMedia)]);
-	arrayHoras.push([hora]);
-		
+	arrayHoras.push([hora]);		
 	}
+	
 var chartFrequenciaCardiaca = $('#frequenciaCardiaca').highcharts();
 var chartFrequenciaRespiratoria = $('#frequenciaRespiratoria').highcharts();
 var chartTemperaturaCorporea = $('#temperaturaCorporea').highcharts();
@@ -1224,40 +1227,9 @@ chartPressao.series[1].setData(dadosPD);
 chartPressao.series[2].setData(dadosPM);
 chartPressao.xAxis[0].setCategories(arrayHoras);
 
-
-
-
 });
 
-
-//PROBLEMA
-
-$(document).on('pageshow', '#monitor', function() {
-
-$('#dataTabela').empty();
-$('#dataGrafico').empty();
-
-var arrayDiasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-var datas = {};
-
-for(var i = arrayDiasMonitorados.length-1; i>=0; i--){
-	var valor = 'data'+(i-1);
-	datas[valor] = arrayDiasMonitorados[i].data;
-}
-
-
-
-$.each(datas, function(val, text) {
-    $('.comboboxData').append(new Option(text,val));
-
-    });
-
-
-	$('#dataTabela').selectmenu().selectmenu('refresh');
-	$('#dataGrafico').selectmenu().selectmenu('refresh');
-
-});
-
+//ATUALIZA DATA DA TABELA
 function atualizaComBoxTabela(arrayDiasMonitorados) {
 $('#dataTabela').empty();
 var datas = {};
@@ -1271,6 +1243,9 @@ $.each(datas, function(val, text) {
     });
 $('#dataTabela').selectmenu().selectmenu('refresh');
 }
+
+
+//ATUALIZA DATA DO GRAFICO
 
 function atualizaComBoxGrafico(arrayDiasMonitorados) {
 $('#dataGrafico').empty();
