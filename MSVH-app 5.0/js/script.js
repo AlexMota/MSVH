@@ -2,6 +2,54 @@
 numIdPacAtual = 0;
 pacientesJson = [];
 
+//FUNCOES BASICAS
+
+//DADOS DO PACIENTE CLICADO
+
+function dadosDiaPacienteAtual(dataEscolhida) {
+
+var diasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
+var dados = [];
+for(var i=0; i< diasMonitorados.length; i++){
+	if(diasMonitorados[i].data == dataEscolhida){
+		dados = diasMonitorados[i].dadosHoras;
+		break;
+	}
+}
+
+return dados;
+}
+
+//TODOS OS DIAS MONITORADOS DO PACIENTE
+
+function diasMonitoradosPaciente() {
+
+var diasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
+
+return diasMonitorados;
+}
+
+//DIA ATUAL MONITORADO DO PACIENTE
+
+function dadosDiaAtual(diasMonitorados) {
+
+	var posDiaAtual = diasMonitorados.length -1;
+	var dadosDiaAtual = diasMonitorados[posDiaAtual];
+
+return dadosDiaAtual;
+}
+
+//INFORMAÇOES DO PACIENTE
+
+function infoPaciente() {
+
+	var paciente = pacientesJson[numIdPacAtual];
+
+return paciente;
+}
+
+
+
 //CARREGAMENTO DE DADOS INICIAL
 $(document).on('pageinit', '#init', function() {
 	
@@ -13,16 +61,27 @@ $(document).on('pageinit', '#init', function() {
 	});	
 });
 
+//DIA E HORA DO ULTIMO DADO
+
+
+function ultimoDado() {
+var diasMonitorados = diasMonitoradosPaciente();
+var diaAtual = dadosDiaAtual(diasMonitorados);
+var quantHoras = diaAtual.dadosHoras.length;
+var dado = {data:diaAtual.data+"", hora:diaAtual.dadosHoras[quantHoras - 1].hora};
+
+return dado;
+}
 
 
 //RECEBENDO MAIS DADOS DO SERVIDOR
 
 $(function() {
     setInterval(function(){
-	var ultimoDado = ultimoDado();
-	var data = ultimoDado.data.value;
-	var hora = ultimoDado.hora.value;
-	console.log(ultimoDado);
+	var dado = ultimoDado();
+	var data = dado.data;
+	var hora = dado.hora;
+	console.log(hora);
 
 		$.getJSON("https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/dadosdia?data="+data+"&hora="+hora+"", function(data) {
 		    var novosDados = data.items;
@@ -136,62 +195,7 @@ $(function() {
 	});
 });
 
-//DIA E HORA DO ULTIMO DADO
 
-
-function ultimoDado() {
-var diasMonitorados = diasMonitoradosPaciente();
-var diaAtual = dadosDiaAtual(diasMonitorados);
-var quantHoras = diaAtual.length;
-var ultimoDado = {data:""+diaAtual.data+"", hora:""+diaAtual.dadosHoras[quantHoras - 1]+""};
-
-return ultimoDado;
-}
-
-
-//DADOS DO PACIENTE CLICADO
-
-function dadosDiaPacienteAtual(dataEscolhida) {
-
-var diasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-var dados = [];
-for(var i=0; i< diasMonitorados.length; i++){
-	if(diasMonitorados[i].data == dataEscolhida){
-		dados = diasMonitorados[i].dadosHoras;
-		break;
-	}
-}
-
-return dados;
-}
-
-//TODOS OS DIAS MONITORADOS DO PACIENTE
-
-function diasMonitoradosPaciente() {
-
-var diasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
-
-return diasMonitorados;
-}
-
-//DIA ATUAL MONITORADO DO PACIENTE
-
-function dadosDiaAtual(diasMonitorados) {
-
-	var posDiaAtual = diasMonitorados.length -1;
-	var dadosDiaAtual = diasMonitorados[posDiaAtual];
-
-return dadosDiaAtual;
-}
-
-//INFORMAÇOES DO PACIENTE
-
-function infoPaciente() {
-
-	var paciente = pacientesJson[numIdPacAtual];
-
-return paciente;
-}
 
 // ATUALIZAR MONITOR
 
