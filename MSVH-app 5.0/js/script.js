@@ -1,6 +1,7 @@
 //VARIAVEIS GLOBAIS
 numIdPacAtual = 0;
 pacientesJson = [];
+configuracao = {sonoro:false, visual:false,vibratorio:false};
 
 //FUNCOES BASICAS
 
@@ -23,7 +24,6 @@ return dados;
 //TODOS OS DIAS MONITORADOS DO PACIENTE
 
 function diasMonitoradosPaciente() {
-
 var diasMonitorados = pacientesJson[numIdPacAtual].diasMonitorados;
 
 return diasMonitorados;
@@ -49,20 +49,7 @@ return paciente;
 }
 
 
-
-//CARREGAMENTO DE DADOS INICIAL
-$(document).on('pageinit', '#init', function() {
-	
-	$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/pacientes', function(data) {
-		pacientesJson = data.items;
-		setTimeout(function() {
-			$.mobile.changePage("#pacientes", "fade");
-	}, 2000);		
-	});	
-});
-
 //DIA E HORA DO ULTIMO DADO
-
 
 function ultimoDado() {
 var diasMonitorados = diasMonitoradosPaciente();
@@ -74,6 +61,88 @@ return dado;
 }
 
 
+//ALERTA DE NOVO DADO
+
+function alertaNovoDado() {
+
+if(configuracao.sonoro){
+//navigator.notification.beep(1);
+}
+if(configuracao.visual){
+$( "#popupAlertaVisual" ).popup( "open" )
+}
+if(configuracao.vibratorio){
+//navigator.vibrate(1000);
+}
+
+}
+
+
+// ATUALIZA LISTA PACIENTES
+function atualizaListaPacientes() {
+var diasMonitorados;
+var diaMaisRecente;
+
+$("#listap li").remove();
+
+		for ( i = 0; i < pacientesJson.length; i++) {
+			//botao icone
+			diasMonitorados = pacientesJson[i].diasMonitorados;
+			diaMaisRecente = dadosDiaAtual(diasMonitorados);
+			
+			if (pacientesJson[i].sexo == "feminino") {
+				if(verificaAlteracao(diaMaisRecente)){
+					listItem = '<li class="paciente" id="pac'+i+'"><a href="#monitor"><img src="img/paciente-fem-ver.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
+				}else{
+					listItem = '<li class="paciente" id="pac'+i+'"><a href="#monitor"><img src="img/paciente-fem.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
+				}
+			} else if (pacientesJson[i].sexo == "masculino") {
+				if(verificaAlteracao(diaMaisRecente)){
+					listItem = '<li class="paciente" id="pac'+i+'"><a href="#monitor"><img src="img/paciente-mas-ver.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti +'</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
+				}else{
+					listItem = '<li class="paciente" id="pac'+i+'"><a href="#monitor"><img src="img/paciente-mas.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti +'</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
+
+				}
+			}
+			$('#listap').append(listItem)
+		}
+		$("#listap").listview("refresh");
+}
+
+//ALERTA DE PERIGO DO PACIENTE NA LISTA
+
+function verificaAlteracao(diaMaisRecente){
+
+		var horas = diaMaisRecente.dadosHoras;
+		var tc = parseFloat(diaMaisRecente.dadosHoras[horas.length-1].temperaturaCorporea);
+		var pas = parseFloat(diaMaisRecente.dadosHoras[horas.length-1].pressaoSistolica);
+		var pad = parseFloat(diaMaisRecente.dadosHoras[horas.length-1].pressaoDiastolica);
+		var pam = parseFloat(diaMaisRecente.dadosHoras[horas.length-1].pressaoMedia);
+		var sato2 = parseFloat(diaMaisRecente.dadosHoras[horas.length-1].saturacaoOxigenio);
+		var fc = parseFloat(diaMaisRecente.dadosHoras[horas.length-1].frequenciaCardiaca);
+		var fr = parseFloat(diaMaisRecente.dadosHoras[horas.length-1].frequenciaRespiratoria);
+		
+		var result = false;
+
+		if(fc < 60 || fc > 100 || fr < 12 || fr > 20 || tc < 30 || tc > 37 || sato2 < 95 || pas < 90 || pas > 139){
+		result = true;
+		}
+		
+	return result;	
+}
+
+
+
+//CARREGAMENTO DE DADOS INICIAL
+$(document).on('pageinit', '#init', function() {
+	$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/pacientes', function(data) {
+		pacientesJson = data.items;
+		setTimeout(function() {
+			$.mobile.changePage("#pacientes", "fade");
+	}, 2000);		
+	});	
+});
+
 //RECEBENDO MAIS DADOS DO SERVIDOR
 
 $(function() {
@@ -81,7 +150,6 @@ $(function() {
 	var dado = ultimoDado();
 	var data = dado.data;
 	var hora = dado.hora;
-	console.log(hora);
 
 		$.getJSON("https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/dadosdia?data="+data+"&hora="+hora+"", function(data) {
 		    var novosDados = data.items;
@@ -91,41 +159,33 @@ $(function() {
 		    var indice;
 		    var dias = [];
 		    var tamDias
-			var modeloDado = {};
+			var dadoRecebido = {};
 		    
 		    for ( var i = 0; i < tamDados; i++ ) {
-			console.log("for1");
 		    dias = pacientesJson[i].diasMonitorados;
 		    dataPesq =  novosDados[i].data;
 		    tamDias = dias.length;
 				for ( var j = 0; j < tamDias; j++ ) {
-			console.log("for2");	
 					if(dias[j].data == dataPesq){
 			  		  encontrado = true;
-					  modeloDado.hora = novosDados[i].dadosHoras[0].hora;
-					  modeloDado.temperaturaCorporea = novosDados[i].dadosHoras[0].temperaturaCorporea;
-					  modeloDado.pressaoSistolica = novosDados[i].dadosHoras[0].pressaoSistolica;
-					  modeloDado.pressaoDiastolica = novosDados[i].dadosHoras[0].pressaoDiastolica;
-					  modeloDado.pressaoMedia = novosDados[i].dadosHoras[0].pressaoMedia;
-					  modeloDado.saturacaoOxigenio = novosDados[i].dadosHoras[0].saturacaoOxigenio;
-					  modeloDado.frequenciaCardiaca = novosDados[i].dadosHoras[0].frequenciaCardiaca;
-					  modeloDado.frequenciaRespiratoria = novosDados[i].dadosHoras[0].frequenciaRespiratoria;
+					  pacientesJson[i].diasMonitorados[j].dadosHoras.push(novosDados[i].dadosHoras[0]);
 
-					  
-					  console.log("encontrado");
-					  pacientesJson[i].diasMonitorados[j].dadosHoras.push(modeloDado);
 					  
 					  break;
 					}
 				}
 				if(encontrado == false){
-				console.log("nao encontrado");
 				pacientesJson[i].diasMonitorados.push(novosDados[i]);
 				}
 		    }
 
-		    console.log("Dias: "+tamDias);
+			atualizaListaPacientes();
+			atualizaMonitor();
+			alertaNovoDado();
 });
+
+
+
 }, 10000);
 
 });
@@ -136,37 +196,45 @@ $(function() {
 $(function() {
 	$('#aviso-sonoro').change(function() {
 		if (($(this).val()) == 'off') {
-			$("#volume").slider({
-				disabled : true
-			});
+		configuracao.sonoro = false;
+		console.log("sonoro: "+configuracao.sonoro )
 		}
 		if (($(this).val()) == 'on') {
-			$("#volume").slider({
-				disabled : false
-			});
+		configuracao.sonoro = true;
+		console.log("sonoro: "+configuracao.sonoro )
 		}
 	});
-		$('#selecionaData').change(function() {
-		console.log($(this).val());
+	
+	$('#aviso-visual').change(function() {
+		if (($(this).val()) == 'off') {
+		configuracao.visual = false;
+		console.log("visual: "+configuracao.visual )
+		}
+		if (($(this).val()) == 'on') {
+		configuracao.visual = true;
+		console.log("visual: "+configuracao.visual )
+		}
 	});
+	
+		$('#aviso-vibratorio').change(function() {
+		if (($(this).val()) == 'off') {
+		configuracao.vibratorio = false;
+		console.log("vibratorio: "+configuracao.vibratorio )
+		}
+		if (($(this).val()) == 'on') {
+		configuracao.vibratorio = true;
+		console.log("vibratorio: "+configuracao.vibratorio )
+		}
+	});
+		
 });
-
 
 //LISTA DE PACIENTES
 
 $(document).on('pageinit', '#pacientes', function() {
 
-		for ( i = 0; i < pacientesJson.length; i++) {
-			//botao icone
+atualizaListaPacientes();
 
-			if (pacientesJson[i].sexo == "feminino") {
-				listItem = '<li class="paciente" id="pac'+i+'"><a href="#monitor"><img src="img/paciente-fem.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
-			} else if (pacientesJson[i].sexo == "masculino") {
-				listItem = '<li class="paciente" id="pac'+i+'"><a href="#monitor"><img src="img/paciente-mas.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti +'</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
-			}
-			$('#listap').append(listItem)
-		}
-		$("#listap").listview("refresh");
 });
 
 
@@ -199,7 +267,7 @@ $(function() {
 
 // ATUALIZAR MONITOR
 
-function atualizaMonitor(diasMonitorados) {
+function atualizaMonitor() {
 		
 		var paciente = infoPaciente();
 		var nome = paciente.nome;
@@ -208,7 +276,8 @@ function atualizaMonitor(diasMonitorados) {
 		var uti = paciente.uti;
 		var leito = paciente.leito;
 		var descricao = paciente.descricao;
-
+		
+		var diasMonitorados = diasMonitoradosPaciente();
 		var diaMaisRecente = dadosDiaAtual(diasMonitorados);
 		var data = diaMaisRecente.data;
 		var horas = diaMaisRecente.dadosHoras;
@@ -228,7 +297,7 @@ function atualizaMonitor(diasMonitorados) {
 		$("#leitoMonitor").html('<img src="js/jquerymobile-files/images/icons-png/plus-white.png"/> Leito '+leito+'');
 		$("#prontuarioMonitor").html('<img src="js/jquerymobile-files/images/icons-png/tag-white.png"/> N.P. '+numProntuario+'');
 		$("#descricaoMonitor").html('<img src="js/jquerymobile-files/images/icons-png/edit-white.png"/> '+descricao+'');
-		$("#dataHoraDados").html('<h1 align="center"><big>Ultima atualização: '+data+' - '+horaMaisRecente+'h</big></h1>');
+		$("#dataHoraDados").html('<h1 align="center">Ultima atualização: '+data+' - '+horaMaisRecente+'h</h1>');
 
 
 		if(fc < 60 || fc > 100){		
@@ -280,11 +349,9 @@ function atualizaMonitor(diasMonitorados) {
 
 $(function() {
 	$('#listap').on('click', '.paciente', function(event) {
-		
 		var id = $(this).attr("id");
 		numIdPacAtual = parseInt(id.substring(3, id.length));
-		var diasMonitorados = diasMonitoradosPaciente();
-		atualizaMonitor(diasMonitorados);
+		atualizaMonitor();
 
 	});
 });
@@ -292,9 +359,7 @@ $(function() {
 // MONITOR DO PACIENTE
 
 $(document).on('pageshow', '#monitor', function() {
-
-		var diasMonitorados = diasMonitoradosPaciente();
-		atualizaMonitor(diasMonitorados);
+		atualizaMonitor();
 
 });
 
@@ -330,7 +395,6 @@ $(function() {
 		var botaoFR = document.getElementById("btFreqResp");
 		botaoFR.classList.add("ui-btn-active");
 		botaoFR.classList.add("ui-state-persist");
-		//console.log(botao);	
 		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
 		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
 		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
@@ -355,7 +419,6 @@ $(function() {
 		var botaoTC = document.getElementById("btTempCorp");
 		botaoTC.classList.add("ui-btn-active");
 		botaoTC.classList.add("ui-state-persist");
-		//console.log(botao);
 
 		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
 		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
@@ -383,7 +446,6 @@ $(function() {
 		var botaoSO = document.getElementById("btSatOxig");
 		botaoSO.classList.add("ui-btn-active");
 		botaoSO.classList.add("ui-state-persist");
-		//console.log(botao);
 
 		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
 		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
@@ -411,7 +473,6 @@ $(function() {
 		var botaoPA = document.getElementById("btPressaoArt");
 		botaoPA.classList.add("ui-btn-active");
 		botaoPA.classList.add("ui-state-persist");
-		//console.log(botao);
 
 		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
 		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
@@ -531,7 +592,6 @@ for ( i = 0; i < dados.length; i++) {
 
 		$("table#table-column-toggle tbody").append(linha).closest("table#table-column-toggle").table("refresh");
 	}
-
 }
 
 //DATA DA TABELA
@@ -601,7 +661,6 @@ $(function() {
 		var botaoFC = document.getElementById("btFreqCar");
 		botaoFC.classList.add("ui-btn-active");
 		botaoFC.classList.add("ui-state-persist");
-		//console.log(botao);
 
 		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
 		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
@@ -624,7 +683,6 @@ $(function() {
 		var botaoFR = document.getElementById("btFreqResp");
 		botaoFR.classList.add("ui-btn-active");
 		botaoFR.classList.add("ui-state-persist");
-		//console.log(botao);
 		
 		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
 		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
@@ -647,7 +705,6 @@ $(function() {
 		var botaoTC = document.getElementById("btTempCorp");
 		botaoTC.classList.add("ui-btn-active");
 		botaoTC.classList.add("ui-state-persist");
-		//console.log(botao);
 
 		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
 		document.getElementById('btSatOxig').classList.remove('ui-btn-active');
@@ -670,7 +727,6 @@ $(function() {
 		var botaoSO = document.getElementById("btSatOxig");
 		botaoSO.classList.add("ui-btn-active");
 		botaoSO.classList.add("ui-state-persist");
-		//console.log(botao);
 
 		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
 		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
@@ -693,7 +749,6 @@ $(function() {
 		var botaoPA = document.getElementById("btPressaoArt");
 		botaoPA.classList.add("ui-btn-active");
 		botaoPA.classList.add("ui-state-persist");
-		//console.log(botao);
 		
 		document.getElementById('btFreqCar').classList.remove('ui-btn-active');
 		document.getElementById('btTempCorp').classList.remove('ui-btn-active');
@@ -716,7 +771,6 @@ $(function() {
 		var botaoFC = document.getElementById("btFreqCar");
 		botaoFC.classList.add("ui-btn-active");
 		botaoFC.classList.add("ui-state-persist");
-		//console.log(botao);
 
 		document.getElementById('btFreqResp').classList.remove('ui-btn-active');
 		document.getElementById('btSatOxig').classList.remove('ui-btn-active');

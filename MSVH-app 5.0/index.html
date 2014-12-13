@@ -45,6 +45,8 @@
 
 				<h1 align="center"><img  src="img/monitor_icon.png"/></h1>
 				<h2 align="center">Monitoramento de Sinais Vitais Humanos</h2>
+				<h3 align="center"><img  src="img/carregamento.png"/></h3>
+
 			</div>
 
 		</div>
@@ -63,7 +65,9 @@
 
 					
 				</ul>
-
+			<div data-role="popup" id="popupAlertaVisual">
+			<p>Novos dados recebidos!</p>
+			</div>
 			</div>
 
 			<div data-role="panel" id="painel-config" data-display="overlay" data-position="left" data-theme="b">
@@ -81,17 +85,14 @@
 							<option value="on">On</option>
 						</select>
 
-						<label for="volume">Volume:</label>
-						<input  disabled="disabled" type="range" name="volume" id="volume" min="0" max="10" value="5" data-highlight="true"/>
-
 						<label for="aviso-visual">Alertas visuais:</label>
 						<select name="aviso-visual" id="aviso-visual" data-role="slider">
 							<option value="off">Off</option>
 							<option value="on">On</option>
 						</select>
 
-						<label for="aviso-visual">Alertas vibratorios:</label>
-						<select name="aviso-visual" id="aviso-visual" data-role="slider">
+						<label for="aviso-vibratorio">Alertas vibratorios:</label>
+						<select name="aviso-vibratorio" id="aviso-vibratorio" data-role="slider">
 							<option value="off">Off</option>
 							<option value="on">On</option>
 						</select>
@@ -237,8 +238,7 @@
 				<div id="frequenciaRespiratoria" style="min-width: 87%; height: 400px; margin: 0 auto"class="bordagrafico"></div>
 
 					
-
-				</div>
+			</div>
 
 			<div data-role="footer" data-position="fixed">
 			<div data-role="tabs" id="tabs">
@@ -343,14 +343,14 @@
      
             <thead >
 	   <tr class="ui-bar-b">
-	   	<th data-priority="1">Hrs</th>
-         <th data-priority="2">FC</th>
-         <th data-priority="2">FR</th>
+	   	<th >Hrs</th>
+         <th data-priority="1">FC</th>
+         <th data-priority="1">FR</th>
          <th data-priority="2">TC</th>
          <th data-priority="2">SO2</th>
-         <th data-priority="2">PAS</th>
-		 <th data-priority="2">PAD</th>
-         <th data-priority="2">PAM</th>
+         <th data-priority="1">PAS</th>
+		 <th data-priority="3">PAD</th>
+         <th data-priority="3">PAM</th>
 		 </tr>
      </thead>
 
