@@ -63,11 +63,12 @@
 
 				<ul id="listap" data-role="listview" >
 
-					
 				</ul>
-			<div data-role="popup" id="popupAlertaVisual">
-			<p>Novos dados recebidos!</p>
-			</div>
+				<div data-role="popup" id="popupAlertaVisual">
+					<p>
+						Novos dados recebidos!
+					</p>
+				</div>
 			</div>
 
 			<div data-role="panel" id="painel-config" data-display="overlay" data-position="left" data-theme="b">
@@ -217,53 +218,45 @@
 			<div data-role="content" >
 
 				<select id="dataGrafico" class="comboboxData" data-mini="true" data-inline="true" data-icon="calendar" data-iconpos="left">
-    
+
 				</select>
 
-					
 				<div id="pressao" style="min-width: 87%; height: 400px; margin: 0 auto" class="bordagrafico"></div>
-					
-					
+
 				<div id="saturacaoOxigenio" style="min-width: 87%; height: 400px; margin: 0 auto" class="bordagrafico" ></div>
-					
-					
+
 				<div id="frequenciaCardiaca" style="min-width: 87%; height: 400px; margin: 0 auto" class="bordagrafico"></div>
 
-					
-					
 				<div id="temperaturaCorporea" style="min-width: 87%; height: 400px; margin: 0 auto" class="bordagrafico"></div>
 
-					
-					
 				<div id="frequenciaRespiratoria" style="min-width: 87%; height: 400px; margin: 0 auto"class="bordagrafico"></div>
 
-					
 			</div>
 
 			<div data-role="footer" data-position="fixed">
-			<div data-role="tabs" id="tabs">
+				<div data-role="tabs" id="tabs">
 
 					<div data-role="navbar" data-theme="a" >
 						<ul>
 							<li>
 								<a id="btFreqCar"><img src="img/heart.png" class="imagensgraficos"/></a>
-								
+
 							</li>
 							<li>
 								<a id="btFreqResp"><img src="img/lung.png" class="imagensgraficos" /></a>
-								
+
 							</li>
 							<li>
 								<a id="btTempCorp"><img src="img/thermometer.png" class="imagensgraficos" /></a>
-								
+
 							</li>
 							<li>
 								<a id="btSatOxig"><img src="img/blood.png" class="imagensgraficos"/></a>
-								
+
 							</li>
 							<li>
 								<a id="btPressaoArt"  class="ui-state-persist"><img src="img/blood pressure.png" class="imagensgraficos"/></a>
-								
+
 							</li>
 
 						</ul>
@@ -273,8 +266,6 @@
 			</div>
 
 		</div>
-
-
 
 		<!--Fim da pagina do Graficos-->
 
@@ -316,7 +307,7 @@
 						<li>
 							<a id="frPopup" href="#"><img src="img/icons/l__icon.png" class="ui-li-icon"/><h3></h3></a>
 						</li>
-						
+
 						<li>
 							<a id="so2Popup" href="#"><img src="img/bs-icon.png" class="ui-li-icon"/><h3></h3></a>
 						</li>
@@ -328,42 +319,42 @@
 				</div>
 
 				<div class="ui-grid-a">
-    <div class="ui-block-a">
-<select id="dataTabela" class="comboboxData" data-mini="true" data-inline="true" data-icon="calendar" data-iconpos="left">
-    
-</select>
-	</div>
-    <div class="ui-block-b"id="bloco2">
-	
-	</div>
-</div><!-- /grid-a -->
+					<div class="ui-block-a">
+						<select id="dataTabela" class="comboboxData" data-mini="true" data-inline="true" data-icon="calendar" data-iconpos="left">
+
+						</select>
+					</div>
+					<div class="ui-block-b"id="bloco2">
+
+					</div>
+				</div><!-- /grid-a -->
 				
-				
-				<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" data-column-btn-text="Filtro" data-column-btn-theme="b">
-     
-            <thead >
-	   <tr class="ui-bar-b">
-	   	<th >Hrs</th>
-         <th data-priority="1">FC</th>
-         <th data-priority="1">FR</th>
-         <th data-priority="2">TC</th>
-         <th data-priority="2">SO2</th>
-         <th data-priority="1">PAS</th>
-		 <th data-priority="3">PAD</th>
-         <th data-priority="3">PAM</th>
-		 </tr>
-     </thead>
+				<div class="ui-grid-solo">
+    				<div class="ui-block-a">
+						<table data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke" data-column-btn-text="Filtro" data-column-btn-theme="b">		     
+							<thead >
+								<tr class="ui-bar-b">
+									<th >Hrs</th>
+									<th>FC</th>
+									<th>FR</th>
+									<th>TC</th>
+									<th data-priority="3">SO2</th>
+									<th>PAS</th>
+									<th data-priority="3">PAD</th>
+									<th data-priority="3">PAM</th>
+								</tr>
+						     
+							</thead>
+							<tbody>
+						    </tbody>
 
-	 <tbody>
-     </tbody>
+						</table>
+					</div>
+				</div>
 
-     
-     
-   </table>
-			</div>	
 
-			<div data-role="footer" data-position="fixed" data-theme="b">
 			</div>
+
 
 		</div>
 		<!--Inicio da pagina da tabela-->
