@@ -70,11 +70,25 @@ function ultimoDado() {
 
 function alertaNovoDado() {
 
+	if (configuracao.visual) {
+		var paginaAtual = $.mobile.activePage.attr('id');
+			if(paginaAtual == 'pacientes'){
+					$("#popupAlertaPacientes").popup("open");
+					setInterval(function(){ $("#popupAlertaPacientes").popup("close"); }, 2000);
+			}else if(paginaAtual == 'monitor'){
+					$("#popupAlertaMonitor").popup("open");
+					setInterval(function(){ $("#popupAlertaMonitor").popup("close"); }, 2000);
+			}else if(paginaAtual == 'tabela'){
+					$("#popupAlertaTabela").popup("open");
+					setInterval(function(){ $("#popupAlertaTabela").popup("close"); }, 2000);
+			}else if(paginaAtual == 'graficos'){
+					$("#popupAlertaGraficos").popup("open");
+					setInterval(function(){ $("#popupAlertaGraficos").popup("close"); }, 2000);
+			}
+	
+	}
 	if (configuracao.sonoro) {
 		//navigator.notification.beep(1);
-	}
-	if (configuracao.visual) {
-		$("#popupAlertaVisual").popup("open")
 	}
 	if (configuracao.vibratorio) {
 		//navigator.vibrate(1000);
