@@ -70,27 +70,42 @@ function ultimoDado() {
 
 function atualizaTelaAlerta() {
 
-		var paginaAtual = $.mobile.activePage.attr('id');
-		atualizaListaPacientes();
-
+		var paginaAtual = $.mobile.activePage.attr('id');	
 			if(paginaAtual == 'pacientes'){
+					atualizaListaPacientes();
+					if(configuracao.visual){
 					$("#popupAlertaPacientes").popup("open");
-					setInterval(function(){ $("#popupAlertaPacientes").popup("close"); }, 2000);
+					setInterval(function(){ 
+					$("#popupAlertaPacientes").popup("close");
+					}, 2000);
+					}
 			}else if(paginaAtual == 'monitor'){
 					atualizaMonitor();
+					if(configuracao.visual){
 					$("#popupAlertaMonitor").popup("open");
-					setInterval(function(){ $("#popupAlertaMonitor").popup("close"); }, 2000);
+					setInterval(function(){ 
+					$("#popupAlertaMonitor").popup("close");
+					}, 2000);
+					}
 			}else if(paginaAtual == 'tabela'){
-			
+					atualizaTabelaRecente();
+					if(configuracao.visual){
 					$("#popupAlertaTabela").popup("open");
-					setInterval(function(){ $("#popupAlertaTabela").popup("close"); }, 2000);
+					setInterval(function(){ 
+					$("#popupAlertaTabela").popup("close");
+					}, 2000);
+					}
 			}else if(paginaAtual == 'graficos'){
-			
+					atualizaTodosGraficos();
+					if(configuracao.visual){
 					$("#popupAlertaGraficos").popup("open");
-					setInterval(function(){ $("#popupAlertaGraficos").popup("close"); }, 2000);
+					setInterval(function(){ 
+					$("#popupAlertaGraficos").popup("close");
+					}, 2000);
+					}
+					
 			}
-	
-	
+		
 	if (configuracao.sonoro) {
 		//navigator.notification.beep(1);
 	}
@@ -198,7 +213,7 @@ $(function() {
 				}
 			}
 
-			//alertaNovoDado();
+			atualizaTelaAlerta();
 		});
 
 	}, 10000);
@@ -368,7 +383,6 @@ $(function() {
 
 $(document).on('pagebeforeshow', '#monitor', function() {
 	atualizaMonitor();
-
 });
 
 //ICONES DO MONITOR
@@ -513,6 +527,16 @@ $(document).on('pagebeforeshow', '#tabela', function() {
 
 	atualizaTabela(dadosPaciente);
 });
+
+function atualizaTabelaRecente(){
+	var diasMonitorados = diasMonitoradosPaciente();
+	atualizaComBoxTabela(diasMonitorados);
+
+	var diaAtual = dadosDiaAtual(diasMonitorados);
+	var dadosPaciente = diaAtual.dadosHoras;
+	atualizaTabela(dadosPaciente);
+
+}
 
 // ATUALIZA TABELA
 
