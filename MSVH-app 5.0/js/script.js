@@ -68,25 +68,29 @@ function ultimoDado() {
 
 //ALERTA DE NOVO DADO
 
-function alertaNovoDado() {
+function atualizaTelaAlerta() {
 
-	if (configuracao.visual) {
 		var paginaAtual = $.mobile.activePage.attr('id');
+		atualizaListaPacientes();
+
 			if(paginaAtual == 'pacientes'){
 					$("#popupAlertaPacientes").popup("open");
 					setInterval(function(){ $("#popupAlertaPacientes").popup("close"); }, 2000);
 			}else if(paginaAtual == 'monitor'){
+					atualizaMonitor();
 					$("#popupAlertaMonitor").popup("open");
 					setInterval(function(){ $("#popupAlertaMonitor").popup("close"); }, 2000);
 			}else if(paginaAtual == 'tabela'){
+			
 					$("#popupAlertaTabela").popup("open");
 					setInterval(function(){ $("#popupAlertaTabela").popup("close"); }, 2000);
 			}else if(paginaAtual == 'graficos'){
+			
 					$("#popupAlertaGraficos").popup("open");
 					setInterval(function(){ $("#popupAlertaGraficos").popup("close"); }, 2000);
 			}
 	
-	}
+	
 	if (configuracao.sonoro) {
 		//navigator.notification.beep(1);
 	}
@@ -194,9 +198,7 @@ $(function() {
 				}
 			}
 
-			atualizaListaPacientes();
-			atualizaMonitor();
-			alertaNovoDado();
+			//alertaNovoDado();
 		});
 
 	}, 10000);
@@ -243,7 +245,7 @@ $(function() {
 
 //LISTA DE PACIENTES
 
-$(document).on('pageinit', '#pacientes', function() {
+$(document).on('pagebeforeshow', '#pacientes', function() {
 
 	atualizaListaPacientes();
 
@@ -364,7 +366,7 @@ $(function() {
 
 // MONITOR DO PACIENTE
 
-$(document).on('pageshow', '#monitor', function() {
+$(document).on('pagebeforeshow', '#monitor', function() {
 	atualizaMonitor();
 
 });
@@ -500,7 +502,7 @@ $(function() {
 
 // TABELA DE DADOS
 
-$(document).on('pageshow', '#tabela', function() {
+$(document).on('pagebeforeshow', '#tabela', function() {
 	$(".ui-table-columntoggle-btn").detach().appendTo('#bloco2');
 
 	var diasMonitorados = diasMonitoradosPaciente();
@@ -1205,10 +1207,9 @@ function graficoFrequenciaRespiratoria(arrayDadosHora) {
 	chart.series[0].setData(arrayFR);
 	chart.xAxis[0].setCategories(arrayHoras);
 }
+//ATUALIZA TODOS OS GRAFICOS
 
-//GRAFICO INICIAL
-
-$(document).on('pageshow', '#graficos', function() {
+function atualizaTodosGraficos(){
 	var diasMonitorados = diasMonitoradosPaciente();
 	atualizaComBoxGrafico(diasMonitorados);
 	var diaAtual = dadosDiaAtual(diasMonitorados);
@@ -1218,7 +1219,13 @@ $(document).on('pageshow', '#graficos', function() {
 	graficoFrequenciaCardiaca(diaAtual.dadosHoras);
 	graficoTemperaturaCorporea(diaAtual.dadosHoras);
 	graficoFrequenciaRespiratoria(diaAtual.dadosHoras);
+}
 
+
+//GRAFICO INICIAL
+
+$(document).on('pagebeforeshow', '#graficos', function() {
+atualizaTodosGraficos();
 });
 
 // TROCA DATA DO GRAFICO
