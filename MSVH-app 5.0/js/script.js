@@ -1,8 +1,9 @@
 //VARIAVEIS GLOBAIS
 numIdPacAtual = 0;
+recebidorDados = null;
 pacientesJson = [];
 pacientesAlertaStatus = [true, true, true, true];
-
+pacientesRiscoAlertaAtivado = 0;
 configuracao = {
 	sonoro : false,
 	visual : false,
@@ -73,7 +74,6 @@ function ultimoDado() {
 //ALERTA DE NOVO DADO
 
 function atualizaTelaAlerta() {
-
 		var paginaAtual = $.mobile.activePage.attr('id');	
 			if(paginaAtual == 'pacientes'){
 					atualizaListaPacientes();
@@ -119,7 +119,6 @@ function atualizaTelaAlerta() {
 	if (configuracao.barra-status) {
 		//navigator.vibrate(1000);
 	}
-
 }
 
 // ATUALIZA LISTA PACIENTES
@@ -133,9 +132,9 @@ function atualizaListaPacientes() {
 		//botao icone
 		diasMonitorados = pacientesJson[i].diasMonitorados;
 		diaMaisRecente = dadosDiaAtual(diasMonitorados);
-		console.log(pacientesAlertaStatus[i]);
+		pacientesRiscoAlertaAtivado = 0;
 		if(pacientesAlertaStatus[i] == true){
-		console.log("primeiro if");
+		console.log("1");
 			if (pacientesJson[i].sexo == "feminino") {
 				if (verificaAlteracao(diaMaisRecente)) {
 					listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-fem-ver.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
@@ -150,7 +149,7 @@ function atualizaListaPacientes() {
 
 				}
 			}
-		}else{
+		}else if(pacientesAlertaStatus[i] == false){
 			if (pacientesJson[i].sexo == "feminino") {
 				if (verificaAlteracao(diaMaisRecente)) {
 					listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-fem-ver.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm-off" data-mini="true" class="alarme"></a></li>';
@@ -207,12 +206,10 @@ $(document).on('pageinit', '#init', function() {
 
 //RECEBENDO MAIS DADOS DO SERVIDOR
 
-$(function() {
-	setInterval(function() {
+function novosDadosJson(){
 		var dado = ultimoDado();
 		var data = dado.data;
 		var hora = dado.hora;
-
 		$.getJSON("https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/dadosdia?data=" + data + "&hora=" + hora + "", function(data) {
 			var novosDados = data.items;
 			var encontrado = false;
@@ -242,8 +239,12 @@ $(function() {
 
 			atualizaTelaAlerta();
 		});
+}
 
-	}, configuracao.tempoatualizacao);
+
+$(function() {
+
+	recebidorDados = setInterval(novosDadosJson, configuracao.tempoatualizacao);
 
 });
 
@@ -296,6 +297,9 @@ $(function() {
 	
 	$('#selecionarTempo').change(function() {
 		configuracao.tempoatualizacao =  $(this).val();
+		clearInterval(recebidorDados);
+		recebidorDados = setInterval(novosDadosJson, configuracao.tempoatualizacao);
+
 		console.log(configuracao.tempoatualizacao);
 	});
 
@@ -431,8 +435,6 @@ $(function() {
 		pacientesAlertaStatus[posPacClicado] = true;
 		}
 	});
-	
-	
 	
 });
 
