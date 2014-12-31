@@ -1,10 +1,14 @@
 //VARIAVEIS GLOBAIS
 numIdPacAtual = 0;
 pacientesJson = [];
+pacientesAlertaStatus = [true, true, true, true];
+
 configuracao = {
 	sonoro : false,
 	visual : false,
-	vibratorio : false
+	vibratorio : false,
+	barrastatus : false,
+	tempoatualizacao: 10000
 };
 
 //FUNCOES BASICAS
@@ -75,7 +79,7 @@ function atualizaTelaAlerta() {
 					atualizaListaPacientes();
 					if(configuracao.visual){
 					$("#popupAlertaPacientes").popup("open");
-					setInterval(function(){ 
+					setTimeout(function(){ 
 					$("#popupAlertaPacientes").popup("close");
 					}, 2000);
 					}
@@ -83,7 +87,7 @@ function atualizaTelaAlerta() {
 					atualizaMonitor();
 					if(configuracao.visual){
 					$("#popupAlertaMonitor").popup("open");
-					setInterval(function(){ 
+					setTimeout(function(){ 
 					$("#popupAlertaMonitor").popup("close");
 					}, 2000);
 					}
@@ -91,7 +95,7 @@ function atualizaTelaAlerta() {
 					atualizaTabelaRecente();
 					if(configuracao.visual){
 					$("#popupAlertaTabela").popup("open");
-					setInterval(function(){ 
+					setTimeout(function(){ 
 					$("#popupAlertaTabela").popup("close");
 					}, 2000);
 					}
@@ -99,7 +103,7 @@ function atualizaTelaAlerta() {
 					atualizaTodosGraficos();
 					if(configuracao.visual){
 					$("#popupAlertaGraficos").popup("open");
-					setInterval(function(){ 
+					setTimeout(function(){ 
 					$("#popupAlertaGraficos").popup("close");
 					}, 2000);
 					}
@@ -110,6 +114,9 @@ function atualizaTelaAlerta() {
 		//navigator.notification.beep(1);
 	}
 	if (configuracao.vibratorio) {
+		//navigator.vibrate(1000);
+	}
+	if (configuracao.barra-status) {
 		//navigator.vibrate(1000);
 	}
 
@@ -126,21 +133,41 @@ function atualizaListaPacientes() {
 		//botao icone
 		diasMonitorados = pacientesJson[i].diasMonitorados;
 		diaMaisRecente = dadosDiaAtual(diasMonitorados);
+		console.log(pacientesAlertaStatus[i]);
+		if(pacientesAlertaStatus[i] == true){
+		console.log("primeiro if");
+			if (pacientesJson[i].sexo == "feminino") {
+				if (verificaAlteracao(diaMaisRecente)) {
+					listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-fem-ver.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
+				} else {
+					listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-fem.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
+				}
+			} else if (pacientesJson[i].sexo == "masculino") {
+				if (verificaAlteracao(diaMaisRecente)) {
+					listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-mas-ver.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
+				} else {
+					listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-mas.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
 
-		if (pacientesJson[i].sexo == "feminino") {
-			if (verificaAlteracao(diaMaisRecente)) {
-				listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-fem-ver.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
-			} else {
-				listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-fem.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
+				}
 			}
-		} else if (pacientesJson[i].sexo == "masculino") {
-			if (verificaAlteracao(diaMaisRecente)) {
-				listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-mas-ver.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
-			} else {
-				listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-mas.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
+		}else{
+			if (pacientesJson[i].sexo == "feminino") {
+				if (verificaAlteracao(diaMaisRecente)) {
+					listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-fem-ver.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm-off" data-mini="true" class="alarme"></a></li>';
+				} else {
+					listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-fem.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm-off" data-mini="true" class="alarme"></a></li>';
+				}
+			} else if (pacientesJson[i].sexo == "masculino") {
+				if (verificaAlteracao(diaMaisRecente)) {
+					listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-mas-ver.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm-off" data-mini="true" class="alarme"></a></li>';
+				} else {
+					listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-mas.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm-off" data-mini="true" class="alarme"></a></li>';
 
+				}
 			}
 		}
+
+
 		$('#listap').append(listItem)
 	}
 	$("#listap").listview("refresh");
@@ -175,7 +202,7 @@ $(document).on('pageinit', '#init', function() {
 		setTimeout(function() {
 			$.mobile.changePage("#pacientes", "fade");
 		}, 2000);
-	});
+	});	
 });
 
 //RECEBENDO MAIS DADOS DO SERVIDOR
@@ -216,7 +243,7 @@ $(function() {
 			atualizaTelaAlerta();
 		});
 
-	}, 10000);
+	}, configuracao.tempoatualizacao);
 
 });
 
@@ -254,6 +281,22 @@ $(function() {
 			configuracao.vibratorio = true;
 			console.log("vibratorio: " + configuracao.vibratorio)
 		}
+	});
+	
+	$('#aviso-barra-status').change(function() {
+		if (($(this).val()) == 'off') {
+			configuracao.barrastatus = false;
+			console.log("barra status: " + configuracao.barrastatus)
+		}
+		if (($(this).val()) == 'on') {
+			configuracao.barrastatus = true;
+			console.log("barra status: " + configuracao.barrastatus)
+		}
+	});
+	
+	$('#selecionarTempo').change(function() {
+		configuracao.tempoatualizacao =  $(this).val();
+		console.log(configuracao.tempoatualizacao);
 	});
 
 });
@@ -377,6 +420,20 @@ $(function() {
 		atualizaMonitor();
 
 	});
+	
+	$('#listap').on('click', 'li a.alarme', function(event) {
+		var id = $(this).parent().attr("id");
+		var posPacClicado = parseInt(id.substring(3, id.length));
+		console.log("id: "+id);
+		if(pacientesAlertaStatus[posPacClicado] == true){
+		pacientesAlertaStatus[posPacClicado] = false;
+		}else{
+		pacientesAlertaStatus[posPacClicado] = true;
+		}
+	});
+	
+	
+	
 });
 
 // MONITOR DO PACIENTE
