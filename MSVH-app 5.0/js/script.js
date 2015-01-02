@@ -9,7 +9,7 @@ configuracao = {
 	visual : false,
 	vibratorio : false,
 	barrastatus : false,
-	tempoatualizacao: 10000
+	tempoatualizacao: 30000
 };
 
 //FUNCOES BASICAS
@@ -116,8 +116,8 @@ function atualizaTelaAlerta() {
 	if (configuracao.vibratorio) {
 		//navigator.vibrate(1000);
 	}
-	if (configuracao.barra-status) {
-		//navigator.vibrate(1000);
+	if (configuracao.barrastatus) {
+		//window.plugin.notification.local.add({ message: 'Novos dados recebidos!' });
 	}
 }
 
@@ -134,7 +134,6 @@ function atualizaListaPacientes() {
 		diaMaisRecente = dadosDiaAtual(diasMonitorados);
 		pacientesRiscoAlertaAtivado = 0;
 		if(pacientesAlertaStatus[i] == true){
-		console.log("1");
 			if (pacientesJson[i].sexo == "feminino") {
 				if (verificaAlteracao(diaMaisRecente)) {
 					listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-fem-ver.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
