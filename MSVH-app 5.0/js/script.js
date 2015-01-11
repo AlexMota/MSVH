@@ -718,11 +718,11 @@ $(function() {
 		var $hrPopup = $popup.find('h1');
 		$hrPopup.text(hr + 'h')
 
-		$popup.find('h3:eq(0)').text("Freq. Cardiaca: " + fc + " bpm");
-		$popup.find('h3:eq(1)').text("Freq. Respiratoria: " + fr + " mpm");
-		$popup.find('h3:eq(2)').text("Temp. Corporea: " + t + " ºC");
-		$popup.find('h3:eq(3)').text("Sat. Oxigenio: " + so2 + " %");
-		$popup.find('h3:eq(4)').text("Press. Arterial: " + pas + "/" + pad + " (" + pam + ") mmHg");
+		$popup.find('h3:eq(0)').text("FC: " + fc + " bpm");
+		$popup.find('h3:eq(1)').text("FR: " + fr + " mpm");
+		$popup.find('h3:eq(2)').text("TC: " + t + " ºC");
+		$popup.find('h3:eq(3)').text("SO: " + so2 + " %");
+		$popup.find('h3:eq(4)').text("PA: " + pas + "/" + pad + " (" + pam + ") mmHg");
 
 		$popup.popup("open");
 
