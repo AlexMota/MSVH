@@ -844,7 +844,7 @@ $(function() {
 		$('#pressao').css('display', 'flex');
 	});
 	//Padrao
-	$('#monGraficos').click(function() {
+	$('.btGraficos').click(function() {
 		var botaoFC = document.getElementById("btFreqCar");
 		botaoFC.classList.add("ui-btn-active");
 		botaoFC.classList.add("ui-state-persist");
