@@ -119,6 +119,7 @@ function atualizaTelaAlerta() {
 	if (configuracao.barrastatus) {
 		//window.plugin.notification.local.add({ message: 'Novos dados recebidos!' });
 	}
+	verificaAlteracaoListaPac();
 }
 
 // ATUALIZA LISTA PACIENTES
@@ -132,7 +133,6 @@ function atualizaListaPacientes() {
 		//botao icone
 		diasMonitorados = pacientesJson[i].diasMonitorados;
 		diaMaisRecente = dadosDiaAtual(diasMonitorados);
-		pacientesRiscoAlertaAtivado = 0;
 		if(pacientesAlertaStatus[i] == true){
 			if (pacientesJson[i].sexo == "feminino") {
 				if (verificaAlteracao(diaMaisRecente)) {
@@ -192,6 +192,25 @@ function verificaAlteracao(diaMaisRecente) {
 
 	return result;
 }
+// VERIFICA LISTA PACIENTES EM RISCO
+
+function verificaAlteracaoListaPac() {
+	var diasMonitorados;
+	var diaMaisRecente;
+	pacientesRiscoAlertaAtivado = 0;
+
+	for ( i = 0; i < pacientesJson.length; i++) {
+		diasMonitorados = pacientesJson[i].diasMonitorados;
+		diaMaisRecente = dadosDiaAtual(diasMonitorados);
+
+if(verificaAlteracao(diaMaisRecente) && pacientesAlertaStatus[i]){
+pacientesRiscoAlertaAtivado++;
+}		
+}
+alert("Pacientes em risco: "+pacientesRiscoAlertaAtivado);
+}
+
+
 
 //CARREGAMENTO DE DADOS INICIAL
 $(document).on('pageinit', '#init', function() {
