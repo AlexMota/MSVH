@@ -9,7 +9,7 @@ configuracao = {
 	visual : false,
 	vibratorio : false,
 	barrastatus : false,
-	tempoatualizacao: 30000
+	tempoatualizacao : 30000
 };
 
 //FUNCOES BASICAS
@@ -74,52 +74,52 @@ function ultimoDado() {
 //ALERTA DE NOVO DADO
 
 function atualizaTelaAlerta() {
-		var paginaAtual = $.mobile.activePage.attr('id');	
-			if(paginaAtual == 'pacientes'){
-					atualizaListaPacientes();
-					if(configuracao.visual){
-					$("#popupAlertaPacientes").popup("open");
-					setTimeout(function(){ 
-					$("#popupAlertaPacientes").popup("close");
-					}, 2000);
-					}
-			}else if(paginaAtual == 'monitor'){
-					atualizaMonitor();
-					if(configuracao.visual){
-					$("#popupAlertaMonitor").popup("open");
-					setTimeout(function(){ 
-					$("#popupAlertaMonitor").popup("close");
-					}, 2000);
-					}
-			}else if(paginaAtual == 'tabela'){
-					atualizaTabelaRecente();
-					if(configuracao.visual){
-					$("#popupAlertaTabela").popup("open");
-					setTimeout(function(){ 
-					$("#popupAlertaTabela").popup("close");
-					}, 2000);
-					}
-			}else if(paginaAtual == 'graficos'){
-					atualizaTodosGraficos();
-					if(configuracao.visual){
-					$("#popupAlertaGraficos").popup("open");
-					setTimeout(function(){ 
-					$("#popupAlertaGraficos").popup("close");
-					}, 2000);
-					}
-					
-			}
-		
-	if (configuracao.sonoro) {
-		//navigator.notification.beep(1);
-	}
-	if (configuracao.vibratorio) {
-		//navigator.vibrate(1000);
-	}
-	if (configuracao.barrastatus) {
-		//window.plugin.notification.local.add({ message: 'Novos dados recebidos!' });
+	var paginaAtual = $.mobile.activePage.attr('id');
+	if (paginaAtual == 'pacientes') {
+		atualizaListaPacientes();
+		$("#popupAlertaPacientes").popup("open");
+		setTimeout(function() {
+			$("#popupAlertaPacientes").popup("close");
+		}, 2000);
+
+	} else if (paginaAtual == 'monitor') {
+		atualizaMonitor();
+		$("#popupAlertaMonitor").popup("open");
+		setTimeout(function() {
+			$("#popupAlertaMonitor").popup("close");
+		}, 2000);
+
+	} else if (paginaAtual == 'tabela') {
+		atualizaTabelaRecente();
+		$("#popupAlertaTabela").popup("open");
+		setTimeout(function() {
+			$("#popupAlertaTabela").popup("close");
+		}, 2000);
+
+	} else if (paginaAtual == 'graficos') {
+		atualizaTodosGraficos();
+		$("#popupAlertaGraficos").popup("open");
+		setTimeout(function() {
+			$("#popupAlertaGraficos").popup("close");
+		}, 2000);
+
 	}
 	verificaAlteracaoListaPac();
+
+	if (pacientesRiscoAlertaAtivado > 0) {
+		if (configuracao.visual) {
+			alert("Pacientes em risco: " + pacientesRiscoAlertaAtivado);
+		}
+		if (configuracao.sonoro) {
+			//navigator.notification.beep(1);
+		}
+		if (configuracao.vibratorio) {
+			//navigator.vibrate(1000);
+		}
+		if (configuracao.barrastatus) {
+			//window.plugin.notification.local.add({ message: 'Novos dados recebidos!' });
+		}
+	}
 }
 
 // ATUALIZA LISTA PACIENTES
@@ -133,7 +133,7 @@ function atualizaListaPacientes() {
 		//botao icone
 		diasMonitorados = pacientesJson[i].diasMonitorados;
 		diaMaisRecente = dadosDiaAtual(diasMonitorados);
-		if(pacientesAlertaStatus[i] == true){
+		if (pacientesAlertaStatus[i] == true) {
 			if (pacientesJson[i].sexo == "feminino") {
 				if (verificaAlteracao(diaMaisRecente)) {
 					listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-fem-ver.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm" data-mini="true" class="alarme"></a></li>';
@@ -148,7 +148,7 @@ function atualizaListaPacientes() {
 
 				}
 			}
-		}else if(pacientesAlertaStatus[i] == false){
+		} else if (pacientesAlertaStatus[i] == false) {
 			if (pacientesJson[i].sexo == "feminino") {
 				if (verificaAlteracao(diaMaisRecente)) {
 					listItem = '<li class="paciente" id="pac' + i + '"><a href="#monitor"><img src="img/paciente-fem-ver.png"/><h3>' + pacientesJson[i].nome + '</h3><p>' + pacientesJson[i].uti + '</p></a><a href="" data-role="icon" data-icon="alarm-off" data-mini="true" class="alarme"></a></li>';
@@ -164,7 +164,6 @@ function atualizaListaPacientes() {
 				}
 			}
 		}
-
 
 		$('#listap').append(listItem)
 	}
@@ -192,6 +191,7 @@ function verificaAlteracao(diaMaisRecente) {
 
 	return result;
 }
+
 // VERIFICA LISTA PACIENTES EM RISCO
 
 function verificaAlteracaoListaPac() {
@@ -203,14 +203,12 @@ function verificaAlteracaoListaPac() {
 		diasMonitorados = pacientesJson[i].diasMonitorados;
 		diaMaisRecente = dadosDiaAtual(diasMonitorados);
 
-if(verificaAlteracao(diaMaisRecente) && pacientesAlertaStatus[i]){
-pacientesRiscoAlertaAtivado++;
-}		
+		if (verificaAlteracao(diaMaisRecente) && pacientesAlertaStatus[i]) {
+			pacientesRiscoAlertaAtivado++;
+		}
+	}
+	//alert("Pacientes em risco: "+pacientesRiscoAlertaAtivado);
 }
-alert("Pacientes em risco: "+pacientesRiscoAlertaAtivado);
-}
-
-
 
 //CARREGAMENTO DE DADOS INICIAL
 $(document).on('pageinit', '#init', function() {
@@ -219,46 +217,45 @@ $(document).on('pageinit', '#init', function() {
 		setTimeout(function() {
 			$.mobile.changePage("#pacientes", "fade");
 		}, 2000);
-	});	
+	});
 });
 
 //RECEBENDO MAIS DADOS DO SERVIDOR
 
-function novosDadosJson(){
-		var dado = ultimoDado();
-		var data = dado.data;
-		var hora = dado.hora;
-		$.getJSON("https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/dadosdia?data=" + data + "&hora=" + hora + "", function(data) {
-			var novosDados = data.items;
-			var encontrado = false;
-			var tamDados = novosDados.length;
-			var dataPesq;
-			var indice;
-			var dias = [];
-			var tamDias
-			var dadoRecebido = {};
+function novosDadosJson() {
+	var dado = ultimoDado();
+	var data = dado.data;
+	var hora = dado.hora;
+	$.getJSON("https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/dadosdia?data=" + data + "&hora=" + hora + "", function(data) {
+		var novosDados = data.items;
+		var encontrado = false;
+		var tamDados = novosDados.length;
+		var dataPesq;
+		var indice;
+		var dias = [];
+		var tamDias
+		var dadoRecebido = {};
 
-			for (var i = 0; i < tamDados; i++) {
-				dias = pacientesJson[i].diasMonitorados;
-				dataPesq = novosDados[i].data;
-				tamDias = dias.length;
-				for (var j = 0; j < tamDias; j++) {
-					if (dias[j].data == dataPesq) {
-						encontrado = true;
-						pacientesJson[i].diasMonitorados[j].dadosHoras.push(novosDados[i].dadosHoras[0]);
+		for (var i = 0; i < tamDados; i++) {
+			dias = pacientesJson[i].diasMonitorados;
+			dataPesq = novosDados[i].data;
+			tamDias = dias.length;
+			for (var j = 0; j < tamDias; j++) {
+				if (dias[j].data == dataPesq) {
+					encontrado = true;
+					pacientesJson[i].diasMonitorados[j].dadosHoras.push(novosDados[i].dadosHoras[0]);
 
-						break;
-					}
-				}
-				if (encontrado == false) {
-					pacientesJson[i].diasMonitorados.push(novosDados[i]);
+					break;
 				}
 			}
+			if (encontrado == false) {
+				pacientesJson[i].diasMonitorados.push(novosDados[i]);
+			}
+		}
 
-			atualizaTelaAlerta();
-		});
+		atualizaTelaAlerta();
+	});
 }
-
 
 $(function() {
 
@@ -301,7 +298,7 @@ $(function() {
 			console.log("vibratorio: " + configuracao.vibratorio)
 		}
 	});
-	
+
 	$('#aviso-barra-status').change(function() {
 		if (($(this).val()) == 'off') {
 			configuracao.barrastatus = false;
@@ -312,9 +309,9 @@ $(function() {
 			console.log("barra status: " + configuracao.barrastatus)
 		}
 	});
-	
+
 	$('#selecionarTempo').change(function() {
-		configuracao.tempoatualizacao =  $(this).val();
+		configuracao.tempoatualizacao = $(this).val();
 		clearInterval(recebidorDados);
 		recebidorDados = setInterval(novosDadosJson, configuracao.tempoatualizacao);
 
@@ -442,18 +439,18 @@ $(function() {
 		atualizaMonitor();
 
 	});
-	
+
 	$('#listap').on('click', 'li a.alarme', function(event) {
 		var id = $(this).parent().attr("id");
 		var posPacClicado = parseInt(id.substring(3, id.length));
-		console.log("id: "+id);
-		if(pacientesAlertaStatus[posPacClicado] == true){
-		pacientesAlertaStatus[posPacClicado] = false;
-		}else{
-		pacientesAlertaStatus[posPacClicado] = true;
+		console.log("id: " + id);
+		if (pacientesAlertaStatus[posPacClicado] == true) {
+			pacientesAlertaStatus[posPacClicado] = false;
+		} else {
+			pacientesAlertaStatus[posPacClicado] = true;
 		}
 	});
-	
+
 });
 
 // MONITOR DO PACIENTE
@@ -605,7 +602,7 @@ $(document).on('pagebeforeshow', '#tabela', function() {
 	atualizaTabela(dadosPaciente);
 });
 
-function atualizaTabelaRecente(){
+function atualizaTabelaRecente() {
 	var diasMonitorados = diasMonitoradosPaciente();
 	atualizaComBoxTabela(diasMonitorados);
 
@@ -636,7 +633,6 @@ function atualizaTabela(dadosDiaEncontrado) {
 		dados.push([hora, frequenciaCardiaca, frequenciaRespiratoria, temperaturaCorporea, saturacaoOxigenio, pressaoSistolica, pressaoDiastolica, pressaoMedia]);
 	}
 
-	
 	for ( i = 0; i < dados.length; i++) {
 
 		var hora = dados[i][0];
@@ -701,8 +697,8 @@ function atualizaTabela(dadosDiaEncontrado) {
 
 		$("table#table-column-toggle tbody").append(linha).closest("table#table-column-toggle").table("refresh");
 	}
-		$( ".ui-checkbox input" ).removeAttr( "checked");
-		$( ".ui-checkbox label" ).removeClass( "ui-checkbox-on" ).addClass( "ui-checkbox-off" );
+	$(".ui-checkbox input").removeAttr("checked");
+	$(".ui-checkbox label").removeClass("ui-checkbox-on").addClass("ui-checkbox-off");
 }
 
 //DATA DA TABELA
@@ -1308,9 +1304,10 @@ function graficoFrequenciaRespiratoria(arrayDadosHora) {
 	chart.series[0].setData(arrayFR);
 	chart.xAxis[0].setCategories(arrayHoras);
 }
+
 //ATUALIZA TODOS OS GRAFICOS
 
-function atualizaTodosGraficos(){
+function atualizaTodosGraficos() {
 	var diasMonitorados = diasMonitoradosPaciente();
 	atualizaComBoxGrafico(diasMonitorados);
 	var diaAtual = dadosDiaAtual(diasMonitorados);
@@ -1322,11 +1319,10 @@ function atualizaTodosGraficos(){
 	graficoFrequenciaRespiratoria(diaAtual.dadosHoras);
 }
 
-
 //GRAFICO INICIAL
 
 $(document).on('pagebeforeshow', '#graficos', function() {
-atualizaTodosGraficos();
+	atualizaTodosGraficos();
 });
 
 // TROCA DATA DO GRAFICO
