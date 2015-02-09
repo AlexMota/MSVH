@@ -2,6 +2,7 @@
 numIdPacAtual = 0;
 recebidorDados = null;
 pacientesJson = [];
+janelaStatus = false;
 pacientesAlertaStatus = [true, true, true, true];
 pacientesRiscoAlertaAtivado = 0;
 configuracao = {
@@ -77,47 +78,33 @@ function atualizaTelaAlerta() {
 	var paginaAtual = $.mobile.activePage.attr('id');
 	if (paginaAtual == 'pacientes') {
 		atualizaListaPacientes();
-		$("#popupAlertaPacientes").popup("open");
-		setTimeout(function() {
-			$("#popupAlertaPacientes").popup("close");
-		}, 2000);
 
 	} else if (paginaAtual == 'monitor') {
 		atualizaMonitor();
-		$("#popupAlertaMonitor").popup("open");
-		setTimeout(function() {
-			$("#popupAlertaMonitor").popup("close");
-		}, 2000);
 
 	} else if (paginaAtual == 'tabela') {
 		atualizaTabelaRecente();
-		$("#popupAlertaTabela").popup("open");
-		setTimeout(function() {
-			$("#popupAlertaTabela").popup("close");
-		}, 2000);
 
 	} else if (paginaAtual == 'graficos') {
 		atualizaTodosGraficos();
-		$("#popupAlertaGraficos").popup("open");
-		setTimeout(function() {
-			$("#popupAlertaGraficos").popup("close");
-		}, 2000);
-
 	}
 	verificaAlteracaoListaPac();
 
 	if (pacientesRiscoAlertaAtivado > 0) {
 		if (configuracao.visual) {
 			alert("Pacientes em risco: " + pacientesRiscoAlertaAtivado);
+		//window.plugins.toast.showLongCenter('Atenção: '+pacientesRiscoAlertaAtivado+' paciente(s) em risco!');
 		}
 		if (configuracao.sonoro) {
+			if(!configuracao.barrastatus){
 			//navigator.notification.beep(1);
+			}
 		}
 		if (configuracao.vibratorio) {
 			//navigator.vibrate(1000);
 		}
 		if (configuracao.barrastatus) {
-			//window.plugin.notification.local.add({ message: 'Novos dados recebidos!' });
+			//window.plugin.notification.local.add({ message: 'Atenção: '+pacientesRiscoAlertaAtivado+' paciente(s) em risco!' });
 		}
 	}
 }
@@ -210,14 +197,58 @@ function verificaAlteracaoListaPac() {
 	//alert("Pacientes em risco: "+pacientesRiscoAlertaAtivado);
 }
 
-//CARREGAMENTO DE DADOS INICIAL
-$(document).on('pageinit', '#init', function() {
+//Funcao de erro
+ function carregarDadosNovamente(buttonIndex){
+if(buttonIndex == 1){
+ //navigator.app.exitApp();
+ }else if(buttonIndex == 2){
+ dadosIniciais();
+ }else{
+  dadosIniciais();
+ }
+ }
+ 
+ function continuarAplicativo(buttonIndex){
+if(buttonIndex == 1){
+ //navigator.app.exitApp();
+ }
+ janelaStatus = false;
+ }
+function alertaErroMaisdados(){
+if(!janelaStatus){
+	//navigator.notification.confirm('Não foi possivel carregar mais dados dos pacientes no momento. Deseja continuar ou fechar o aplicativo?',continuarAplicativo,'Erro',['Fechar','Continuar']);
+janelaStatus = true;
+}
+}
+
+function dadosIniciais(){
 	$.getJSON('https://intense-sled-740.appspot.com/_ah/api/jsonmsvh/v1/pacientes', function(data) {
 		pacientesJson = data.items;
-		setTimeout(function() {
+	})
+	.done(function() {
+    alert( "success" );
 			$.mobile.changePage("#pacientes", "fade");
-		}, 2000);
+				atualizaListaPacientes();
+			//window.plugins.toast.showLongCenter('Dados dos pacientes carregados.');
+			 $.mobile.loading('hide');
+
+
+	})
+	.fail(function() {
+    var op = confirm("tentar denovo?");
+	if(op){
+	dadosIniciais();
+	}
+	//navigator.notification.confirm('Não foi possivel carregar os dados dos pacientes. Deseja tentar novamente?',carregarDadosNovamente,'Sem conexão com a internet',['Não','Sim']);
+	
 	});
+}
+
+//CARREGAMENTO DE DADOS INICIAL
+$( document ).ready(function() {
+ $.mobile.loading('show');
+dadosIniciais();
+//document.addEventListener("deviceready", dadosIniciais, false);
 });
 
 //RECEBENDO MAIS DADOS DO SERVIDOR
@@ -253,8 +284,15 @@ function novosDadosJson() {
 			}
 		}
 
-		atualizaTelaAlerta();
+	})
+	.done(function() {
+    atualizaTelaAlerta();
+	})
+	.fail(function() {
+	alert("Nao foi possivel pegar mais dados");
+	alertaErroMaisdados();
 	});
+	
 }
 
 $(function() {
@@ -385,7 +423,7 @@ function atualizaMonitor() {
 	$("#leitoMonitor").html('<img src="js/jquerymobile-files/images/icons-png/plus-white.png"/> Leito ' + leito + '');
 	$("#prontuarioMonitor").html('<img src="js/jquerymobile-files/images/icons-png/tag-white.png"/> N.P. ' + numProntuario + '');
 	$("#descricaoMonitor").html('<img src="js/jquerymobile-files/images/icons-png/edit-white.png"/> ' + descricao + '');
-	$("#dataHoraDados").html('<h1 align="center">Ultima atualização: ' + data + ' - ' + horaMaisRecente + 'h</h1>');
+	$("#dataHoraDados").html('<h3 align="center">Ultima atualização: ' + data + ' - ' + horaMaisRecente + 'h</h3>');
 
 	if (fc < 60 || fc > 100) {
 		$("#monitorFC").html('<a id="monFreqCard" href="#graficos"><img src="img/heart.png"/></a><big><big><big style="color: red">' + fc + '</big></big></big><small> bpm</small>');
@@ -456,7 +494,9 @@ $(function() {
 // MONITOR DO PACIENTE
 
 $(document).on('pagebeforeshow', '#monitor', function() {
+	$.mobile.loading('show');
 	atualizaMonitor();
+	 $.mobile.loading('hide');
 });
 
 //ICONES DO MONITOR
@@ -591,6 +631,7 @@ $(function() {
 // TABELA DE DADOS
 
 $(document).on('pagebeforeshow', '#tabela', function() {
+	$.mobile.loading('show');
 	$(".ui-table-columntoggle-btn").detach().appendTo('#bloco2');
 
 	var diasMonitorados = diasMonitoradosPaciente();
@@ -600,6 +641,8 @@ $(document).on('pagebeforeshow', '#tabela', function() {
 	var dadosPaciente = diaAtual.dadosHoras;
 
 	atualizaTabela(dadosPaciente);
+	$.mobile.loading('hide');
+
 });
 
 function atualizaTabelaRecente() {
@@ -1322,7 +1365,9 @@ function atualizaTodosGraficos() {
 //GRAFICO INICIAL
 
 $(document).on('pagebeforeshow', '#graficos', function() {
+	$.mobile.loading('show');
 	atualizaTodosGraficos();
+	$.mobile.loading('hide');
 });
 
 // TROCA DATA DO GRAFICO

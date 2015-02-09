@@ -34,24 +34,6 @@
 
 	<body>
 
-		<!--Incio da pagina Inicial splash page-->
-		<div data-role="page" id="init">
-
-			<div data-role="header" data-theme="b">
-				<h1>MonitorApp</h1>
-			</div>
-
-			<div data-role="content">
-
-				<h1 align="center"><img  src="img/monitor_icon.png"/></h1>
-				<h2 align="center">Monitoramento de Sinais Vitais Humanos</h2>
-				<h3 align="center"><img  src="img/carregamento.png"/></h3>
-
-			</div>
-
-		</div>
-		<!--Fim da pagina Inicial splash page-->
-
 		<!--Incio da pagina de Pacientes-->
 
 		<div data-role="page" id="pacientes">
@@ -60,7 +42,6 @@
 				<a href="#painel-config" data-icon="bars" data-iconpos="notext">Configuracoes</a>
 			</div>
 			<div data-role="content" >
-
 				<ul id="listap" data-role="listview" >
 
 				</ul>
@@ -147,10 +128,9 @@
 
 			<div data-role="content">
 
-				<form>
-
-					<ul data-role="listview" data-inset="true" data-theme="b">
-						<li data-role="data-divider" data-theme="b">
+							
+					<div class="ui-grid-solo ui-bar-b ui-corner-all ui-overlay-shadow">
+    					<div class="ui-block-a">
 							<div class="ui-grid-a" >
 								<div id="nomeMonitor"class="ui-bar-b ui-grid-solo">
 									<img  src="js/jquerymobile-files/images/icons-png/user-white.png"/> Maria Silva Dias da Cunha
@@ -164,16 +144,14 @@
 								<div id="leitoMonitor" class="ui-block-a ui-bar-b">
 									<img src="js/jquerymobile-files/images/icons-png/plus-white.png"/> Leito 4
 								</div>
-								<div id="ProntuarioMonitor" class="ui-block-b ui-bar-b">
+								<div id="prontuarioMonitor" class="ui-block-b ui-bar-b">
 									<img src="js/jquerymobile-files/images/icons-png/tag-white.png"/> N.P. 654736
 								</div>
 								<div id="descricaoMonitor" class="ui-bar-b ui-grid-solo">
 									<img src="js/jquerymobile-files/images/icons-png/edit-white.png"/> Diabética, Hipertensa
 								</div>
 							</div><!-- /grid-b -->
-						</li>
-						<li>
-							<div class="ui-grid-a ui-corner-all" >
+							<div class="ui-grid-a" >
 								<div id="monitorFC" class="ui-block-a ui-bar-a">
 									<a id="monFreqCard" href="#graficos" class="" ><img src="img/heart.png"/></a><big><big><big>102</big></big></big> bpm
 								</div>
@@ -190,17 +168,14 @@
 									<a id="monPressaoArt" href="#graficos"><img src="img/blood pressure.png"/></a><big><big><big>130 / 85 (86)</big></big></big> mmHg
 								</div>
 							</div>
-						</li>
-						<li>
-							<div class="ui-grid-a" >
-								<div id="dataHoraDados"class="ui-grid-solo">
-									<h1 align="center">Data - Hora</h1>
+							<div class="ui-grid-solo" >
+								<div id="dataHoraDados"class="ui-block-a">
+									<p align="center">Data - Hora<p>
 								</div>
 							</div>
-						</li>
-					</ul>
-				</form>
-
+						</div>
+					</div>						
+							
 						<div data-role="popup" id="popupAlertaMonitor" data-theme="b">
 					<p>
 						Novos dados recebidos!
